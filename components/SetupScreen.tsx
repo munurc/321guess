@@ -83,12 +83,9 @@ export function SetupScreen() {
   return (
     <main className="mx-auto max-w-5xl px-4 py-8 sm:py-14">
       <header className="mb-8 flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl sm:text-4xl font-black tracking-tight">
-            <span className="text-accent">3·2·1</span>guess
-          </h1>
-          <p className="mt-1 text-sm text-ink/60">{t("subtitle")}</p>
-        </div>
+        <h1 className="text-3xl sm:text-4xl font-black tracking-tight">
+          <span className="text-accent">3·2·1</span>guess
+        </h1>
         <LanguageSwitcher />
       </header>
 

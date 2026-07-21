@@ -39,7 +39,20 @@ export default async function LocaleLayout({
     <html lang={locale}>
       <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          {children}
+          <div className="flex min-h-screen flex-col">
+            <div className="flex-1">{children}</div>
+            <footer className="mt-8 pb-6 text-center text-xs text-ink/50">
+              vibe coded by{" "}
+              <a
+                href="https://instagram.com/munurcoskun"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-ink/70 underline decoration-ink/20 underline-offset-4 hover:text-accent hover:decoration-accent"
+              >
+                munurcoskun
+              </a>
+            </footer>
+          </div>
         </NextIntlClientProvider>
       </body>
     </html>

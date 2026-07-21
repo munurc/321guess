@@ -5,7 +5,6 @@
   },
   "setup": {
     "title": "321guess",
-    "subtitle": "Play with a friend. No login. 3-2-1 and the guessing starts.",
     "mode": {
       "heading": "Game mode",
       "clubClub": {
