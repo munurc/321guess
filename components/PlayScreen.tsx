@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import type { Dataset, Round, Settings } from "@/lib/types";
 import { loadDataset } from "@/lib/data";
 import { buildPool, pickRound } from "@/lib/game";
+import { fetchLiveRoundPlayers } from "@/lib/live-players";
 import { Countdown } from "./Countdown";
 import { RoundView } from "./RoundView";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -43,6 +44,18 @@ export function PlayScreen() {
     const excluded = new Set(settings.excludedCountries);
     const next = pickRound(pool, settings.mode, excluded, settings.difficulty);
     setRound(next);
+    // Fire-and-forget: replace the local snapshot's answers with the live
+    // Wikidata result when it arrives. If the API fails the local list stays.
+    if (next) {
+      const controller = new AbortController();
+      fetchLiveRoundPlayers(next, controller.signal).then((live) => {
+        if (!live) return;
+        setRound((current) => {
+          if (!current || roundKey(current) !== roundKey(next)) return current;
+          return { ...current, correctPlayers: live };
+        });
+      });
+    }
   }, [dataset, settings]);
 
   useEffect(() => {
