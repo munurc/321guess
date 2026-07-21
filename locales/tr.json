@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "321guess — Futbolcu Tahmin Oyunu",
+    "description": "Arkadaşınla ekran başında oynanan futbolcu tahmin oyunu."
+  },
+  "setup": {
+    "title": "321guess",
+    "subtitle": "Arkadaşınla oyna. Login yok, kayıt yok. 3-2-1 ve tahmin başlar.",
+    "mode": {
+      "heading": "Oyun modu",
+      "clubClub": {
+        "title": "Kulüp × Kulüp",
+        "description": "İki kulüp logosu — iki takımda da oynamış futbolcuyu bul."
+      },
+      "countryClub": {
+        "title": "Ülke × Kulüp",
+        "description": "Bir bayrak + bir logo — o milliyetten olup o kulüpte oynamış futbolcuyu bul."
+      }
+    },
+    "difficulty": {
+      "heading": "Zorluk",
+      "easy": {
+        "title": "Kolay",
+        "description": "Sadece dünya devleri (Barça, Man Utd…)."
+      },
+      "medium": {
+        "title": "Orta",
+        "description": "Bilinen kulüplerin çoğu."
+      },
+      "hard": {
+        "title": "Zor",
+        "description": "Az bilinen kulüpler karışıyor."
+      }
+    },
+    "leagues": {
+      "heading": "Dahil edilecek ligler",
+      "hint": "İşareti kaldırdığın ligler oyuna girmez.",
+      "selectAll": "Tümünü seç",
+      "clearAll": "Tümünü temizle"
+    },
+    "excludedCountries": {
+      "heading": "Sorulmayacak ülkeler (bayrak)",
+      "hint": "Ülke × Kulüp modunda bayrağı hangi ülkelerin sorulmayacağını seç. Tikini kaldırdığın ülkelerin bayrağı gelmez."
+    },
+    "start": "Oyunu Başlat",
+    "startDisabled": "En az bir lig seçmelisin",
+    "loading": "Veri yükleniyor…"
+  },
+  "play": {
+    "getReady": "Hazır olun",
+    "vs": "vs",
+    "showAnswers": "Cevabı Göster",
+    "nextRound": "Sonraki Tur",
+    "backToSetup": "Ayarlara dön",
+    "noSettings": "Ayarlar bulunamadı, ana sayfaya yönlendiriliyorsun…",
+    "answersHeading": "Doğru futbolcular",
+    "noAnswers": "Kayıtlarda uygun futbolcu bulunamadı — sonraki tura geç.",
+    "rerolling": "Uygun eşleşme aranıyor…"
+  },
+  "language": {
+    "tr": "Türkçe",
+    "en": "English"
+  }
+}

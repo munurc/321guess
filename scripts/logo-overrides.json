@@ -1,0 +1,4 @@
+{
+  "_comment": "Manual overrides for clubs whose Wikidata P154/P41/P18 point to non-logo images (stadium photos, colour palettes, etc.). Keys are Wikidata Q IDs. Values are Wikimedia Commons file URLs.",
+  "Q7156": "http://commons.wikimedia.org/wiki/Special:FilePath/FC%20Barcelona%20%28crest%29.svg"
+}

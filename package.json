@@ -1,0 +1,32 @@
+{
+  "name": "321guess",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "fetch-data": "tsx scripts/fetch-wikidata.ts",
+    "enrich-popularity": "tsx scripts/enrich-popularity.ts",
+    "refetch-logos": "tsx scripts/refetch-logos.ts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "next": "15.1.6",
+    "next-intl": "^3.26.3",
+    "react": "19.0.0",
+    "react-dom": "19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.4"
+  }
+}

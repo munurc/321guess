@@ -1,0 +1,86 @@
+[
+  {
+    "id": "Q216022",
+    "nameEn": "Belgian Pro League",
+    "nameTr": "Belgian Pro League",
+    "countryCode": "BE"
+  },
+  {
+    "id": "Q206813",
+    "nameEn": "Brasileirão Série A",
+    "nameTr": "Brasileirão Série A",
+    "countryCode": "BR"
+  },
+  {
+    "id": "Q82595",
+    "nameEn": "Bundesliga",
+    "nameTr": "Bundesliga",
+    "countryCode": "DE"
+  },
+  {
+    "id": "Q324867",
+    "nameEn": "La Liga",
+    "nameTr": "La Liga",
+    "countryCode": "ES"
+  },
+  {
+    "id": "Q764690",
+    "nameEn": "Liga MX",
+    "nameTr": "Liga MX",
+    "countryCode": "MX"
+  },
+  {
+    "id": "Q182994",
+    "nameEn": "Liga Portugal",
+    "nameTr": "Liga Portugal",
+    "countryCode": "PT"
+  },
+  {
+    "id": "Q13394",
+    "nameEn": "Ligue 1",
+    "nameTr": "Ligue 1",
+    "countryCode": "FR"
+  },
+  {
+    "id": "Q18543",
+    "nameEn": "Major League Soccer",
+    "nameTr": "Major League Soccer",
+    "countryCode": "US"
+  },
+  {
+    "id": "Q9448",
+    "nameEn": "Premier League",
+    "nameTr": "Premier League",
+    "countryCode": "GB"
+  },
+  {
+    "id": "Q223170",
+    "nameEn": "Primera División (Arg)",
+    "nameTr": "Primera División (Arg)",
+    "countryCode": "AR"
+  },
+  {
+    "id": "Q255633",
+    "nameEn": "Saudi Pro League",
+    "nameTr": "Saudi Pro League",
+    "countryCode": "SA"
+  },
+  {
+    "id": "Q14377162",
+    "nameEn": "Scottish Premiership",
+    "nameTr": "Scottish Premiership",
+    "countryCode": "GB"
+  },
+  {
+    "id": "Q15804",
+    "nameEn": "Serie A",
+    "nameTr": "Serie A",
+    "countryCode": "IT"
+  },
+  {
+    "id": "Q485568",
+    "nameEn": "Süper Lig",
+    "nameTr": "Süper Lig",
+    "countryCode": "TR"
+  }
+]

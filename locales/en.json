@@ -1,0 +1,64 @@
+{
+  "meta": {
+    "title": "321guess — Football Player Guessing Game",
+    "description": "A local co-op football player guessing game — play with a friend, no login required."
+  },
+  "setup": {
+    "title": "321guess",
+    "subtitle": "Play with a friend. No login. 3-2-1 and the guessing starts.",
+    "mode": {
+      "heading": "Game mode",
+      "clubClub": {
+        "title": "Club × Club",
+        "description": "Two club badges — name a player who played for both."
+      },
+      "countryClub": {
+        "title": "Country × Club",
+        "description": "A flag + a badge — name a player from that country who played for that club."
+      }
+    },
+    "difficulty": {
+      "heading": "Difficulty",
+      "easy": {
+        "title": "Easy",
+        "description": "Only the giants (Barça, Man Utd…)."
+      },
+      "medium": {
+        "title": "Medium",
+        "description": "Most recognizable clubs."
+      },
+      "hard": {
+        "title": "Hard",
+        "description": "Obscure clubs come into play."
+      }
+    },
+    "leagues": {
+      "heading": "Included leagues",
+      "hint": "Unchecked leagues won't appear.",
+      "selectAll": "Select all",
+      "clearAll": "Clear all"
+    },
+    "excludedCountries": {
+      "heading": "Countries to skip (flag)",
+      "hint": "Country × Club only: unchecked countries' flags won't appear as the question."
+    },
+    "start": "Start Game",
+    "startDisabled": "Pick at least one league",
+    "loading": "Loading data…"
+  },
+  "play": {
+    "getReady": "Get ready",
+    "vs": "vs",
+    "showAnswers": "Show Answers",
+    "nextRound": "Next Round",
+    "backToSetup": "Back to setup",
+    "noSettings": "No settings found — sending you home…",
+    "answersHeading": "Correct players",
+    "noAnswers": "No matching players in our data — skip to next round.",
+    "rerolling": "Finding a valid pair…"
+  },
+  "language": {
+    "tr": "Türkçe",
+    "en": "English"
+  }
+}

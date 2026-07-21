@@ -1,0 +1,1626 @@
+[
+  {
+    "id": "Q104770",
+    "name": "1. FC Köln",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/1._FC_Koeln_Logo_2014%E2%80%93.svg/330px-1._FC_Koeln_Logo_2014%E2%80%93.svg.png",
+    "leagueId": "Q82595",
+    "countryCode": "DE",
+    "popularity": 75
+  },
+  {
+    "id": "Q141971",
+    "name": "1. FC Union Berlin",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/1._FC_Union_Berlin_Logo.svg/960px-1._FC_Union_Berlin_Logo.svg.png",
+    "leagueId": "Q82595",
+    "countryCode": "DE",
+    "popularity": 67
+  },
+  {
+    "id": "Q105254",
+    "name": "1. FSV Mainz 05",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/1._FSV_Mainz_05_logo.svg/330px-1._FSV_Mainz_05_logo.svg.png",
+    "leagueId": "Q82595",
+    "countryCode": "DE",
+    "popularity": 65
+  },
+  {
+    "id": "Q187326",
+    "name": "Aberdeen F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/f/fb/Aberdeen_FC_stars_crest.svg/250px-Aberdeen_FC_stars_crest.svg.png",
+    "leagueId": "Q14377162",
+    "countryCode": "GB",
+    "popularity": 61
+  },
+  {
+    "id": "Q1543",
+    "name": "AC Milan",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Logo_of_AC_Milan.svg/500px-Logo_of_AC_Milan.svg.png",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 123
+  },
+  {
+    "id": "Q289482",
+    "name": "AC Monza",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a7/AC_Monza_logo_%282021%29.svg/330px-AC_Monza_logo_%282021%29.svg.png",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 51
+  },
+  {
+    "id": "Q2052",
+    "name": "ACF Fiorentina",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/ACF_Fiorentina_-_logo_%28Italy%2C_2022%29.svg/120px-ACF_Fiorentina_-_logo_%28Italy%2C_2022%29.svg.png",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 93
+  },
+  {
+    "id": "Q290781",
+    "name": "AD Almería",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/5/5a/AD_Almer%C3%ADa.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 16
+  },
+  {
+    "id": "Q19568",
+    "name": "AFC Bournemouth",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/AFC_Bournemouth_%282013%29.svg/250px-AFC_Bournemouth_%282013%29.svg.png",
+    "leagueId": "Q9448",
+    "countryCode": "GB",
+    "popularity": 77
+  },
+  {
+    "id": "Q2701659",
+    "name": "Al Fateh SC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Al_Fateh_SC_Logo.svg/960px-Al_Fateh_SC_Logo.svg.png",
+    "leagueId": "Q255633",
+    "countryCode": "SA",
+    "popularity": 35
+  },
+  {
+    "id": "Q73965",
+    "name": "Al Hilal SFC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Al_Hilal_SFC_Logo.svg/500px-Al_Hilal_SFC_Logo.svg.png",
+    "leagueId": "Q255633",
+    "countryCode": "SA",
+    "popularity": 63
+  },
+  {
+    "id": "Q482764",
+    "name": "Al-Nassr",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Nassr_FC_Logo.svg/330px-Nassr_FC_Logo.svg.png",
+    "leagueId": "Q255633",
+    "countryCode": "SA",
+    "popularity": 70
+  },
+  {
+    "id": "Q610482",
+    "name": "Alba Roma 1907",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/3/36/Alba_Roma_Stemma_Ufficiale.png",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 13
+  },
+  {
+    "id": "Q2549594",
+    "name": "Alumni Athletic Club",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Escudo_Alumni.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 16
+  },
+  {
+    "id": "Q845137",
+    "name": "Angers SCO",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Angers_Sporting_Club_de_l%27Ouest_logo.svg/60px-Angers_Sporting_Club_de_l%27Ouest_logo.svg.png",
+    "leagueId": "Q13394",
+    "countryCode": "FR",
+    "popularity": 50
+  },
+  {
+    "id": "Q220621",
+    "name": "Argentinos Juniors",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Escudo_de_la_Asociaci%C3%B3n_Atl%C3%A9tica_Argentinos_Juniors.svg/960px-Escudo_de_la_Asociaci%C3%B3n_Atl%C3%A9tica_Argentinos_Juniors.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 46
+  },
+  {
+    "id": "Q2739",
+    "name": "AS Roma",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f7/AS_Roma_logo_%282017%29.svg/330px-AS_Roma_logo_%282017%29.svg.png",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 102
+  },
+  {
+    "id": "Q18711",
+    "name": "Aston Villa F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Aston_Villa_FC_new_crest.svg/330px-Aston_Villa_FC_new_crest.svg.png",
+    "leagueId": "Q9448",
+    "countryCode": "GB",
+    "popularity": 101
+  },
+  {
+    "id": "Q1886",
+    "name": "Atalanta BC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f2/Atalanta_BC_new_logo.svg/330px-Atalanta_BC_new_logo.svg.png",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 86
+  },
+  {
+    "id": "Q8687",
+    "name": "Athletic Club",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/9/98/Club_Athletic_Bilbao_logo.svg/250px-Club_Athletic_Bilbao_logo.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 87
+  },
+  {
+    "id": "Q16836317",
+    "name": "Atlanta United FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/b/bb/Atlanta_MLS.svg/330px-Atlanta_MLS.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 39
+  },
+  {
+    "id": "Q1023532",
+    "name": "Atlas F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/F%C3%BAtbol_Club_Atlas.svg/250px-F%C3%BAtbol_Club_Atlas.svg.png",
+    "leagueId": "Q764690",
+    "countryCode": "MX",
+    "popularity": 36
+  },
+  {
+    "id": "Q198034",
+    "name": "Atlético Clube Goianiense",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Atl%C3%A9tico_Clube_Goianiense_logo.svg/250px-Atl%C3%A9tico_Clube_Goianiense_logo.svg.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 31
+  },
+  {
+    "id": "Q8701",
+    "name": "Atlético Madrid",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f9/Atletico_Madrid_Logo_2024.svg/330px-Atletico_Madrid_Logo_2024.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 107
+  },
+  {
+    "id": "Q757470",
+    "name": "Atlético Tucumán",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Atletico_tucuman_nuevo2.svg/3840px-Atletico_tucuman_nuevo2.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 28
+  },
+  {
+    "id": "Q60643348",
+    "name": "Austin FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/8/85/Austin_FC_logo.svg/330px-Austin_FC_logo.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 31
+  },
+  {
+    "id": "Q2469894",
+    "name": "Barracas Central",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Barracas_central_logo.svg/960px-Barracas_central_logo.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 19
+  },
+  {
+    "id": "Q104761",
+    "name": "Bayer 04 Leverkusen",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/5/59/Bayer_04_Leverkusen_logo.svg/500px-Bayer_04_Leverkusen_logo.svg.png",
+    "leagueId": "Q82595",
+    "countryCode": "DE",
+    "popularity": 89
+  },
+  {
+    "id": "Q172567",
+    "name": "Beşiktaş J.K. (Football)",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/BesiktasJK-Logo.svg/250px-BesiktasJK-Logo.svg.png",
+    "leagueId": "Q485568",
+    "countryCode": "TR",
+    "popularity": 85
+  },
+  {
+    "id": "Q1893",
+    "name": "Bologna F.C. 1909",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Bologna_F.C._1909_logo.svg/250px-Bologna_F.C._1909_logo.svg.png",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 85
+  },
+  {
+    "id": "Q41420",
+    "name": "Borussia Dortmund",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Borussia_Dortmund_logo.svg/960px-Borussia_Dortmund_logo.svg.png",
+    "leagueId": "Q82595",
+    "countryCode": "DE",
+    "popularity": 99
+  },
+  {
+    "id": "Q101959",
+    "name": "Borussia Mönchengladbach",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Borussia_M%C3%B6nchengladbach_logo.svg/960px-Borussia_M%C3%B6nchengladbach_logo.svg.png",
+    "leagueId": "Q82595",
+    "countryCode": "DE",
+    "popularity": 84
+  },
+  {
+    "id": "Q80958",
+    "name": "Botafogo F.R.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Botafogo_de_Futebol_e_Regatas_logo.svg/330px-Botafogo_de_Futebol_e_Regatas_logo.svg.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 60
+  },
+  {
+    "id": "Q19571",
+    "name": "Brentford F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/2/2a/Brentford_FC_crest.svg/330px-Brentford_FC_crest.svg.png",
+    "leagueId": "Q9448",
+    "countryCode": "GB",
+    "popularity": 65
+  },
+  {
+    "id": "Q19453",
+    "name": "Brighton & Hove Albion F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/d/d0/Brighton_and_Hove_Albion_FC_crest.svg/330px-Brighton_and_Hove_Albion_FC_crest.svg.png",
+    "leagueId": "Q9448",
+    "countryCode": "GB",
+    "popularity": 72
+  },
+  {
+    "id": "Q838134",
+    "name": "C.F. Estrela da Amadora",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/S%C3%ADmbolo_Estrela_da_Amadora.svg/960px-S%C3%ADmbolo_Estrela_da_Amadora.svg.png",
+    "leagueId": "Q182994",
+    "countryCode": "PT",
+    "popularity": 36
+  },
+  {
+    "id": "Q1900",
+    "name": "Cagliari Calcio",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/6/61/Cagliari_Calcio_1920.svg/250px-Cagliari_Calcio_1920.svg.png",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 76
+  },
+  {
+    "id": "Q272712",
+    "name": "Çaykur Rizespor",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/5/5f/Caykur_Rizespor_logo.svg/330px-Caykur_Rizespor_logo.svg.png",
+    "leagueId": "Q485568",
+    "countryCode": "TR",
+    "popularity": 41
+  },
+  {
+    "id": "Q1023227",
+    "name": "CD Tondela",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/0/00/C.D._Tondela.png",
+    "leagueId": "Q182994",
+    "countryCode": "PT",
+    "popularity": 36
+  },
+  {
+    "id": "Q1052219",
+    "name": "Ceará Sporting Club",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Cear%C3%A1_Sporting_Club_logo.svg/500px-Cear%C3%A1_Sporting_Club_logo.svg.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 34
+  },
+  {
+    "id": "Q2946171",
+    "name": "Centro de Ensino Unificado de Brasília Esporte Clube",
+    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/CEUB.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 8
+  },
+  {
+    "id": "Q364698",
+    "name": "Cercle Brugge K.S.V.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Logo_Cercle_Brugge_2022.png",
+    "leagueId": "Q216022",
+    "countryCode": "BE",
+    "popularity": 45
+  },
+  {
+    "id": "Q167615",
+    "name": "CF Montréal",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Logo_of_CF_Montreal_2023.svg/330px-Logo_of_CF_Montreal_2023.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "CA",
+    "popularity": 44
+  },
+  {
+    "id": "Q9616",
+    "name": "Chelsea F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/Chelsea_FC.svg/330px-Chelsea_FC.svg.png",
+    "leagueId": "Q9448",
+    "countryCode": "GB",
+    "popularity": 126
+  },
+  {
+    "id": "Q308683",
+    "name": "Chicago Fire FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Chicago_Fire_logo%2C_2021.svg/960px-Chicago_Fire_logo%2C_2021.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 43
+  },
+  {
+    "id": "Q506832",
+    "name": "Club Athletico Paranaense",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Athletico_Paranaense_%28Logo_2019%29.svg/250px-Athletico_Paranaense_%28Logo_2019%29.svg.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 51
+  },
+  {
+    "id": "Q692646",
+    "name": "Club Atlético Banfield",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/CA_Banfield_%282014%29.svg/250px-CA_Banfield_%282014%29.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 39
+  },
+  {
+    "id": "Q5136129",
+    "name": "Club Atlético Del Plata",
+    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Club%20delplata%20escudo.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 6
+  },
+  {
+    "id": "Q327172",
+    "name": "Club Atlético Huracán",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Emblema_oficial_del_Club_Atl%C3%A9tico_Hurac%C3%A1n.svg/960px-Emblema_oficial_del_Club_Atl%C3%A9tico_Hurac%C3%A1n.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 39
+  },
+  {
+    "id": "Q214978",
+    "name": "Club Atlético Independiente",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Escudo_del_Club_Atl%C3%A9tico_Independiente.svg/500px-Escudo_del_Club_Atl%C3%A9tico_Independiente.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 56
+  },
+  {
+    "id": "Q324589",
+    "name": "Club Atlético Lanús",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Escudo_de_Lan%C3%BAs_%28sin_estrellas%29.svg/960px-Escudo_de_Lan%C3%BAs_%28sin_estrellas%29.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 41
+  },
+  {
+    "id": "Q10286",
+    "name": "Club Atlético Osasuna",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/3/38/CA_Osasuna_2024_crest.svg/330px-CA_Osasuna_2024_crest.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 68
+  },
+  {
+    "id": "Q15799",
+    "name": "Club Atlético River Plate",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Club_Atl%C3%A9tico_River_Plate_logo.svg/960px-Club_Atl%C3%A9tico_River_Plate_logo.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 76
+  },
+  {
+    "id": "Q318307",
+    "name": "Club Atlético Rosario Central",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/c/ce/Rosario_Central_logo.svg/330px-Rosario_Central_logo.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 42
+  },
+  {
+    "id": "Q215163",
+    "name": "Club Atlético Vélez Sarsfield",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Escudo_del_Club_Atl%C3%A9tico_V%C3%A9lez_Sarsfield.svg/960px-Escudo_del_Club_Atl%C3%A9tico_V%C3%A9lez_Sarsfield.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 50
+  },
+  {
+    "id": "Q190916",
+    "name": "Club Brugge K.V.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/d/d0/Club_Brugge_KV_logo.svg/250px-Club_Brugge_KV_logo.svg.png",
+    "leagueId": "Q216022",
+    "countryCode": "BE",
+    "popularity": 67
+  },
+  {
+    "id": "Q768253",
+    "name": "Club de Fútbol Monterrey",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Club_de_F%C3%BAtbol_Monterrey_logo.svg/500px-Club_de_F%C3%BAtbol_Monterrey_logo.svg.png",
+    "leagueId": "Q764690",
+    "countryCode": "MX",
+    "popularity": 47
+  },
+  {
+    "id": "Q633223",
+    "name": "Club León",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/8/8f/Club_Leon_Logo.svg/250px-Club_Leon_Logo.svg.png",
+    "leagueId": "Q764690",
+    "countryCode": "MX",
+    "popularity": 37
+  },
+  {
+    "id": "Q1280895",
+    "name": "Club Necaxa",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Club_Necaxa_Logo.svg/960px-Club_Necaxa_Logo.svg.png",
+    "leagueId": "Q764690",
+    "countryCode": "MX",
+    "popularity": 35
+  },
+  {
+    "id": "Q1421829",
+    "name": "Club Sport Emelec",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Instituto_acc_cordoba_logo.svg/120px-Instituto_acc_cordoba_logo.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 26
+  },
+  {
+    "id": "Q3681574",
+    "name": "Club Sportivo Buenos Aires",
+    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Sportivo%20bs%20aires%20badge.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 7
+  },
+  {
+    "id": "Q3681576",
+    "name": "Club Sportivo Palermo",
+    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Sportivo%20palermo%20logo.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 7
+  },
+  {
+    "id": "Q270995",
+    "name": "Clube Atlético Mineiro",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Logo_of_Clube_Atl%C3%A9tico_Mineiro.svg/330px-Logo_of_Clube_Atl%C3%A9tico_Mineiro.svg.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 57
+  },
+  {
+    "id": "Q17479",
+    "name": "Clube de Regatas do Flamengo",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Clube_de_Regatas_do_Flamengo_logo.svg/500px-Clube_de_Regatas_do_Flamengo_logo.svg.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 89
+  },
+  {
+    "id": "Q2552872",
+    "name": "Clube do Remo",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Clube_do_Remo.svg/960px-Clube_do_Remo.svg.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 22
+  },
+  {
+    "id": "Q642408",
+    "name": "Colorado Rapids",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/2/2b/Colorado_Rapids_logo.svg/330px-Colorado_Rapids_logo.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 42
+  },
+  {
+    "id": "Q3683801",
+    "name": "Columbian Football Club",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Columbian_fc_logo.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 6
+  },
+  {
+    "id": "Q457163",
+    "name": "Columbus Crew",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Columbus_Crew_logo_2021.svg/500px-Columbus_Crew_logo_2021.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 43
+  },
+  {
+    "id": "Q1120838",
+    "name": "Como 1907",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Calcio_Como_-_logo_%28Italy%2C_2019-%29.svg/500px-Calcio_Como_-_logo_%28Italy%2C_2019-%29.svg.png",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 53
+  },
+  {
+    "id": "Q598834",
+    "name": "Criciúma Esporte Clube",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Crici%C3%BAma_EC_2025_crest.svg/960px-Crici%C3%BAma_EC_2025_crest.svg.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 33
+  },
+  {
+    "id": "Q845859",
+    "name": "Cruz Azul",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cruz_Azul_2026.png/3840px-Cruz_Azul_2026.png",
+    "leagueId": "Q764690",
+    "countryCode": "MX",
+    "popularity": 46
+  },
+  {
+    "id": "Q188277",
+    "name": "Cruzeiro E.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Cruzeiro_Esporte_Clube_%28logo%29.svg/330px-Cruzeiro_Esporte_Clube_%28logo%29.svg.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 56
+  },
+  {
+    "id": "Q19467",
+    "name": "Crystal Palace F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/Crystal_Palace_FC_logo_%282022%29.svg/330px-Crystal_Palace_FC_logo_%282022%29.svg.png",
+    "leagueId": "Q9448",
+    "countryCode": "GB",
+    "popularity": 82
+  },
+  {
+    "id": "Q238593",
+    "name": "D.C. United",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/3/32/D.C._United_logo_%282016%29.svg/250px-D.C._United_logo_%282016%29.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 52
+  },
+  {
+    "id": "Q12247594",
+    "name": "Damac Club",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/7/7e/Damac_FC_Logo.svg/330px-Damac_FC_Logo.svg.png",
+    "leagueId": "Q255633",
+    "countryCode": "SA",
+    "popularity": 24
+  },
+  {
+    "id": "Q1024338",
+    "name": "Defensa y Justicia",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Escudo_del_Club_Social_y_Deportivo_Defensa_y_Justicia.svg/250px-Escudo_del_Club_Social_y_Deportivo_Defensa_y_Justicia.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 29
+  },
+  {
+    "id": "Q223620",
+    "name": "Deportivo Alavés",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f8/Deportivo_Alaves_logo_%282020%29.svg/330px-Deportivo_Alaves_logo_%282020%29.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 60
+  },
+  {
+    "id": "Q8760",
+    "name": "Deportivo de A Coruña",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/RC_Deportivo_A_Coru%C3%B1a_logo_2026.svg/250px-RC_Deportivo_A_Coru%C3%B1a_logo_2026.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 69
+  },
+  {
+    "id": "Q4382304",
+    "name": "Deportivo Riestra",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Escudo_del_Club_Deportivo_Riestra.svg/500px-Escudo_del_Club_Deportivo_Riestra.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 16
+  },
+  {
+    "id": "Q274465",
+    "name": "E.C. Vitória",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Esporte_Clube_Vit%C3%B3ria_%282024%29.svg/960px-Esporte_Clube_Vit%C3%B3ria_%282024%29.svg.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 39
+  },
+  {
+    "id": "Q10512",
+    "name": "Elche CF",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Elche_CF_logo.svg/250px-Elche_CF_logo.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 58
+  },
+  {
+    "id": "Q501693",
+    "name": "ES Troyes AC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/ESTAC_Troyes_Logo.svg/960px-ESTAC_Troyes_Logo.svg.png",
+    "leagueId": "Q13394",
+    "countryCode": "FR",
+    "popularity": 46
+  },
+  {
+    "id": "Q910453",
+    "name": "Esporte Clube Juventude",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bf/Juventude_crest.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 38
+  },
+  {
+    "id": "Q214940",
+    "name": "Estudiantes de La Plata",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Estudiantes_de_la_Plata_crest_%282025%29_cropped.svg/960px-Estudiantes_de_la_Plata_crest_%282025%29_cropped.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 51
+  },
+  {
+    "id": "Q5794",
+    "name": "Everton F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/7/7c/Everton_FC_logo.svg/330px-Everton_FC_logo.svg.png",
+    "leagueId": "Q9448",
+    "countryCode": "GB",
+    "popularity": 103
+  },
+  {
+    "id": "Q118919",
+    "name": "Eyüpspor",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/6/62/Ey%C3%BCpspor_Logosu.png",
+    "leagueId": "Q485568",
+    "countryCode": "IR",
+    "popularity": 22
+  },
+  {
+    "id": "Q1065328",
+    "name": "F.C. Verbroedering Dender Eendracht Hekelgem",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/9/98/FCVDenderEH.png",
+    "leagueId": "Q216022",
+    "countryCode": "BE",
+    "popularity": 25
+  },
+  {
+    "id": "Q219241",
+    "name": "Falkirk F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/5/5d/Falkirk_FC_logo.svg/250px-Falkirk_FC_logo.svg.png",
+    "leagueId": "Q14377162",
+    "countryCode": "GB",
+    "popularity": 42
+  },
+  {
+    "id": "Q1398111",
+    "name": "Fatih Karagümrük S.K.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/e/ea/Fatih_Karag%C3%BCmr%C3%BCk_S.K..png",
+    "leagueId": "Q485568",
+    "countryCode": "TR",
+    "popularity": 34
+  },
+  {
+    "id": "Q7156",
+    "name": "FC Barcelona",
+    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/FC%20Barcelona%20%28crest%29.svg",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 152
+  },
+  {
+    "id": "Q15789",
+    "name": "FC Bayern Munich",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg/960px-FC_Bayern_M%C3%BCnchen_logo_%282024%29.svg.png",
+    "leagueId": "Q82595",
+    "countryCode": "DE",
+    "popularity": 124
+  },
+  {
+    "id": "Q20855983",
+    "name": "FC Cincinnati",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/7/78/FC_Cincinnati_primary_logo_2018.svg/330px-FC_Cincinnati_primary_logo_2018.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 34
+  },
+  {
+    "id": "Q642291",
+    "name": "FC Dallas",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/c/c9/FC_Dallas_logo.svg/330px-FC_Dallas_logo.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 38
+  },
+  {
+    "id": "Q128446",
+    "name": "FC Porto",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/FC_Porto.svg/330px-FC_Porto.svg.png",
+    "leagueId": "Q182994",
+    "countryCode": "PT",
+    "popularity": 93
+  },
+  {
+    "id": "Q6601875",
+    "name": "Fenerbahçe Istanbul",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/3/39/Fenerbah%C3%A7e.svg/330px-Fenerbah%C3%A7e.svg.png",
+    "leagueId": "Q485568",
+    "countryCode": "TR",
+    "popularity": 92
+  },
+  {
+    "id": "Q80987",
+    "name": "Fluminense F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Fluminense_Football_Club.svg/500px-Fluminense_Football_Club.svg.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 71
+  },
+  {
+    "id": "Q188841",
+    "name": "Fortaleza E.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Fortaleza_Esporte_Clube_logo.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 53
+  },
+  {
+    "id": "Q18708",
+    "name": "Fulham F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Fulham_FC_%28shield%29.svg/330px-Fulham_FC_%28shield%29.svg.png",
+    "leagueId": "Q9448",
+    "countryCode": "GB",
+    "popularity": 84
+  },
+  {
+    "id": "Q495299",
+    "name": "Galatasaray S.K.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Galatasaray_S.K._Logo_2026_5-stars.svg/1920px-Galatasaray_S.K._Logo_2026_5-stars.svg.png",
+    "leagueId": "Q485568",
+    "countryCode": "TR",
+    "popularity": 93
+  },
+  {
+    "id": "Q824850",
+    "name": "Gaziantep F.K.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/c/c6/Gazi%C5%9Fehir_Gaziantep_logo.svg/250px-Gazi%C5%9Fehir_Gaziantep_logo.svg.png",
+    "leagueId": "Q485568",
+    "countryCode": "TR",
+    "popularity": 38
+  },
+  {
+    "id": "Q2074",
+    "name": "Genoa CFC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/2/2c/Genoa_CFC_crest.svg/250px-Genoa_CFC_crest.svg.png",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 84
+  },
+  {
+    "id": "Q8806",
+    "name": "Getafe CF",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/4/46/Getafe_logo.svg/330px-Getafe_logo.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 67
+  },
+  {
+    "id": "Q80882",
+    "name": "Godoy Cruz Antonio Tomba",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/a/ad/Godoy_Cruz_Antonio_Tomba.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 38
+  },
+  {
+    "id": "Q1534448",
+    "name": "Goiânia Esporte Clube",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Goiania_EC.svg/250px-Goiania_EC.svg.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 11
+  },
+  {
+    "id": "Q816779",
+    "name": "Goiás Esporte Clube",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Goi%C3%A1s_Esporte_Clube_logo.svg/250px-Goi%C3%A1s_Esporte_Clube_logo.svg.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 37
+  },
+  {
+    "id": "Q221695",
+    "name": "Grêmio FBPA",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Gremio_logo.svg/500px-Gremio_logo.svg.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 59
+  },
+  {
+    "id": "Q2359560",
+    "name": "Hajer Club",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/8/86/Hajer_FC_logo.png",
+    "leagueId": "Q255633",
+    "countryCode": "SA",
+    "popularity": 13
+  },
+  {
+    "id": "Q51974",
+    "name": "Hamburger SV",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Hamburger_SV_logo.svg/960px-Hamburger_SV_logo.svg.png",
+    "leagueId": "Q82595",
+    "countryCode": "DE",
+    "popularity": 76
+  },
+  {
+    "id": "Q192597",
+    "name": "Hibernian F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/3/37/Hibernian_FC_logo.svg/330px-Hibernian_FC_logo.svg.png",
+    "leagueId": "Q14377162",
+    "countryCode": "GB",
+    "popularity": 54
+  },
+  {
+    "id": "Q328313",
+    "name": "Houston Dynamo FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Houston_Dynamo_FC_logo.svg/250px-Houston_Dynamo_FC_logo.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 44
+  },
+  {
+    "id": "Q19477",
+    "name": "Hull City A.F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/5/54/Hull_City_A.F.C._logo.svg/250px-Hull_City_A.F.C._logo.svg.png",
+    "leagueId": "Q9448",
+    "countryCode": "GB",
+    "popularity": 69
+  },
+  {
+    "id": "Q2454482",
+    "name": "Independiente Rivadavia",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Escudo_del_Club_Independiente_Rivadavia.svg/960px-Escudo_del_Club_Independiente_Rivadavia.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 18
+  },
+  {
+    "id": "Q16844931",
+    "name": "Inter Miami CF",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/5/5c/Inter_Miami_CF_logo.svg/250px-Inter_Miami_CF_logo.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 62
+  },
+  {
+    "id": "Q631",
+    "name": "Inter Milan",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/FC_Internazionale_Milano_2021.svg/960px-FC_Internazionale_Milano_2021.svg.png",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 121
+  },
+  {
+    "id": "Q9653",
+    "name": "Ipswich Town F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/4/43/Ipswich_Town.svg/330px-Ipswich_Town.svg.png",
+    "leagueId": "Q9448",
+    "countryCode": "GB",
+    "popularity": 67
+  },
+  {
+    "id": "Q1422",
+    "name": "Juventus FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Juventus_FC_-_logo_black_%28Italy%2C_2020%29.svg/250px-Juventus_FC_-_logo_black_%28Italy%2C_2020%29.svg.png",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 130
+  },
+  {
+    "id": "Q216032",
+    "name": "K.R.C. Genk",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/7/77/Logo_KRC_Genk.png",
+    "leagueId": "Q216022",
+    "countryCode": "BE",
+    "popularity": 57
+  },
+  {
+    "id": "Q18232",
+    "name": "KAA Gent",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/KAA_Gent_logo.svg/330px-KAA_Gent_logo.svg.png",
+    "leagueId": "Q216022",
+    "countryCode": "BE",
+    "popularity": 58
+  },
+  {
+    "id": "Q138230",
+    "name": "Kasımpaşa S.K.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/1/18/Kasimpasa_logo.svg/330px-Kasimpasa_logo.svg.png",
+    "leagueId": "Q485568",
+    "countryCode": "TR",
+    "popularity": 43
+  },
+  {
+    "id": "Q210961",
+    "name": "Kilmarnock F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/3/38/Kilmarnock_FC_crest.svg/330px-Kilmarnock_FC_crest.svg.png",
+    "leagueId": "Q14377162",
+    "countryCode": "GB",
+    "popularity": 49
+  },
+  {
+    "id": "Q513237",
+    "name": "Kocaelispor",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/c/cc/Kocaelispor_current_logo.png",
+    "leagueId": "Q485568",
+    "countryCode": "TR",
+    "popularity": 29
+  },
+  {
+    "id": "Q113000",
+    "name": "KV Mechelen",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/2/28/KV_Mechelen_logo.svg/250px-KV_Mechelen_logo.svg.png",
+    "leagueId": "Q216022",
+    "countryCode": "BE",
+    "popularity": 48
+  },
+  {
+    "id": "Q204357",
+    "name": "LA Galaxy",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Los_Angeles_Galaxy_logo.svg/960px-Los_Angeles_Galaxy_logo.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 59
+  },
+  {
+    "id": "Q8823",
+    "name": "Levante UD",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/7/7b/Levante_Uni%C3%B3n_Deportiva%2C_S.A.D._logo.svg/330px-Levante_Uni%C3%B3n_Deportiva%2C_S.A.D._logo.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 69
+  },
+  {
+    "id": "Q1130849",
+    "name": "Liverpool F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/0/0c/Liverpool_FC.svg/250px-Liverpool_FC.svg.png",
+    "leagueId": "Q9448",
+    "countryCode": "GB",
+    "popularity": 132
+  },
+  {
+    "id": "Q18380286",
+    "name": "Los Angeles FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Los_Angeles_Football_Club.svg/250px-Los_Angeles_Football_Club.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 46
+  },
+  {
+    "id": "Q18656",
+    "name": "Manchester United F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/7/7a/Manchester_United_FC_crest.svg/330px-Manchester_United_FC_crest.svg.png",
+    "leagueId": "Q9448",
+    "countryCode": "GB",
+    "popularity": 147
+  },
+  {
+    "id": "Q19828435",
+    "name": "Minnesota United FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/e/e8/Minnesota_United_FC_%28MLS%29_Primary_logo.svg/250px-Minnesota_United_FC_%28MLS%29_Primary_logo.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 36
+  },
+  {
+    "id": "Q216523",
+    "name": "Motherwell F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Motherwell_FC_crest.svg/500px-Motherwell_FC_crest.svg.png",
+    "leagueId": "Q14377162",
+    "countryCode": "GB",
+    "popularity": 50
+  },
+  {
+    "id": "Q47518754",
+    "name": "Nashville SC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Nashville_SC_logo%2C_2020.svg/1280px-Nashville_SC_logo%2C_2020.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 36
+  },
+  {
+    "id": "Q309095",
+    "name": "New England Revolution",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Logo_of_New_England_Revolution_%282021%29.svg/250px-Logo_of_New_England_Revolution_%282021%29.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 45
+  },
+  {
+    "id": "Q13361030",
+    "name": "New York City FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Logo_New_York_City_FC_2025.svg/960px-Logo_New_York_City_FC_2025.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 46
+  },
+  {
+    "id": "Q204220",
+    "name": "New York Red Bulls",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/5/51/New_York_Red_Bulls_logo.svg/330px-New_York_Red_Bulls_logo.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 54
+  },
+  {
+    "id": "Q18716",
+    "name": "Newcastle United F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Newcastle_United_Logo.svg/330px-Newcastle_United_Logo.svg.png",
+    "leagueId": "Q9448",
+    "countryCode": "GB",
+    "popularity": 96
+  },
+  {
+    "id": "Q221882",
+    "name": "Newell's Old Boys",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Escudo_del_Club_Atl%C3%A9tico_Newell%27s_Old_Boys_de_Rosario.svg/500px-Escudo_del_Club_Atl%C3%A9tico_Newell%27s_Old_Boys_de_Rosario.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 52
+  },
+  {
+    "id": "Q185163",
+    "name": "OGC Nice",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/2/2e/OGC_Nice_logo.svg/250px-OGC_Nice_logo.svg.png",
+    "leagueId": "Q13394",
+    "countryCode": "FR",
+    "popularity": 65
+  },
+  {
+    "id": "Q132885",
+    "name": "Olympique de Marseille",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Olympique_de_Marseille_2026_logo.svg/250px-Olympique_de_Marseille_2026_logo.svg.png",
+    "leagueId": "Q13394",
+    "countryCode": "FR",
+    "popularity": 84
+  },
+  {
+    "id": "Q2338486",
+    "name": "Olympique Lillois",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Olympique_lillois.svg/960px-Olympique_lillois.svg.png",
+    "leagueId": "Q13394",
+    "countryCode": "FR",
+    "popularity": 18
+  },
+  {
+    "id": "Q15214308",
+    "name": "Orlando City SC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/6/6a/Orlando_City_2014.svg/330px-Orlando_City_2014.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 41
+  },
+  {
+    "id": "Q916199",
+    "name": "Oud-Heverlee Leuven",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/2/24/OH_LEUVEN.png",
+    "leagueId": "Q216022",
+    "countryCode": "BE",
+    "popularity": 35
+  },
+  {
+    "id": "Q483020",
+    "name": "Paris Saint-Germain FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a7/Paris_Saint-Germain_F.C..svg/330px-Paris_Saint-Germain_F.C..svg.png",
+    "leagueId": "Q13394",
+    "countryCode": "FR",
+    "popularity": 100
+  },
+  {
+    "id": "Q2693",
+    "name": "Parma Calcio 1913",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Logo_Parma_Calcio_1913_%28adozione_2016%29.svg/250px-Logo_Parma_Calcio_1913_%28adozione_2016%29.svg.png",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 80
+  },
+  {
+    "id": "Q689874",
+    "name": "Philadelphia Union",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/4/46/Philadelphia_Union_2018_logo.svg/330px-Philadelphia_Union_2018_logo.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 39
+  },
+  {
+    "id": "Q1031200",
+    "name": "Portland Timbers",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Portland_Timbers_logo.svg/330px-Portland_Timbers_logo.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 44
+  },
+  {
+    "id": "Q1143000",
+    "name": "Pumas UNAM",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b7/Club_Universidad_Nacional_logo.svg/250px-Club_Universidad_Nacional_logo.svg.png",
+    "leagueId": "Q764690",
+    "countryCode": "MX",
+    "popularity": 40
+  },
+  {
+    "id": "Q606210",
+    "name": "Querétaro F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/1/11/Quer%C3%A9taro_F.C._logo.svg/250px-Quer%C3%A9taro_F.C._logo.svg.png",
+    "leagueId": "Q764690",
+    "countryCode": "MX",
+    "popularity": 34
+  },
+  {
+    "id": "Q191843",
+    "name": "R.C. Lens",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/RC_Lens_logo.svg/330px-RC_Lens_logo.svg.png",
+    "leagueId": "Q13394",
+    "countryCode": "FR",
+    "popularity": 59
+  },
+  {
+    "id": "Q276533",
+    "name": "Racing Club",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Escudo_de_Racing_Club_%282014%29.svg/250px-Escudo_de_Racing_Club_%282014%29.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 54
+  },
+  {
+    "id": "Q12236",
+    "name": "Racing de Santander",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Racing_de_Santander_logo.svg/120px-Racing_de_Santander_logo.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 59
+  },
+  {
+    "id": "Q2312558",
+    "name": "Racing White Daring Molenbeek",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/5/5a/RWD-Molenbeek.png",
+    "leagueId": "Q216022",
+    "countryCode": "BE",
+    "popularity": 23
+  },
+  {
+    "id": "Q10300",
+    "name": "Rayo Vallecano",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/d/d8/Rayo_Vallecano_logo.svg/330px-Rayo_Vallecano_logo.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 69
+  },
+  {
+    "id": "Q702455",
+    "name": "RB Leipzig",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/0/04/RB_Leipzig_2014_logo.svg/500px-RB_Leipzig_2014_logo.svg.png",
+    "leagueId": "Q82595",
+    "countryCode": "DE",
+    "popularity": 72
+  },
+  {
+    "id": "Q8749",
+    "name": "RC Celta de Vigo",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/1/12/RC_Celta_de_Vigo_logo.svg/250px-RC_Celta_de_Vigo_logo.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 72
+  },
+  {
+    "id": "Q126334",
+    "name": "RC Strasbourg Alsace",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/8/80/Racing_Club_de_Strasbourg_logo.svg/330px-Racing_Club_de_Strasbourg_logo.svg.png",
+    "leagueId": "Q13394",
+    "countryCode": "FR",
+    "popularity": 57
+  },
+  {
+    "id": "Q8780",
+    "name": "RCD Espanyol de Barcelona",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/9/92/RCD_Espanyol_crest.svg/330px-RCD_Espanyol_crest.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 82
+  },
+  {
+    "id": "Q8723",
+    "name": "Real Betis Balompié",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/2/2f/Real_Betis_2022_logo.svg/500px-Real_Betis_2022_logo.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 77
+  },
+  {
+    "id": "Q1102998",
+    "name": "Real Club España",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/2/20/Real_club_espana_logo.png",
+    "leagueId": "Q764690",
+    "countryCode": "MX",
+    "popularity": 14
+  },
+  {
+    "id": "Q8682",
+    "name": "Real Madrid Club de Fútbol",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/330px-Real_Madrid_CF.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 151
+  },
+  {
+    "id": "Q391353",
+    "name": "Real Salt Lake",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/5/54/Real_Salt_Lake_2010.svg/330px-Real_Salt_Lake_2010.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 40
+  },
+  {
+    "id": "Q10315",
+    "name": "Real Sociedad",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/Real_Sociedad_logo.svg/250px-Real_Sociedad_logo.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 80
+  },
+  {
+    "id": "Q865735",
+    "name": "Royal Excelsior Mouscron",
+    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/600px%20White%20square%20on%20HEX-FF0000%20background.svg",
+    "leagueId": "Q216022",
+    "countryCode": "BE",
+    "popularity": 25
+  },
+  {
+    "id": "Q196160",
+    "name": "Royale Union Saint-Gilloise",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/1/11/Royale_Union_Saint-Gilloise_logo.svg/330px-Royale_Union_Saint-Gilloise_logo.svg.png",
+    "leagueId": "Q216022",
+    "countryCode": "BE",
+    "popularity": 45
+  },
+  {
+    "id": "Q35933",
+    "name": "S.C. Corinthians Paulista",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Sport_Club_Corinthians_Paulista_crest.svg/330px-Sport_Club_Corinthians_Paulista_crest.svg.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 102
+  },
+  {
+    "id": "Q80845",
+    "name": "S.C. Internacional",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Sport_Club_Internacional_logo.svg/960px-Sport_Club_Internacional_logo.svg.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 60
+  },
+  {
+    "id": "Q430107",
+    "name": "Samsunspor FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/8/83/Samsunspor_crest.svg/250px-Samsunspor_crest.svg.png",
+    "leagueId": "Q485568",
+    "countryCode": "TR",
+    "popularity": 42
+  },
+  {
+    "id": "Q118945347",
+    "name": "San Diego FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/6/6f/San_Diego_FC_logo.svg/330px-San_Diego_FC_logo.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 24
+  },
+  {
+    "id": "Q575370",
+    "name": "San Jose Earthquakes",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/9/98/San_Jose_Earthquakes_2014.svg/250px-San_Jose_Earthquakes_2014.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 39
+  },
+  {
+    "id": "Q80921",
+    "name": "San Martín de San Juan",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/5/57/San_Mart%C3%ADn_de_San_Juan.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 23
+  },
+  {
+    "id": "Q80955",
+    "name": "Santos F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Santos_Futebol_Clube_logo_%28with_stars_and_crown%29.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 74
+  },
+  {
+    "id": "Q745246",
+    "name": "Santos Laguna",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/9/96/Santos_Laguna_logo.svg/250px-Santos_Laguna_logo.svg.png",
+    "leagueId": "Q764690",
+    "countryCode": "MX",
+    "popularity": 40
+  },
+  {
+    "id": "Q38568",
+    "name": "São Paulo FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/S%C3%A3o_Paulo_Futebol_Clube_logo_%282022%29.svg/60px-S%C3%A3o_Paulo_Futebol_Clube_logo_%282022%29.svg.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 93
+  },
+  {
+    "id": "Q160532",
+    "name": "SC Paderborn 07",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/SC_Paderborn_07_Logo_new.svg/120px-SC_Paderborn_07_Logo_new.svg.png",
+    "leagueId": "Q82595",
+    "countryCode": "DE",
+    "popularity": 55
+  },
+  {
+    "id": "Q32494",
+    "name": "Schalke 04",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/FC_Schalke_04_Logo.svg/960px-FC_Schalke_04_Logo.svg.png",
+    "leagueId": "Q82595",
+    "countryCode": "DE",
+    "popularity": 87
+  },
+  {
+    "id": "Q632511",
+    "name": "Seattle Sounders FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/8/84/Seattle_Sounders_logo.svg/330px-Seattle_Sounders_logo.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 49
+  },
+  {
+    "id": "Q10329",
+    "name": "Sevilla FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/Sevilla_FC_logo.svg/250px-Sevilla_FC_logo.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 86
+  },
+  {
+    "id": "Q80964",
+    "name": "Sociedade Esportiva Palmeiras",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/6/60/SE_Palmeiras_2025_crest.png",
+    "leagueId": "Q206813",
+    "countryCode": "BR",
+    "popularity": 75
+  },
+  {
+    "id": "Q75729",
+    "name": "Sporting CP",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Sporting_Clube_de_Portugal_2026.svg/960px-Sporting_Clube_de_Portugal_2026.svg.png",
+    "leagueId": "Q182994",
+    "countryCode": "PT",
+    "popularity": 81
+  },
+  {
+    "id": "Q329812",
+    "name": "Sporting Kansas City",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Sporting_Kansas_City_logo.svg/250px-Sporting_Kansas_City_logo.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 39
+  },
+  {
+    "id": "Q2609",
+    "name": "SS Lazio",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/c/ce/S.S._Lazio_badge.svg/250px-S.S._Lazio_badge.svg.png",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 99
+  },
+  {
+    "id": "Q2641",
+    "name": "SSC Napoli",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/SSC_Napoli_2025_%28white_and_azure%29.svg/960px-SSC_Napoli_2025_%28white_and_azure%29.svg.png",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 115
+  },
+  {
+    "id": "Q268776",
+    "name": "St Johnstone F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/4/40/St_Johnstone_FC_crest.svg/330px-St_Johnstone_FC_crest.svg.png",
+    "leagueId": "Q14377162",
+    "countryCode": "GB",
+    "popularity": 43
+  },
+  {
+    "id": "Q66642491",
+    "name": "St. Louis City SC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Logo_of_St._Louis_City_SC.svg/250px-Logo_of_St._Louis_City_SC.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "US",
+    "popularity": 28
+  },
+  {
+    "id": "Q319136",
+    "name": "St. Mirren F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/2/27/St_Mirren_FC_crest.svg/330px-St_Mirren_FC_crest.svg.png",
+    "leagueId": "Q14377162",
+    "countryCode": "GB",
+    "popularity": 46
+  },
+  {
+    "id": "Q218372",
+    "name": "Stade Brestois 29",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/0/05/Stade_Brestois_29_logo.svg/330px-Stade_Brestois_29_logo.svg.png",
+    "leagueId": "Q13394",
+    "countryCode": "FR",
+    "popularity": 54
+  },
+  {
+    "id": "Q19509",
+    "name": "Stade Rennais F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/Stade_Rennais_FC.svg/330px-Stade_Rennais_FC.svg.png",
+    "leagueId": "Q13394",
+    "countryCode": "FR",
+    "popularity": 59
+  },
+  {
+    "id": "Q190561",
+    "name": "Standard Liège",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/7/7e/Standard_Li%C3%A8ge_logo.svg/250px-Standard_Li%C3%A8ge_logo.svg.png",
+    "leagueId": "Q216022",
+    "countryCode": "BE",
+    "popularity": 64
+  },
+  {
+    "id": "Q692691",
+    "name": "SV Elversberg",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/SV_Elversberg_Logo_2021.svg/330px-SV_Elversberg_Logo_2021.svg.png",
+    "leagueId": "Q82595",
+    "countryCode": "DE",
+    "popularity": 31
+  },
+  {
+    "id": "Q51976",
+    "name": "SV Werder Bremen",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/SV-Werder-Bremen-Logo.svg/250px-SV-Werder-Bremen-Logo.svg.png",
+    "leagueId": "Q82595",
+    "countryCode": "DE",
+    "popularity": 83
+  },
+  {
+    "id": "Q1022939",
+    "name": "Talleres de Córdoba",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Escudo_Talleres_2015.svg/960px-Escudo_Talleres_2015.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 32
+  },
+  {
+    "id": "Q849823",
+    "name": "Tigres UANL",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/8/82/Tigres_UANL_logo_%28crest%29.svg/330px-Tigres_UANL_logo_%28crest%29.svg.png",
+    "leagueId": "Q764690",
+    "countryCode": "MX",
+    "popularity": 45
+  },
+  {
+    "id": "Q670186",
+    "name": "Toluca FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Club_Toluca_Logo.svg/120px-Club_Toluca_Logo.svg.png",
+    "leagueId": "Q764690",
+    "countryCode": "MX",
+    "popularity": 38
+  },
+  {
+    "id": "Q327238",
+    "name": "Toronto FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/7/7c/Toronto_FC_Logo.svg/250px-Toronto_FC_Logo.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "CA",
+    "popularity": 43
+  },
+  {
+    "id": "Q18741",
+    "name": "Tottenham Hotspur F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b4/Tottenham_Hotspur.svg/120px-Tottenham_Hotspur.svg.png",
+    "leagueId": "Q9448",
+    "countryCode": "GB",
+    "popularity": 102
+  },
+  {
+    "id": "Q2422417",
+    "name": "Toulouse FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/c/cd/Toulouse_FC_%281937%29.gif",
+    "leagueId": "Q13394",
+    "countryCode": "FR",
+    "popularity": 17
+  },
+  {
+    "id": "Q22707",
+    "name": "TSG 1899 Hoffenheim",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Logo_TSG_Hoffenheim.svg/960px-Logo_TSG_Hoffenheim.svg.png",
+    "leagueId": "Q82595",
+    "countryCode": "DE",
+    "popularity": 73
+  },
+  {
+    "id": "Q1328077",
+    "name": "U.S. Fiumana",
+    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Logo%20of%20US%20Fiumana.svg",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 10
+  },
+  {
+    "id": "Q2798",
+    "name": "Udinese Calcio",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/c/ce/Udinese_Calcio_logo.svg/250px-Udinese_Calcio_logo.svg.png",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 78
+  },
+  {
+    "id": "Q80899",
+    "name": "Unión de Santa Fe",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Escudo_club_Atl%C3%A9tico_Uni%C3%B3n_de_santa_fe.svg/960px-Escudo_club_Atl%C3%A9tico_Uni%C3%B3n_de_santa_fe.svg.png",
+    "leagueId": "Q223170",
+    "countryCode": "AR",
+    "popularity": 29
+  },
+  {
+    "id": "Q10333",
+    "name": "Valencia CF",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/c/ce/Valenciacf.svg/330px-Valenciacf.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 92
+  },
+  {
+    "id": "Q196107",
+    "name": "Vancouver Whitecaps FC",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Vancouver_Whitecaps_logo.svg/500px-Vancouver_Whitecaps_logo.svg.png",
+    "leagueId": "Q18543",
+    "countryCode": "CA",
+    "popularity": 42
+  },
+  {
+    "id": "Q501245",
+    "name": "Venezia F.C.",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/3/39/Venezia_FC_crest.svg/60px-Venezia_FC_crest.svg.png",
+    "leagueId": "Q15804",
+    "countryCode": "IT",
+    "popularity": 53
+  },
+  {
+    "id": "Q4512",
+    "name": "VfB Stuttgart",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/VfB_Stuttgart_1893_Logo.svg/500px-VfB_Stuttgart_1893_Logo.svg.png",
+    "leagueId": "Q82595",
+    "countryCode": "DE",
+    "popularity": 85
+  },
+  {
+    "id": "Q12297",
+    "name": "Villarreal CF",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/b/b9/Villarreal_CF_logo-en.svg/330px-Villarreal_CF_logo-en.svg.png",
+    "leagueId": "Q324867",
+    "countryCode": "ES",
+    "popularity": 81
+  }
+]
