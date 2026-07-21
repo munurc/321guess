@@ -46,7 +46,8 @@
     "loading": "Veri yükleniyor…"
   },
   "play": {
-    "getReady": "Hazır olun",
+    "getReady": "Hazır ol",
+    "go": "Başla",
     "vs": "vs",
     "showAnswers": "Cevabı Göster",
     "nextRound": "Sonraki Tur",

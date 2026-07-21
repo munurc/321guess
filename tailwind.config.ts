@@ -5,24 +5,27 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: ["class", '[data-theme="dark"]'],
   theme: {
     extend: {
       colors: {
-        paper: "#f6f2ea",
-        "paper-2": "#ede8dc",
-        ink: "#1e1c19",
-        "ink-soft": "#4a4640",
-        "ink-mute": "#7a746a",
-        rule: "#d9d3c4",
-        accent: "#3f6b56",
-        "accent-strong": "#2f5443",
+        // Tokens are RGB triplets in CSS variables so Tailwind's `/opacity`
+        // syntax keeps working. Both themes are defined in app/globals.css.
+        paper: "rgb(var(--paper) / <alpha-value>)",
+        "paper-2": "rgb(var(--paper-2) / <alpha-value>)",
+        ink: "rgb(var(--ink) / <alpha-value>)",
+        "ink-soft": "rgb(var(--ink-soft) / <alpha-value>)",
+        "ink-mute": "rgb(var(--ink-mute) / <alpha-value>)",
+        rule: "rgb(var(--rule) / <alpha-value>)",
+        accent: "rgb(var(--accent) / <alpha-value>)",
+        "accent-strong": "rgb(var(--accent-strong) / <alpha-value>)",
       },
       keyframes: {
-        countdown: {
-          "0%": { transform: "scale(0.4)", opacity: "0" },
-          "20%": { transform: "scale(1.15)", opacity: "1" },
+        "countdown-soft": {
+          "0%": { transform: "scale(0.85)", opacity: "0" },
+          "25%": { transform: "scale(1.02)", opacity: "1" },
           "80%": { transform: "scale(1)", opacity: "1" },
-          "100%": { transform: "scale(1.6)", opacity: "0" },
+          "100%": { transform: "scale(1.05)", opacity: "0" },
         },
         "fade-in": {
           "0%": { opacity: "0", transform: "translateY(8px)" },
@@ -30,7 +33,7 @@ const config: Config = {
         },
       },
       animation: {
-        countdown: "countdown 1s ease-in-out forwards",
+        "countdown-soft": "countdown-soft 1s cubic-bezier(0.16, 1, 0.3, 1) forwards",
         "fade-in": "fade-in 0.4s ease-out forwards",
       },
     },

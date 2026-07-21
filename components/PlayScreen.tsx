@@ -10,6 +10,7 @@ import { buildPool, pickRound } from "@/lib/game";
 import { Countdown } from "./Countdown";
 import { RoundView } from "./RoundView";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { ThemeToggle } from "./ThemeToggle";
 
 const SETTINGS_KEY = "321guess.settings";
 type Phase = "countdown" | "round";
@@ -75,7 +76,10 @@ export function PlayScreen() {
         >
           ← {t("backToSetup")}
         </Link>
-        <LanguageSwitcher />
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <LanguageSwitcher />
+        </div>
       </header>
 
       {phase === "countdown" ? (

@@ -2,8 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Light theme (default) — warm cream + bottle green */
 :root {
+  --paper: 246 242 234;      /* #f6f2ea */
+  --paper-2: 237 232 220;    /* #ede8dc */
+  --ink: 30 28 25;           /* #1e1c19 */
+  --ink-soft: 74 70 64;      /* #4a4640 */
+  --ink-mute: 122 116 106;   /* #7a746a */
+  --rule: 217 211 196;       /* #d9d3c4 */
+  --accent: 63 107 86;       /* #3f6b56 */
+  --accent-strong: 47 84 67; /* #2f5443 */
   color-scheme: light;
+  --page-glow: rgba(63, 107, 86, 0.06);
+}
+
+/* Dark theme — deep warm-neutral, brighter accent for contrast */
+:root[data-theme="dark"] {
+  --paper: 20 19 15;         /* #14130f */
+  --paper-2: 30 28 23;       /* #1e1c17 */
+  --ink: 232 226 211;        /* #e8e2d3 */
+  --ink-soft: 184 176 160;   /* #b8b0a0 */
+  --ink-mute: 138 132 120;   /* #8a8478 */
+  --rule: 58 53 43;          /* #3a352b */
+  --accent: 108 163 136;     /* #6ca388 */
+  --accent-strong: 85 135 111;/* #55876f */
+  color-scheme: dark;
+  --page-glow: rgba(108, 163, 136, 0.05);
+}
+
+/* Respect OS preference when the user hasn't explicitly chosen */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: 20 19 15;
+    --paper-2: 30 28 23;
+    --ink: 232 226 211;
+    --ink-soft: 184 176 160;
+    --ink-mute: 138 132 120;
+    --rule: 58 53 43;
+    --accent: 108 163 136;
+    --accent-strong: 85 135 111;
+    color-scheme: dark;
+    --page-glow: rgba(108, 163, 136, 0.05);
+  }
 }
 
 html,
@@ -13,7 +53,6 @@ body {
 
 body {
   @apply bg-paper text-ink antialiased;
-  /* Soft, off-camera warm glow — never a hard gradient, just a gentle paper feel */
-  background-image: radial-gradient(1200px 800px at 50% -200px, rgba(63, 107, 86, 0.06), transparent 60%);
+  background-image: radial-gradient(1200px 800px at 50% -200px, var(--page-glow), transparent 60%);
   background-attachment: fixed;
 }

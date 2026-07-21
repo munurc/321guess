@@ -16,16 +16,20 @@ export function Countdown({ onDone }: { onDone: () => void }) {
     return () => clearTimeout(id);
   }, [n, onDone]);
 
+  const isGo = n === 0;
   return (
-    <div className="flex min-h-[70vh] flex-col items-center justify-center">
-      <p className="mb-6 text-sm uppercase tracking-widest text-ink/40">
+    <div className="flex min-h-[70vh] flex-col items-center justify-center gap-6">
+      <p className="text-xs uppercase tracking-[0.3em] text-ink/40">
         {t("getReady")}
       </p>
       <div
         key={n}
-        className="animate-countdown text-[16rem] font-black leading-none text-accent [font-variant-numeric:tabular-nums]"
+        aria-live="polite"
+        className={`animate-countdown-soft font-serif leading-none text-accent [font-variant-numeric:tabular-nums] ${
+          isGo ? "text-7xl italic sm:text-8xl" : "text-[12rem] font-medium sm:text-[16rem]"
+        }`}
       >
-        {n === 0 ? "GO" : n}
+        {isGo ? t("go") : n}
       </div>
     </div>
   );

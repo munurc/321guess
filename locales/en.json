@@ -47,6 +47,7 @@
   },
   "play": {
     "getReady": "Get ready",
+    "go": "Go",
     "vs": "vs",
     "showAnswers": "Show Answers",
     "nextRound": "Next Round",

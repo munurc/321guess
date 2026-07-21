@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import type { Dataset, Difficulty, GameMode, Settings } from "@/lib/types";
 import { loadDataset } from "@/lib/data";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { ThemeToggle } from "./ThemeToggle";
 
 const SETTINGS_KEY = "321guess.settings";
 
@@ -82,11 +83,14 @@ export function SetupScreen() {
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-8 sm:py-14">
-      <header className="mb-8 flex items-center justify-between">
+      <header className="mb-8 flex items-center justify-between gap-3">
         <h1 className="text-3xl sm:text-4xl font-black tracking-tight">
           <span className="text-accent">3·2·1</span>guess
         </h1>
-        <LanguageSwitcher />
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <LanguageSwitcher />
+        </div>
       </header>
 
       {!dataset ? (

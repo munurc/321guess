@@ -11,7 +11,7 @@ export function LogoTile({ src, alt, caption, variant = "logo" }: LogoTileProps)
   return (
     <div className="flex flex-col items-center gap-3">
       <div
-        className={`grid aspect-square w-40 place-items-center rounded-2xl border border-rule bg-white p-6 shadow-md shadow-ink/10 sm:w-56 lg:w-72 ${
+        className={`grid aspect-square w-40 place-items-center rounded-2xl border border-rule bg-paper-2 p-6 shadow-md shadow-ink/10 sm:w-56 lg:w-72 ${
           variant === "flag" ? "overflow-hidden !p-0" : ""
         }`}
       >

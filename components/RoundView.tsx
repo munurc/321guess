@@ -5,6 +5,13 @@ import { useLocale, useTranslations } from "next-intl";
 import type { Round } from "@/lib/types";
 import { LogoTile } from "./LogoTile";
 
+/** Turn "TR" into 🇹🇷 using the regional indicator symbols block. */
+function codeToFlag(code: string): string {
+  if (!code || code.length !== 2) return "";
+  const base = 0x1f1e6 - "A".charCodeAt(0);
+  return String.fromCodePoint(base + code.charCodeAt(0), base + code.charCodeAt(1));
+}
+
 export function RoundView({
   round,
   onNext,
@@ -56,14 +63,22 @@ export function RoundView({
               {round.correctPlayers.length === 0 ? (
                 <p className="text-sm text-ink/50">{t("noAnswers")}</p>
               ) : (
-                <ul className="grid gap-1.5 sm:grid-cols-2">
+                <ul className="grid gap-1 sm:grid-cols-2">
                   {round.correctPlayers.map((p) => (
                     <li
                       key={p.id}
-                      className="rounded-md bg-ink/5 px-3 py-2 text-sm leading-tight"
+                      className="flex items-center gap-2 rounded-md bg-paper px-3 py-2 text-sm leading-tight shadow-sm shadow-ink/5"
                     >
-                      <div>{p.name}</div>
-                      <div className="text-xs text-ink/40">{p.nationalityCode}</div>
+                      <span
+                        aria-hidden
+                        className="text-base leading-none [font-family:'Apple_Color_Emoji','Segoe_UI_Emoji','Noto_Color_Emoji',sans-serif]"
+                      >
+                        {codeToFlag(p.nationalityCode)}
+                      </span>
+                      <span className="min-w-0 flex-1 truncate">{p.name}</span>
+                      <span className="text-[10px] font-medium uppercase tracking-wider text-ink/40">
+                        {p.nationalityCode}
+                      </span>
                     </li>
                   ))}
                 </ul>
