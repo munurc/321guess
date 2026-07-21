@@ -1,4 +1,4 @@
 {
-  "_comment": "Manual overrides for clubs whose Wikidata P154/P41/P18 point to non-logo images (stadium photos, colour palettes, etc.). Keys are Wikidata Q IDs. Values are Wikimedia Commons file URLs.",
-  "Q7156": "http://commons.wikimedia.org/wiki/Special:FilePath/FC%20Barcelona%20%28crest%29.svg"
+  "_comment": "Manual overrides for clubs whose Wikipedia REST API + Wikidata both return a wrong image (or none). Wikipedia's summary API handles almost every club now, so this list should stay tiny.",
+  "Q7156": "https://upload.wikimedia.org/wikipedia/en/thumb/4/47/FC_Barcelona_%28crest%29.svg/250px-FC_Barcelona_%28crest%29.svg.png"
 }

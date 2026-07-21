@@ -100,9 +100,12 @@ async function fetchOneLeague(
         BIND(?p18raw AS ?p18)
       }
       BIND(COALESCE(?p154, ?p41, ?p18) AS ?logo)
-      FILTER(BOUND(?logo))
-      ?club wdt:P17 ?country.
-      ?country wdt:P297 ?countryCode.
+      # NOTE: logo is optional here — refetch-logos.ts fetches missing ones
+      # from Wikipedia's REST API after the base pass.
+      OPTIONAL {
+        ?club wdt:P17 ?country.
+        ?country wdt:P297 ?countryCode.
+      }
       ?club rdfs:label ?clubEn. FILTER(LANG(?clubEn) = "en")
       OPTIONAL {
         ?league rdfs:label ?leagueEn. FILTER(LANG(?leagueEn) = "en")
@@ -120,15 +123,18 @@ async function fetchOneLeague(
   const seen = new Set<string>();
 
   for (const b of data.results.bindings) {
-    if (!b.league || !b.club || !b.logo || !b.countryCode) continue;
+    if (!b.league || !b.club) continue;
     const leagueId = qid(b.league.value);
     const clubId = qid(b.club.value);
     if (seen.has(clubId)) continue;
     seen.add(clubId);
-    const countryCode = b.countryCode.value.toUpperCase();
+    const meta = targetLeagues.find((l) => l.qid === leagueId);
+    // Country fallback: some clubs (e.g. Ajax) have no P17 in Wikidata; use
+    // the league's country hint so they still make it into the pool.
+    const countryCode = b.countryCode?.value?.toUpperCase() ?? meta?.countryCodeHint;
+    if (!countryCode) continue;
 
     if (!league) {
-      const meta = targetLeagues.find((l) => l.qid === leagueId);
       // Prefer the hard-coded displayName over Wikidata labels — Wikidata's
       // Turkish/English labels for niche leagues can be dated (e.g. Saudi Pro
       // League returns an Ottoman-era transliteration).
@@ -143,7 +149,9 @@ async function fetchOneLeague(
     clubs.push({
       id: clubId,
       name: b.clubEn?.value ?? clubId,
-      logoUrl: b.logo.value,
+      // If logo is missing at this stage, refetch-logos.ts fills it later
+      // from Wikipedia. Empty string prevents a crash when rendered.
+      logoUrl: b.logo?.value ?? "",
       leagueId,
       countryCode,
       // Filled in by enrich-popularity.ts as a separate pass; default 0 here.
@@ -195,13 +203,15 @@ async function fetchPlayers(clubs: Club[]): Promise<Player[]> {
       // Use p:P54/ps:P54 (all-rank statement pattern) so we catch former clubs
       // like Barcelona for Messi — his current-club Inter Miami is "preferred
       // rank", which makes wdt:P54 truthy-hide Barcelona/PSG.
-      // Skip only DeprecatedRank statements.
+      // Skip only DeprecatedRank statements. ORDER BY makes OFFSET
+      // deterministic — Wikidata otherwise returns a different 400 rows on
+      // each call to the same OFFSET.
       const query = `SELECT DISTINCT ?player WHERE {
         ?player p:P54 ?stmt.
         ?stmt ps:P54 wd:${club.id}.
         ?stmt wikibase:rank ?rank.
         FILTER(?rank != wikibase:DeprecatedRank)
-      } LIMIT ${pageSize} OFFSET ${offset}`;
+      } ORDER BY ?player LIMIT ${pageSize} OFFSET ${offset}`;
       const label = `[${(i + 1).toString().padStart(3)}/${clubs.length}] ${club.name} p${page + 1}`;
       let data: WdResponse;
       try {
@@ -243,13 +253,16 @@ async function fetchPlayers(clubs: Club[]): Promise<Player[]> {
   for (let i = 0; i < allPids.length; i += metaBatchSize) {
     const batch = allPids.slice(i, i + metaBatchSize);
     const values = batch.map((p) => `wd:${p}`).join(" ");
+    // Grab both TR and EN labels; TS side prefers Turkish then falls back.
+    // For most players TR == EN (Latin scripts), but for the ones that differ
+    // (Xavi vs Xavi Hernández, some Turkish nationals) Turkish reads nicer.
     const query = `
-      SELECT ?player ?playerEn ?natCode WHERE {
+      SELECT ?player ?playerTr ?playerEn ?natCode WHERE {
         VALUES ?player { ${values} }
         ?player wdt:P27 ?nationality.
         ?nationality wdt:P297 ?natCode.
-        ?player rdfs:label ?playerEn.
-        FILTER(LANG(?playerEn) = "en")
+        OPTIONAL { ?player rdfs:label ?playerTr. FILTER(LANG(?playerTr) = "tr") }
+        OPTIONAL { ?player rdfs:label ?playerEn. FILTER(LANG(?playerEn) = "en") }
       }
     `;
     const label = `meta ${i + 1}-${Math.min(i + metaBatchSize, allPids.length)}/${allPids.length}`;
@@ -263,7 +276,9 @@ async function fetchPlayers(clubs: Club[]): Promise<Player[]> {
     }
     const seen = new Set<string>();
     for (const b of data.results.bindings) {
-      if (!b.player || !b.playerEn || !b.natCode) continue;
+      if (!b.player || !b.natCode) continue;
+      const name = b.playerTr?.value ?? b.playerEn?.value;
+      if (!name) continue;
       const pid = qid(b.player.value);
       if (seen.has(pid)) continue; // dual-national: keep first
       seen.add(pid);
@@ -271,7 +286,7 @@ async function fetchPlayers(clubs: Club[]): Promise<Player[]> {
       if (clubsForPlayer.length === 0) continue;
       players.set(pid, {
         id: pid,
-        name: b.playerEn.value,
+        name,
         nationalityCode: b.natCode.value.toUpperCase(),
         clubIds: clubsForPlayer,
       });
@@ -324,10 +339,13 @@ async function fetchCountries(codes: Set<string>): Promise<Country[]> {
 async function fetchExtraPagesForHeavyClubs(
   clubs: Club[],
   existing: Player[],
-  // Main fetch already covered pages 0+1 (OFFSET 0 and 400), so supplement
-  // begins at page 2 (OFFSET 800). 3 more pages → covers up to OFFSET 2000.
-  fromPage = 2,
-  pages = 3,
+  // Without ORDER BY, Wikidata's OFFSET is non-deterministic — the same
+  // OFFSET 400 can return a different 400 rows on each call. So we re-cover
+  // pages the main fetch also covered, this time with ORDER BY ?player for
+  // a stable page window, and paginate to the end (early break at less
+  // than pageSize rows).
+  fromPage = 0,
+  pages = 10,
 ): Promise<Player[]> {
   const pageSize = 400;
   const existingByPid = new Map(existing.map((p) => [p.id, p]));
@@ -347,7 +365,7 @@ async function fetchExtraPagesForHeavyClubs(
         ?stmt ps:P54 wd:${club.id}.
         ?stmt wikibase:rank ?rank.
         FILTER(?rank != wikibase:DeprecatedRank)
-      } LIMIT ${pageSize} OFFSET ${offset}`;
+      } ORDER BY ?player LIMIT ${pageSize} OFFSET ${offset}`;
       const label = `heavy [${i + 1}/${heavy.length}] ${club.name} p${page + 1}`;
       let data: WdResponse;
       try {

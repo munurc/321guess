@@ -225,7 +225,7 @@
     "code": "CV",
     "nameEn": "Cape Verde",
     "nameTr": "Cabo Verde",
-    "flagUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Flag%20of%20Cape%20Verde.svg"
+    "flagUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Flag%20of%20Cape%20Verde%20%281975%E2%80%931992%29.svg"
   },
   {
     "code": "CY",
@@ -474,6 +474,12 @@
     "flagUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Flag%20of%20Kenya.svg"
   },
   {
+    "code": "KG",
+    "nameEn": "Kyrgyzstan",
+    "nameTr": "Kırgızistan",
+    "flagUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Flag%20of%20Kyrgyzstan.svg"
+  },
+  {
     "code": "KM",
     "nameEn": "Comoros",
     "nameTr": "Komorlar",
@@ -538,6 +544,12 @@
     "nameEn": "Liberia",
     "nameTr": "Liberya",
     "flagUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Flag%20of%20Liberia.svg"
+  },
+  {
+    "code": "LS",
+    "nameEn": "Lesotho",
+    "nameTr": "Lesotho",
+    "flagUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Flag%20of%20Lesotho.svg"
   },
   {
     "code": "LT",
@@ -888,6 +900,12 @@
     "flagUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Flag%20of%20Thailand.svg"
   },
   {
+    "code": "TM",
+    "nameEn": "Turkmenistan",
+    "nameTr": "Türkmenistan",
+    "flagUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Flag%20of%20Turkmenistan.svg"
+  },
+  {
     "code": "TN",
     "nameEn": "Tunisia",
     "nameTr": "Tunus",
@@ -964,6 +982,12 @@
     "nameEn": "Kosovo",
     "nameTr": "Kosova",
     "flagUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Flag%20of%20Kosovo.svg"
+  },
+  {
+    "code": "YE",
+    "nameEn": "Yemen",
+    "nameTr": "Yemen",
+    "flagUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Flag%20of%20Yemen.svg"
   },
   {
     "code": "YU",
