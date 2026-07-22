@@ -1,5 +1,19 @@
 import { NextResponse } from "next/server";
 import type { Player } from "@/lib/types";
+import additionsRaw from "@/data/player-club-additions.json";
+
+/**
+ * Manual overrides for player→club statements Wikidata is missing (e.g. a
+ * player was rostered but only played on loan; Wikidata volunteers haven't
+ * added the P54 statement yet). Format: playerQid → { clubs: [clubQid…] }.
+ * Anything else in the entry (name, note) is documentation only.
+ */
+type Additions = Record<string, { clubs: string[]; name?: string; note?: string }>;
+const additions: Additions = Object.fromEntries(
+  Object.entries(additionsRaw as Record<string, unknown>)
+    .filter(([k]) => k.startsWith("Q"))
+    .map(([k, v]) => [k, v as { clubs: string[] }]),
+);
 
 /**
  * Round-time player fetch.
@@ -149,15 +163,64 @@ export async function POST(req: Request) {
   }
 
   const qidRe = /^https?:\/\/www\.wikidata\.org\/entity\//;
-  const playerIds = [
-    ...new Set(
-      idsData.results.bindings
-        .map((r) => r.player?.value)
-        .filter((v): v is string => !!v)
-        .map((v) => v.replace(qidRe, "")),
-    ),
-  ];
+  const wikidataIds = new Set(
+    idsData.results.bindings
+      .map((r) => r.player?.value)
+      .filter((v): v is string => !!v)
+      .map((v) => v.replace(qidRe, "")),
+  );
 
+  // ── Merge manual overrides ────────────────────────────────────────────────
+  // For entries where one round club is in the extras and the other is
+  // covered by Wikidata (or also in extras), the player belongs in this
+  // round. When only one side is in extras we run a small verification query
+  // to confirm Wikidata has them at the other club.
+  const directAdds: string[] = [];
+  const needsCheck: Array<{ playerId: string; clubId: string }> = [];
+
+  if (b.mode === "clubClub") {
+    for (const [playerId, entry] of Object.entries(additions)) {
+      const extras = entry.clubs;
+      const hasA = extras.includes(b.clubA);
+      const hasB = extras.includes(b.clubB);
+      if (hasA && hasB) directAdds.push(playerId);
+      else if (hasA) needsCheck.push({ playerId, clubId: b.clubB });
+      else if (hasB) needsCheck.push({ playerId, clubId: b.clubA });
+    }
+  } else {
+    // countryClub: extras just says "player X played at club Y".
+    // Nationality gets checked in metadata query below.
+    for (const [playerId, entry] of Object.entries(additions)) {
+      if (entry.clubs.includes(b.club)) directAdds.push(playerId);
+    }
+  }
+
+  if (needsCheck.length > 0) {
+    // Batched ASK-like query: does each (player, club) pair exist in Wikidata?
+    const values = needsCheck
+      .map(({ playerId, clubId }) => `(wd:${playerId} wd:${clubId})`)
+      .join(" ");
+    const verifyQuery = `
+      SELECT ?player ?club WHERE {
+        VALUES (?player ?club) { ${values} }
+        ?player p:P54/ps:P54 ?club.
+      }
+    `;
+    try {
+      const verifyData = await runSparql(verifyQuery);
+      for (const row of verifyData.results.bindings) {
+        const p = row.player?.value.replace(qidRe, "");
+        if (p) directAdds.push(p);
+      }
+    } catch {
+      // If the check fails, we skip half-in-extras entries silently — the
+      // main round still returns; the overrides just don't apply this time.
+    }
+  }
+
+  for (const id of directAdds) wikidataIds.add(id);
+
+  const playerIds = [...wikidataIds];
   if (playerIds.length === 0) {
     return NextResponse.json(
       { players: [] },

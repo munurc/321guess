@@ -1,0 +1,13 @@
+{
+  "_comment": "Manual player→clubs additions for cases where Wikidata is missing statements. Format: playerQid → [clubQids]. Used by /api/round to augment intersection results. When a Wikipedia article documents a player at a club but Wikidata doesn't have the P54 statement yet, add here. When Wikidata catches up you can leave the entry (it just becomes redundant).",
+  "Q42303600": {
+    "name": "Edon Zhegrova",
+    "note": "Lille and Juventus missing from Wikidata as of 2026",
+    "clubs": ["Q19516", "Q1422"]
+  },
+  "Q470669": {
+    "name": "Elvir Bolić",
+    "note": "Was on Real Madrid roster, only played on loan at Rayo Vallecano; Wikidata missing the Real Madrid statement",
+    "clubs": ["Q8682"]
+  }
+}
