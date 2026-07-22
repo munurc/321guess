@@ -60,5 +60,26 @@
   "language": {
     "tr": "Türkçe",
     "en": "English"
+  },
+  "manual": {
+    "link": "Manuel oyun",
+    "title": "Manuel oyun",
+    "description": "İki takımı kendin seç, cevabı gör.",
+    "mode": {
+      "clubClub": "Kulüp × Kulüp",
+      "countryClub": "Ülke × Kulüp"
+    },
+    "search": {
+      "clubA": "Birinci takımı ara",
+      "clubB": "İkinci takımı ara",
+      "country": "Ülke ara",
+      "club": "Takım ara",
+      "empty": "Sonuç yok",
+      "clear": "Sıfırla"
+    },
+    "start": "Başlat",
+    "newRound": "Yeni oyun",
+    "backHome": "Ana sayfa",
+    "hint": "Rastgele değil — seçtiğin takımların ortak oyuncuları gelir."
   }
 }

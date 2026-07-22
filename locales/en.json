@@ -60,5 +60,26 @@
   "language": {
     "tr": "Türkçe",
     "en": "English"
+  },
+  "manual": {
+    "link": "Manual game",
+    "title": "Manual game",
+    "description": "Pick two teams yourself, see the answers.",
+    "mode": {
+      "clubClub": "Club × Club",
+      "countryClub": "Country × Club"
+    },
+    "search": {
+      "clubA": "Search first club",
+      "clubB": "Search second club",
+      "country": "Search country",
+      "club": "Search club",
+      "empty": "No results",
+      "clear": "Reset"
+    },
+    "start": "Play",
+    "newRound": "New game",
+    "backHome": "Home",
+    "hint": "Not random — you'll see the players who played for both teams you picked."
   }
 }

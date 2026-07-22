@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import type { Dataset, Difficulty, GameMode, Settings } from "@/lib/types";
@@ -12,6 +13,7 @@ const SETTINGS_KEY = "321guess.settings";
 
 export function SetupScreen() {
   const t = useTranslations("setup");
+  const tManual = useTranslations("manual");
   const locale = useLocale();
   const router = useRouter();
   const [dataset, setDataset] = useState<Dataset | null>(null);
@@ -213,6 +215,14 @@ export function SetupScreen() {
             >
               {canStart ? t("start") : t("startDisabled")}
             </button>
+            <div className="mt-3 text-center">
+              <Link
+                href={`/${locale}/manual`}
+                className="text-xs uppercase tracking-wider text-ink/50 underline decoration-ink/20 underline-offset-4 hover:text-accent hover:decoration-accent"
+              >
+                {tManual("link")}
+              </Link>
+            </div>
           </div>
         </div>
       )}
