@@ -8,5 +8,7 @@ export default createMiddleware({
 });
 
 export const config = {
-  matcher: ["/((?!api|_next|.*\\..*).*)"],
+  // Skip locale routing for API routes, Next internals, static assets, and
+  // metadata files (favicon, opengraph-image, twitter-image, sitemap, robots).
+  matcher: ["/((?!api|_next|opengraph-image|twitter-image|favicon|sitemap|robots|.*\\..*).*)"],
 };
