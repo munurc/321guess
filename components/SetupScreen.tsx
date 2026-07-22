@@ -105,7 +105,7 @@ export function SetupScreen() {
             <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-ink/70">
               {t("mode.heading")}
             </h2>
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid gap-3 sm:grid-cols-3">
               <ModeCard
                 selected={mode === "clubClub"}
                 onClick={() => setMode("clubClub")}
@@ -120,6 +120,7 @@ export function SetupScreen() {
                 description={t("mode.countryClub.description")}
                 icon={<FlagIcon />}
               />
+              <ManualCard href={`/${locale}/manual`} title={tManual("title")} description={tManual("description")} />
             </div>
           </section>
 
@@ -215,14 +216,6 @@ export function SetupScreen() {
             >
               {canStart ? t("start") : t("startDisabled")}
             </button>
-            <div className="mt-3 text-center">
-              <Link
-                href={`/${locale}/manual`}
-                className="text-xs uppercase tracking-wider text-ink/50 underline decoration-ink/20 underline-offset-4 hover:text-accent hover:decoration-accent"
-              >
-                {tManual("link")}
-              </Link>
-            </div>
           </div>
         </div>
       )}
@@ -264,6 +257,43 @@ function ModeCard({
         <div className="mt-1 text-xs leading-relaxed text-ink/60">{description}</div>
       </div>
     </button>
+  );
+}
+
+function ManualCard({
+  href,
+  title,
+  description,
+}: {
+  href: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="group flex items-start gap-4 rounded-xl border-2 border-dashed border-ink/20 bg-transparent p-4 text-left transition hover:border-accent hover:bg-accent/5"
+    >
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-ink/10 text-ink/70 transition group-hover:bg-accent group-hover:text-paper">
+        <SearchIcon />
+      </div>
+      <div>
+        <div className="font-semibold">{title}</div>
+        <div className="mt-1 text-xs leading-relaxed text-ink/60">{description}</div>
+        <div className="mt-1 text-[10px] uppercase tracking-wider text-accent opacity-0 transition group-hover:opacity-100">
+          →
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function SearchIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-4.35-4.35" />
+    </svg>
   );
 }
 
