@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
+import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { THEME_INIT_SCRIPT } from "@/components/ThemeToggle";
 import { locales, type Locale } from "@/i18n/request";
 import "../globals.css";
+
+const GA_MEASUREMENT_ID = "G-PW8MGE4D96";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -78,6 +81,18 @@ export default async function LocaleLayout({
           </div>
           <Analytics />
         </NextIntlClientProvider>
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
       </body>
     </html>
   );
