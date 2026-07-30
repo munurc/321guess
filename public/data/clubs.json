@@ -16,14 +16,6 @@
     "popularity": 67
   },
   {
-    "id": "Q162449",
-    "name": "1. FFC Frankfurt",
-    "logoUrl": "",
-    "leagueId": "Q82595",
-    "countryCode": "DE",
-    "popularity": 12
-  },
-  {
     "id": "Q105254",
     "name": "1. FSV Mainz 05",
     "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/1._FSV_Mainz_05_logo.svg/330px-1._FSV_Mainz_05_logo.svg.png",
@@ -90,7 +82,7 @@
   {
     "id": "Q19568",
     "name": "AFC Bournemouth",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/AFC_Bournemouth_%282013%29.svg/250px-AFC_Bournemouth_%282013%29.svg.png",
+    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Deancourt%2014092013%20vblackpool.jpg",
     "leagueId": "Q9448",
     "countryCode": "GB",
     "popularity": 77
@@ -202,15 +194,15 @@
   {
     "id": "Q482764",
     "name": "Al-Nassr",
-    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Nassr%20FC%20Logo.svg",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Nassr_FC_Logo.svg/330px-Nassr_FC_Logo.svg.png",
     "leagueId": "Q255633",
     "countryCode": "SA",
-    "popularity": 70
+    "popularity": 69
   },
   {
     "id": "Q2986998",
     "name": "Al-Raed FC",
-    "logoUrl": "",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Al_Raed_FC.svg/330px-Al_Raed_FC.svg.png",
     "leagueId": "Q255633",
     "countryCode": "SA",
     "popularity": 29
@@ -322,7 +314,7 @@
   {
     "id": "Q180305",
     "name": "AS Monaco FC",
-    "logoUrl": "",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/LogoASMonacoFC2021.svg/250px-LogoASMonacoFC2021.svg.png",
     "leagueId": "Q13394",
     "countryCode": "MC",
     "popularity": 84
@@ -421,7 +413,7 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f9/Atletico_Madrid_Logo_2024.svg/330px-Atletico_Madrid_Logo_2024.svg.png",
     "leagueId": "Q324867",
     "countryCode": "ES",
-    "popularity": 107
+    "popularity": 108
   },
   {
     "id": "Q757470",
@@ -570,7 +562,7 @@
   {
     "id": "Q740637",
     "name": "C.D. Santa Clara",
-    "logoUrl": "",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/3/37/C.D._Santa_Clara_logo.svg/330px-C.D._Santa_Clara_logo.svg.png",
     "leagueId": "Q182994",
     "countryCode": "PT",
     "popularity": 42
@@ -581,12 +573,12 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/S%C3%ADmbolo_Estrela_da_Amadora.svg/960px-S%C3%ADmbolo_Estrela_da_Amadora.svg.png",
     "leagueId": "Q182994",
     "countryCode": "PT",
-    "popularity": 36
+    "popularity": 35
   },
   {
     "id": "Q216503",
     "name": "C.S. Marítimo",
-    "logoUrl": "",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/3/30/C.S._Mar%C3%ADtimo_logo.svg/330px-C.S._Mar%C3%ADtimo_logo.svg.png",
     "leagueId": "Q182994",
     "countryCode": "PT",
     "popularity": 46
@@ -754,7 +746,7 @@
   {
     "id": "Q327172",
     "name": "Club Atlético Huracán",
-    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Emblema%20oficial%20del%20Club%20Atl%C3%A9tico%20Hurac%C3%A1n.svg",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Emblema_oficial_del_Club_Atl%C3%A9tico_Hurac%C3%A1n.svg/960px-Emblema_oficial_del_Club_Atl%C3%A9tico_Hurac%C3%A1n.svg.png",
     "leagueId": "Q223170",
     "countryCode": "AR",
     "popularity": 39
@@ -826,7 +818,7 @@
   {
     "id": "Q190916",
     "name": "Club Brugge K.V.",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/d/d0/Club_Brugge_KV_logo.svg/250px-Club_Brugge_KV_logo.svg.png",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/9/97/Club_brugge.png",
     "leagueId": "Q216022",
     "countryCode": "BE",
     "popularity": 67
@@ -989,7 +981,15 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Calcio_Como_-_logo_%28Italy%2C_2019-%29.svg/500px-Calcio_Como_-_logo_%28Italy%2C_2019-%29.svg.png",
     "leagueId": "Q15804",
     "countryCode": "IT",
-    "popularity": 53
+    "popularity": 54
+  },
+  {
+    "id": "Q19613395",
+    "name": "Çorum FK",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/a/ab/%C3%87orum_F.K._crest.svg/250px-%C3%87orum_F.K._crest.svg.png",
+    "leagueId": "Q485568",
+    "countryCode": "TR",
+    "popularity": 12
   },
   {
     "id": "Q19580",
@@ -1026,7 +1026,7 @@
   {
     "id": "Q188277",
     "name": "Cruzeiro E.C.",
-    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Cruzeiro%20Esporte%20Clube%20%28logo%29.svg",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Cruzeiro_Esporte_Clube_%28logo%29.svg/330px-Cruzeiro_Esporte_Clube_%28logo%29.svg.png",
     "leagueId": "Q206813",
     "countryCode": "BR",
     "popularity": 56
@@ -1038,14 +1038,6 @@
     "leagueId": "Q9448",
     "countryCode": "GB",
     "popularity": 82
-  },
-  {
-    "id": "Q130302376",
-    "name": "CSM Târgu Jiu",
-    "logoUrl": "",
-    "leagueId": "Q9448",
-    "countryCode": "RO",
-    "popularity": 2
   },
   {
     "id": "Q238593",
@@ -1170,7 +1162,7 @@
   {
     "id": "Q214940",
     "name": "Estudiantes de La Plata",
-    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Estudiantes%20de%20la%20Plata%20crest%20%282025%29.svg",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Estudiantes_de_la_Plata_crest_%282025%29_cropped.svg/960px-Estudiantes_de_la_Plata_crest_%282025%29_cropped.svg.png",
     "leagueId": "Q223170",
     "countryCode": "AR",
     "popularity": 51
@@ -1196,7 +1188,7 @@
     "name": "Eyüpspor",
     "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/6/62/Ey%C3%BCpspor_Logosu.png",
     "leagueId": "Q485568",
-    "countryCode": "IR",
+    "countryCode": "TR",
     "popularity": 22
   },
   {
@@ -1293,7 +1285,7 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/7/78/FC_Cincinnati_primary_logo_2018.svg/330px-FC_Cincinnati_primary_logo_2018.svg.png",
     "leagueId": "Q18543",
     "countryCode": "US",
-    "popularity": 34
+    "popularity": 35
   },
   {
     "id": "Q642291",
@@ -1346,7 +1338,7 @@
   {
     "id": "Q19603",
     "name": "FC Twente",
-    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/FC%20Twente%20Assemblage.jpg",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/e/e3/FC_Twente.svg/330px-FC_Twente.svg.png",
     "leagueId": "Q167541",
     "countryCode": "NL",
     "popularity": 71
@@ -1386,7 +1378,7 @@
   {
     "id": "Q80987",
     "name": "Fluminense F.C.",
-    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Fluminense%20logo.gif",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Fluminense_Football_Club.svg/500px-Fluminense_Football_Club.svg.png",
     "leagueId": "Q206813",
     "countryCode": "BR",
     "popularity": 71
@@ -1410,7 +1402,7 @@
   {
     "id": "Q854167",
     "name": "Fortuna Sittard",
-    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/600px%20Fortuna.png",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/e/ef/Fortuna_Sittard_Logo.svg/330px-Fortuna_Sittard_Logo.svg.png",
     "leagueId": "Q167541",
     "countryCode": "NL",
     "popularity": 44
@@ -1762,7 +1754,7 @@
   {
     "id": "Q113000",
     "name": "KV Mechelen",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/2/28/KV_Mechelen_logo.svg/250px-KV_Mechelen_logo.svg.png",
+    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Achter%20De%20Kazerne%20Oud.jpg",
     "leagueId": "Q216022",
     "countryCode": "BE",
     "popularity": 48
@@ -1922,7 +1914,7 @@
   {
     "id": "Q318348",
     "name": "N.E.C.",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/3/38/NEC_Nijmegen_logo.svg/330px-NEC_Nijmegen_logo.svg.png",
+    "logoUrl": "",
     "leagueId": "Q167541",
     "countryCode": "NL",
     "popularity": 46
@@ -2122,7 +2114,7 @@
   {
     "id": "Q1031200",
     "name": "Portland Timbers",
-    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Portland%20Timbers%20wordmark%202019.svg",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Portland_Timbers_logo.svg/330px-Portland_Timbers_logo.svg.png",
     "leagueId": "Q18543",
     "countryCode": "US",
     "popularity": 44
@@ -2170,7 +2162,7 @@
   {
     "id": "Q191843",
     "name": "R.C. Lens",
-    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Tifo%20Lens-Lille%202009.jpg",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/c/cc/RC_Lens_logo.svg/330px-RC_Lens_logo.svg.png",
     "leagueId": "Q13394",
     "countryCode": "FR",
     "popularity": 59
@@ -2258,7 +2250,7 @@
   {
     "id": "Q126334",
     "name": "RC Strasbourg Alsace",
-    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Racing%20Club%20de%20Strasbourg%20contre%20Racing%20Lens%20d%C3%A9cembre%202016%20.jpg",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/8/80/Racing_Club_de_Strasbourg_logo.svg/330px-Racing_Club_de_Strasbourg_logo.svg.png",
     "leagueId": "Q13394",
     "countryCode": "FR",
     "popularity": 57
@@ -2298,7 +2290,7 @@
   {
     "id": "Q391353",
     "name": "Real Salt Lake",
-    "logoUrl": "http://commons.wikimedia.org/wiki/Special:FilePath/Real%20Salt%20Lake%20tertiary%20wordmark%20color.svg",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/5/54/Real_Salt_Lake_2010.svg/330px-Real_Salt_Lake_2010.svg.png",
     "leagueId": "Q18543",
     "countryCode": "US",
     "popularity": 40
@@ -2562,7 +2554,7 @@
   {
     "id": "Q138248",
     "name": "Sint-Truidense V.V.",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/f/f1/K._Sint-Truidense_V.V._logo.png",
+    "logoUrl": "",
     "leagueId": "Q216022",
     "countryCode": "BE",
     "popularity": 41
@@ -2594,7 +2586,7 @@
   {
     "id": "Q209895",
     "name": "Sparta Rotterdam",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/9/9f/Sparta_Rotterdam_logo.svg/250px-Sparta_Rotterdam_logo.svg.png",
+    "logoUrl": "",
     "leagueId": "Q167541",
     "countryCode": "NL",
     "popularity": 54
@@ -2954,7 +2946,7 @@
   {
     "id": "Q784572",
     "name": "VV DOS",
-    "logoUrl": "",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/5/5d/DOS_Holland_Stichtse_Boys_Combinatie.png",
     "leagueId": "Q167541",
     "countryCode": "NL",
     "popularity": 10
@@ -2962,7 +2954,7 @@
   {
     "id": "Q332664",
     "name": "Willem II",
-    "logoUrl": "",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/7/77/Willem_II_logo.svg/250px-Willem_II_logo.svg.png",
     "leagueId": "Q167541",
     "countryCode": "NL",
     "popularity": 46
