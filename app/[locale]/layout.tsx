@@ -28,6 +28,24 @@ export async function generateMetadata({
     metadataBase: new URL("https://321guess.com"),
     title,
     description,
+    alternates: {
+      canonical: url,
+      languages: {
+        tr: "https://321guess.com/tr",
+        en: "https://321guess.com/en",
+        "x-default": "https://321guess.com/tr",
+      },
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
     openGraph: {
       title,
       description,
@@ -35,12 +53,30 @@ export async function generateMetadata({
       siteName: "321guess",
       type: "website",
       locale: locale === "tr" ? "tr_TR" : "en_US",
+      alternateLocale: locale === "tr" ? ["en_US"] : ["tr_TR"],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
     },
+    keywords:
+      locale === "tr"
+        ? [
+            "futbolcu tahmin oyunu",
+            "futbol tahmin oyunu",
+            "futbol bilgi yarışması",
+            "futbolcu bul",
+            "iki takımda oynayan futbolcular",
+            "321guess",
+          ]
+        : [
+            "football player guessing game",
+            "soccer player quiz",
+            "guess the footballer",
+            "football trivia",
+            "321guess",
+          ],
   };
 }
 

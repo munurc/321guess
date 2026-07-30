@@ -1,7 +1,41 @@
 {
   "meta": {
-    "title": "321guess — Futbolcu Tahmin Oyunu",
-    "description": "Arkadaşınla ekran başında oynanan futbolcu tahmin oyunu."
+    "title": "Futbolcu Tahmin Oyunu — 321guess",
+    "description": "Ücretsiz futbolcu tahmin oyunu. İki kulüp logosu veya bir bayrak + bir logo gösterilir, iki takımda da oynamış futbolcuyu bul. Arkadaşınla ekran başında oyna."
+  },
+  "home": {
+    "h1": "Futbolcu Tahmin Oyunu",
+    "tagline": "İki takımda da forma giymiş futbolcuyu bulmaya çalış — arkadaşınla, tarayıcıda, kayıt olmadan.",
+    "intro": "321guess, futbol severler için hazırlanmış ücretsiz bir futbolcu tahmin oyunudur. Sana iki kulüp logosu ya da bir bayrak + bir kulüp logosu gösterilir; hedef, o iki takımda da oynamış bir futbolcunun ismini bulmaktır. Fenerbahçe, Galatasaray, Beşiktaş, Barcelona, Real Madrid, Manchester United gibi dünya devlerinden Süper Lig'e kadar geniş bir kulüp havuzundan sorular gelir. Kayıt yok, indirme yok — tarayıcıyı aç ve arkadaşınla oyna.",
+    "howToHeading": "Nasıl Oynanır?",
+    "howToSteps": [
+      "Oyun modunu seç: Kulüp × Kulüp veya Ülke × Kulüp.",
+      "Zorluk ve dahil edilecek ligleri belirle.",
+      "3-2-1 geri sayımı biter bitmez iki takımda da oynamış futbolcunun ismini söyle."
+    ],
+    "faqHeading": "Sıkça Sorulan Sorular",
+    "faq": [
+      {
+        "q": "321guess futbolcu tahmin oyunu ücretsiz mi?",
+        "a": "Evet, tamamen ücretsiz. Kayıt olmadan, hiçbir uygulama indirmeden tarayıcıda oynayabilirsin."
+      },
+      {
+        "q": "Kaç kişi oynayabilir?",
+        "a": "Ekran başında en az iki kişi öneririz. Bir kişi soruyu okur, diğerleri iki takımda da oynamış futbolcuyu tahmin eder. Tek başına da oynayabilirsin."
+      },
+      {
+        "q": "Hangi ligler ve kulüpler var?",
+        "a": "Türkiye Süper Lig, Premier League, LaLiga, Bundesliga, Serie A, Ligue 1 ve daha fazlası. Ayarlar ekranından istediğin ligleri açıp kapatabilirsin."
+      },
+      {
+        "q": "Ülke × Kulüp modu nedir?",
+        "a": "Bir bayrak ve bir kulüp logosu görürsün. O milliyetten olup o kulüpte oynamış bir futbolcunun ismini bulman gerekir."
+      },
+      {
+        "q": "Cevaplar nasıl doğrulanıyor?",
+        "a": "Oyuncu verileri Wikidata'dan çekilir ve düzenli olarak güncellenir. Tur sonunda 'Cevabı Göster' ile doğru futbolcuları görebilirsin."
+      }
+    ]
   },
   "setup": {
     "title": "321guess",

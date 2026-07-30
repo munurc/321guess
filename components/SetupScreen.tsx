@@ -84,11 +84,14 @@ export function SetupScreen() {
   }
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-8 sm:py-14">
+    <div className="mx-auto max-w-5xl px-4 py-8 sm:py-14">
       <header className="mb-8 flex items-center justify-between gap-3">
-        <h1 className="text-3xl sm:text-4xl font-black tracking-tight">
+        <div
+          className="text-3xl sm:text-4xl font-black tracking-tight"
+          aria-label="321guess"
+        >
           <span className="text-accent">3·2·1</span>guess
-        </h1>
+        </div>
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <LanguageSwitcher />
@@ -219,7 +222,7 @@ export function SetupScreen() {
           </div>
         </div>
       )}
-    </main>
+    </div>
   );
 }
 
