@@ -185,13 +185,21 @@ async function fetchLeaguesAndClubs(): Promise<{ leagues: League[]; clubs: Club[
 
 // ---------- 2. Players (batched by club) --------------------------------------
 
-async function fetchPlayers(clubs: Club[]): Promise<Player[]> {
+async function fetchPlayers(
+  clubs: Club[],
+  existing: Player[] = [],
+): Promise<Player[]> {
   // Phase 1: For each club, get up to N player URIs (fast — no joins).
   // Paginate with 2 pages of 400 → up to 800 players per club, avoiding the
   // ORDER BY sitelinks timeout while still catching famous transfers past #400.
   const pageSize = 400;
   const pages = 2;
   const playerClubs = new Map<string, Set<string>>(); // playerId → clubIds
+
+  // Seed with existing players so we (a) never lose them and (b) skip
+  // metadata refetch for pids we already know.
+  const existingById = new Map(existing.map((p) => [p.id, p]));
+  for (const p of existing) playerClubs.set(p.id, new Set(p.clubIds));
 
   console.log(`  phase 1: player URIs per club (${pages} pages of ${pageSize})`);
   for (let i = 0; i < clubs.length; i++) {
@@ -244,11 +252,24 @@ async function fetchPlayers(clubs: Club[]): Promise<Player[]> {
     await sleep(200);
   }
 
-  // Phase 2: Batch fetch labels + nationality for all unique player IDs.
-  const allPids = [...playerClubs.keys()];
-  console.log(`  phase 2: metadata for ${allPids.length} unique players`);
+  // Phase 2: Batch fetch labels + nationality for NEW player IDs only.
+  // Existing players keep their prior metadata — we only add clubIds discovered
+  // in phase 1. This preserves data across runs and avoids re-hitting SPARQL
+  // for tens of thousands of already-resolved players.
+  const newPids = [...playerClubs.keys()].filter((pid) => !existingById.has(pid));
+  console.log(
+    `  phase 2: metadata for ${newPids.length} NEW players (${existingById.size} kept from existing)`,
+  );
   const players = new Map<string, Player>();
+
+  // Carry existing players forward with unioned clubIds.
+  for (const [pid, prev] of existingById) {
+    const clubsForPlayer = [...(playerClubs.get(pid) ?? new Set(prev.clubIds))];
+    players.set(pid, { ...prev, clubIds: clubsForPlayer });
+  }
+
   const metaBatchSize = 100;
+  const allPids = newPids;
 
   for (let i = 0; i < allPids.length; i += metaBatchSize) {
     const batch = allPids.slice(i, i + metaBatchSize);
@@ -463,6 +484,10 @@ async function main() {
   const cacheClubs = cacheAll || argHas("--cache-clubs");
   const cachePlayers = cacheAll || argHas("--cache-players");
   const supplement = argHas("--supplement");
+  // Default is merge/incremental: load existing players.json, seed the
+  // fetch, skip metadata for known pids, and never drop a player that was
+  // already in the dataset. Pass --replace to overwrite from scratch.
+  const replace = argHas("--replace");
 
   if (cacheClubs && (await fileExists(clubsPath)) && (await fileExists(leaguesPath))) {
     console.log("→ Using cached clubs+leagues");
@@ -506,8 +531,20 @@ async function main() {
       players = await fetchExtraPagesForHeavyClubs(clubs, players);
     }
   } else {
-    console.log("→ Fetching players (batched)…");
-    players = await fetchPlayers(clubs);
+    // Incremental merge (default): seed with existing players.json so we
+    // (a) never lose players that appeared in a previous run and (b) skip
+    // metadata refetch for pids we already know. --replace to overwrite.
+    let existing: Player[] = [];
+    if (!replace && (await fileExists(playersPath))) {
+      try {
+        existing = JSON.parse(await fs.readFile(playersPath, "utf8"));
+        console.log(`→ Seeding from existing players.json (${existing.length} players)`);
+      } catch (e) {
+        console.warn(`  ! could not parse existing players.json: ${(e as Error).message}`);
+      }
+    }
+    console.log("→ Fetching players (batched, incremental)…");
+    players = await fetchPlayers(clubs, existing);
   }
 
   // Filter players to keep only those with clubs strictly in our pool.
