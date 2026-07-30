@@ -90,6 +90,11 @@ async function fetchOneLeague(
       { ?club wdt:P31/wdt:P279* wd:Q476028. }
       UNION
       { ?club wdt:P31/wdt:P279* wd:Q103229495. }
+      # Exclude women's teams: Q26935620 (women's football team) and
+      # Q107458730 (women's football club). Q476028 is gender-neutral so
+      # some women's clubs (e.g. 1. FFC Frankfurt) slip in without this.
+      FILTER NOT EXISTS { ?club wdt:P31/wdt:P279* wd:Q26935620. }
+      FILTER NOT EXISTS { ?club wdt:P31/wdt:P279* wd:Q107458730. }
       OPTIONAL { ?club wdt:P154 ?p154. }
       OPTIONAL { ?club wdt:P41  ?p41. }
       # P18 (image) sometimes holds a stadium/ground photo — only accept it when
@@ -113,7 +118,7 @@ async function fetchOneLeague(
       OPTIONAL {
         ?league rdfs:label ?leagueTr. FILTER(LANG(?leagueTr) = "tr")
       }
-      FILTER(!REGEX(?clubEn, "(reserves?|youth|academy|U-?\\\\d|women)", "i"))
+      FILTER(!REGEX(?clubEn, "(reserves?|youth|academy|U-?\\\\d|women|ladies|f[eé]minin|femenil|kad[ıi]n|frauen|FFC )", "i"))
     }
     LIMIT 200
   `;
