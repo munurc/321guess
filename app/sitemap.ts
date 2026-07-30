@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { locales } from "@/i18n/request";
 
-const BASE_URL = "https://321guess.com";
+const BASE_URL = "https://www.321guess.com";
 const ROUTES = ["", "/play", "/manual"] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {

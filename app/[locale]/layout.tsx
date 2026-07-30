@@ -23,17 +23,17 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "meta" });
   const title = t("title");
   const description = t("description");
-  const url = `https://321guess.com/${locale}`;
+  const url = `https://www.321guess.com/${locale}`;
   return {
-    metadataBase: new URL("https://321guess.com"),
+    metadataBase: new URL("https://www.321guess.com"),
     title,
     description,
     alternates: {
       canonical: url,
       languages: {
-        tr: "https://321guess.com/tr",
-        en: "https://321guess.com/en",
-        "x-default": "https://321guess.com/tr",
+        tr: "https://www.321guess.com/tr",
+        en: "https://www.321guess.com/en",
+        "x-default": "https://www.321guess.com/tr",
       },
     },
     robots: {

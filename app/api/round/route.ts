@@ -34,7 +34,7 @@ const additions: Additions = Object.fromEntries(
 
 const SPARQL_ENDPOINT = "https://query.wikidata.org/sparql";
 const USER_AGENT =
-  "321guess/1.0 (https://321guess.com; https://github.com/munurc/321guess)";
+  "321guess/1.0 (https://www.321guess.com; https://github.com/munurc/321guess)";
 
 export const runtime = "edge";
 
