@@ -6,7 +6,7 @@
   "home": {
     "h1": "Football Player Guessing Game",
     "tagline": "Name a player who played for both teams — local co-op, browser-based, no signup.",
-    "intro": "321guess is a free football player guessing game for fans. You're shown two club badges, or a flag plus a club badge, and the goal is to name a player who played for both teams. Questions are drawn from a broad pool covering the Premier League, LaLiga, Serie A, Bundesliga, Ligue 1, Turkish Süper Lig, and more — from world giants like Barcelona, Real Madrid and Manchester United to lesser-known clubs. No registration, no downloads — just open a browser and play with a friend.",
+    "intro": "321guess is a free football player guessing game for fans. You're shown two club badges, or a flag plus a club badge, and the goal is to name a player who played for both teams. Questions are drawn from a broad pool covering the Premier League, LaLiga, Serie A, Bundesliga, Ligue 1, Turkish Süper Lig, and more — from world giants like Barcelona, Real Madrid and Manchester United to lesser-known clubs. No registration, no downloads — just open a browser and play with a friend. If you'd rather compete solo, the Daily Challenge mode lets you race players worldwide on 5 questions that change every day, with just a username — no account required.",
     "howToHeading": "How to Play",
     "howToSteps": [
       "Pick a mode: Club × Club or Country × Club.",
@@ -34,6 +34,18 @@
       {
         "q": "How are answers verified?",
         "a": "Player data comes from Wikidata and is refreshed regularly. Hit 'Show Answers' at the end of a round to see the valid players."
+      },
+      {
+        "q": "What is the Daily Challenge?",
+        "a": "An online mode with 5 questions that change daily, the same for everyone. Type as many correct players as you can in 3 minutes and compete on the leaderboard."
+      },
+      {
+        "q": "Do I need an account to play online mode?",
+        "a": "No. No email or password — just pick a username and start playing."
+      },
+      {
+        "q": "How is the leaderboard ranked?",
+        "a": "Most correct players found ranks first; ties go to whoever finished faster. There's also a separate all-time leaderboard for total players found."
       }
     ]
   },
@@ -118,21 +130,26 @@
   },
   "online": {
     "modeCard": {
-      "title": "Online mode",
-      "description": "Race others on today's puzzle under your username."
+      "title": "Daily Challenge",
+      "description": "Race the world with 5 new football questions every day.",
+      "live": "LIVE"
     },
-    "title": "Online mode",
-    "description": "Type today's answers and compete on the leaderboard.",
+    "title": "Daily Challenge",
+    "description": "Race the world with 5 new football questions every day.",
     "backHome": "Home",
     "loading": "Loading…",
     "roundError": "Couldn't load today's puzzle. Try again shortly.",
     "welcomeBack": "Welcome back, {username}!",
     "vs": "vs",
-    "instructions": "You have {minutes} minutes — name players who played for both teams.",
+    "questionCountLabel": "questions",
+    "instructions": "You have {minutes} minutes for {questions} questions — name players who played for both teams. Move on to the next question whenever you want.",
+    "questionProgress": "Question {current} / {total}",
     "start": "Start",
     "guessPlaceholder": "Type a player's name…",
     "guessEmpty": "No matches",
-    "foundCount": "{found} / {total} players found",
+    "foundCount": "{found} / {total} found overall",
+    "pass": "Pass",
+    "nextQuestion": "Next Question",
     "finishEarly": "Finish",
     "resultLabel": "correct players",
     "streakLabel": "{count}-day streak",
@@ -146,7 +163,7 @@
     "leaderboard": {
       "tab": {
         "today": "Today",
-        "streak": "Streak"
+        "total": "Total"
       },
       "empty": "Nobody has played yet."
     },

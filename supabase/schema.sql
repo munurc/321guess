@@ -14,8 +14,19 @@ create table if not exists online_players (
   unique (username_lower)
 );
 
+-- One row per day; the actual matchups live in daily_questions below.
 create table if not exists daily_rounds (
   round_date date primary key,
+  question_count integer not null,
+  created_at timestamptz not null default now()
+);
+
+-- A day is a fixed set of club×club matchups (question_index 0..N-1), same
+-- for every player — players can answer as many players as they want per
+-- question, then pass/move on; nothing forces finding every shared player.
+create table if not exists daily_questions (
+  round_date date not null references daily_rounds(round_date),
+  question_index integer not null,
   club_a_id text not null,
   club_a_name text not null,
   club_a_logo_url text not null,
@@ -23,7 +34,7 @@ create table if not exists daily_rounds (
   club_b_name text not null,
   club_b_logo_url text not null,
   answer_player_ids text[] not null,
-  created_at timestamptz not null default now()
+  primary key (round_date, question_index)
 );
 
 -- Server-recorded start time per (round, player) — the only source of truth
@@ -38,11 +49,12 @@ create table if not exists daily_starts (
 
 create table if not exists daily_guesses (
   round_date date not null references daily_rounds(round_date),
+  question_index integer not null,
   player_token uuid not null references online_players(player_token),
   guessed_player_id text not null,
   correct boolean not null,
   created_at timestamptz not null default now(),
-  primary key (round_date, player_token, guessed_player_id)
+  primary key (round_date, question_index, player_token, guessed_player_id)
 );
 
 create table if not exists daily_scores (
@@ -71,8 +83,20 @@ create table if not exists streaks (
 
 create index if not exists streaks_longest_idx on streaks (longest_streak desc);
 
+-- All-time "total known players" leaderboard — sums correct_count across
+-- every day a player has finished, regardless of streaks/gaps.
+create or replace view player_totals as
+select
+  player_token,
+  username,
+  sum(correct_count)::integer as total_correct,
+  count(*)::integer as days_played
+from daily_scores
+group by player_token, username;
+
 alter table online_players enable row level security;
 alter table daily_rounds enable row level security;
+alter table daily_questions enable row level security;
 alter table daily_starts enable row level security;
 alter table daily_guesses enable row level security;
 alter table daily_scores enable row level security;

@@ -29,7 +29,8 @@ export async function POST(req: Request) {
 
     // Duration is computed entirely server-side from the /api/online/start
     // timestamp (or the earliest guess as a fallback) — no client input.
-    const result = await finishRound(roundDate, token, player.username, round.answerPlayerIds.length);
+    const totalPossible = round.questions.reduce((sum, q) => sum + q.answerPlayerIds.length, 0);
+    const result = await finishRound(roundDate, token, player.username, totalPossible);
     return NextResponse.json(result);
   } catch (e) {
     return NextResponse.json({ error: "server_error", message: (e as Error).message }, { status: 500 });

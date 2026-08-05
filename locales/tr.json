@@ -6,7 +6,7 @@
   "home": {
     "h1": "Futbolcu Tahmin Oyunu",
     "tagline": "İki takımda da forma giymiş futbolcuyu bulmaya çalış — arkadaşınla, tarayıcıda, kayıt olmadan.",
-    "intro": "321guess, futbol severler için hazırlanmış ücretsiz bir futbolcu tahmin oyunudur. Sana iki kulüp logosu ya da bir bayrak + bir kulüp logosu gösterilir; hedef, o iki takımda da oynamış bir futbolcunun ismini bulmaktır. Fenerbahçe, Galatasaray, Beşiktaş, Barcelona, Real Madrid, Manchester United gibi dünya devlerinden Süper Lig'e kadar geniş bir kulüp havuzundan sorular gelir. Kayıt yok, indirme yok — tarayıcıyı aç ve arkadaşınla oyna.",
+    "intro": "321guess, futbol severler için hazırlanmış ücretsiz bir futbolcu tahmin oyunudur. Sana iki kulüp logosu ya da bir bayrak + bir kulüp logosu gösterilir; hedef, o iki takımda da oynamış bir futbolcunun ismini bulmaktır. Fenerbahçe, Galatasaray, Beşiktaş, Barcelona, Real Madrid, Manchester United gibi dünya devlerinden Süper Lig'e kadar geniş bir kulüp havuzundan sorular gelir. Kayıt yok, indirme yok — tarayıcıyı aç ve arkadaşınla oyna. Rakip aramak istemeyenler için Günlük Meydan Okuma modunda, sadece bir kullanıcı adıyla (hesap gerekmez) her gün değişen 5 soruda dünyanın dört bir yanından oyuncularla yarışabilirsin.",
     "howToHeading": "Nasıl Oynanır?",
     "howToSteps": [
       "Oyun modunu seç: Kulüp × Kulüp veya Ülke × Kulüp.",
@@ -34,6 +34,18 @@
       {
         "q": "Cevaplar nasıl doğrulanıyor?",
         "a": "Oyuncu verileri Wikidata'dan çekilir ve düzenli olarak güncellenir. Tur sonunda 'Cevabı Göster' ile doğru futbolcuları görebilirsin."
+      },
+      {
+        "q": "Günlük Meydan Okuma nedir?",
+        "a": "Her gün değişen, herkes için aynı 5 soruluk online bir mod. 3 dakika içinde bildiğin futbolcuları yaz, liderlik tablosunda başkalarıyla yarış."
+      },
+      {
+        "q": "Online modda oynamak için hesap açmam mı gerekiyor?",
+        "a": "Hayır. E-posta ya da şifre yok — sadece bir kullanıcı adı seç, hemen oynamaya başla."
+      },
+      {
+        "q": "Liderlik tablosu nasıl sıralanıyor?",
+        "a": "En çok doğru futbolcu bulan önde; eşitlikte daha hızlı bitiren öne geçer. Ayrıca tüm zamanların en çok futbolcu bulan oyuncularını gösteren ayrı bir tablo da var."
       }
     ]
   },
@@ -118,21 +130,26 @@
   },
   "online": {
     "modeCard": {
-      "title": "Online mod",
-      "description": "Kullanıcı adınla günün bilmecesinde başkalarıyla yarış."
+      "title": "Günlük Meydan Okuma",
+      "description": "Her gün değişen 5 soruyla futbol bilgini dünyayla yarıştır.",
+      "live": "CANLI"
     },
-    "title": "Online mod",
-    "description": "Günün eşleşmesini yazarak çöz, başkalarıyla liderlik tablosunda yarış.",
+    "title": "Günlük Meydan Okuma",
+    "description": "Her gün değişen 5 soruyla futbol bilgini dünyayla yarıştır.",
     "backHome": "Ana sayfa",
     "loading": "Yükleniyor…",
     "roundError": "Günün bilmecesi yüklenemedi. Az sonra tekrar dene.",
     "welcomeBack": "Tekrar hoş geldin, {username}!",
     "vs": "vs",
-    "instructions": "{minutes} dakikan var — iki takımda da oynamış futbolcuların isimlerini yaz.",
+    "questionCountLabel": "soru",
+    "instructions": "{minutes} dakikan var — {questions} soruda iki takımda da oynamış futbolcuların isimlerini yaz. İstediğin an sonraki soruya geçebilirsin.",
+    "questionProgress": "Soru {current} / {total}",
     "start": "Başla",
     "guessPlaceholder": "Futbolcu adı yaz…",
     "guessEmpty": "Eşleşme yok",
-    "foundCount": "{found} / {total} futbolcu bulundu",
+    "foundCount": "{found} / {total} toplam bulundu",
+    "pass": "Pas",
+    "nextQuestion": "Sonraki Soru",
     "finishEarly": "Bitir",
     "resultLabel": "doğru futbolcu",
     "streakLabel": "{count} günlük seri",
@@ -146,7 +163,7 @@
     "leaderboard": {
       "tab": {
         "today": "Bugün",
-        "streak": "Seri"
+        "total": "Toplam"
       },
       "empty": "Henüz kimse oynamamış."
     },

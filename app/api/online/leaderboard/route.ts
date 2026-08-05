@@ -1,13 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { todayRoundDate } from "@/lib/daily-round";
-import { getStreakLeaderboard, getTodayLeaderboard } from "@/lib/online-db";
+import { getTodayLeaderboard, getTotalLeaderboard } from "@/lib/online-db";
 
 export async function GET(req: NextRequest) {
-  const type = req.nextUrl.searchParams.get("type") === "streak" ? "streak" : "today";
+  const type = req.nextUrl.searchParams.get("type") === "total" ? "total" : "today";
 
   try {
-    if (type === "streak") {
-      const entries = await getStreakLeaderboard();
+    if (type === "total") {
+      const entries = await getTotalLeaderboard();
       return NextResponse.json({ type, entries });
     }
     const roundDate = todayRoundDate();

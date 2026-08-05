@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { THEME_INIT_SCRIPT } from "@/components/ThemeToggle";
+import { ThemeSync } from "@/components/ThemeSync";
 import { locales, type Locale } from "@/i18n/request";
 import "../globals.css";
 
@@ -68,6 +69,8 @@ export async function generateMetadata({
             "futbol bilgi yarışması",
             "futbolcu bul",
             "iki takımda oynayan futbolcular",
+            "günlük meydan okuma",
+            "online futbol yarışması",
             "321guess",
           ]
         : [
@@ -75,6 +78,8 @@ export async function generateMetadata({
             "soccer player quiz",
             "guess the footballer",
             "football trivia",
+            "daily football challenge",
+            "online football trivia game",
             "321guess",
           ],
   };
@@ -100,6 +105,7 @@ export default async function LocaleLayout({
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body>
+        <ThemeSync />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <div className="flex min-h-screen flex-col">
             <div className="flex-1">{children}</div>

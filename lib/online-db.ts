@@ -2,65 +2,84 @@ import { getSupabaseServerClient } from "./supabase";
 
 type ClubRef = { id: string; name: string; logoUrl: string };
 
-export type DailyRoundRow = {
-  roundDate: string;
+export type DailyQuestionRow = {
+  index: number;
   clubA: ClubRef;
   clubB: ClubRef;
   answerPlayerIds: string[];
 };
 
-function rowToDailyRound(row: {
-  round_date: string;
-  club_a_id: string;
-  club_a_name: string;
-  club_a_logo_url: string;
-  club_b_id: string;
-  club_b_name: string;
-  club_b_logo_url: string;
-  answer_player_ids: string[];
-}): DailyRoundRow {
-  return {
-    roundDate: row.round_date,
-    clubA: { id: row.club_a_id, name: row.club_a_name, logoUrl: row.club_a_logo_url },
-    clubB: { id: row.club_b_id, name: row.club_b_name, logoUrl: row.club_b_logo_url },
-    answerPlayerIds: row.answer_player_ids,
-  };
-}
+export type DailyRoundRow = {
+  roundDate: string;
+  questions: DailyQuestionRow[];
+};
 
 export async function getDailyRound(roundDate: string): Promise<DailyRoundRow | null> {
   const supabase = getSupabaseServerClient();
-  const { data, error } = await supabase
+  const { data: roundRow, error: roundError } = await supabase
     .from("daily_rounds")
-    .select("*")
+    .select("round_date")
     .eq("round_date", roundDate)
     .maybeSingle();
-  if (error) throw error;
-  return data ? rowToDailyRound(data) : null;
+  if (roundError) throw roundError;
+  if (!roundRow) return null;
+
+  const { data: questionRows, error: questionsError } = await supabase
+    .from("daily_questions")
+    .select("*")
+    .eq("round_date", roundDate)
+    .order("question_index", { ascending: true });
+  if (questionsError) throw questionsError;
+
+  return {
+    roundDate,
+    questions: (questionRows ?? []).map((row) => ({
+      index: row.question_index,
+      clubA: { id: row.club_a_id, name: row.club_a_name, logoUrl: row.club_a_logo_url },
+      clubB: { id: row.club_b_id, name: row.club_b_name, logoUrl: row.club_b_logo_url },
+      answerPlayerIds: row.answer_player_ids,
+    })),
+  };
 }
 
-/** Creates today's round if nobody has yet, otherwise returns the row that
- * won the race — safe to call concurrently from multiple first-visitors. */
-export async function createDailyRound(
-  roundDate: string,
-  clubA: ClubRef,
-  clubB: ClubRef,
-  answerPlayerIds: string[],
-): Promise<DailyRoundRow> {
+type QuestionInput = { clubA: ClubRef; clubB: ClubRef; answerPlayerIds: string[] };
+
+/** Creates today's round (all N questions) if nobody has yet, otherwise
+ * returns the set that won the race — safe to call concurrently from
+ * multiple first-visitors. The per-question INSERT is a single statement, so
+ * it's all-or-nothing: a concurrent duplicate just hits a unique-violation
+ * and is discarded rather than leaving a half-written question set. */
+export async function createDailyRound(roundDate: string, questions: QuestionInput[]): Promise<DailyRoundRow> {
   const supabase = getSupabaseServerClient();
-  const { error } = await supabase.from("daily_rounds").upsert(
-    {
-      round_date: roundDate,
-      club_a_id: clubA.id,
-      club_a_name: clubA.name,
-      club_a_logo_url: clubA.logoUrl,
-      club_b_id: clubB.id,
-      club_b_name: clubB.name,
-      club_b_logo_url: clubB.logoUrl,
-      answer_player_ids: answerPlayerIds,
-    },
-    { onConflict: "round_date", ignoreDuplicates: true },
-  );
-  if (error) throw error;
+  const { error: roundError } = await supabase
+    .from("daily_rounds")
+    .upsert({ round_date: roundDate, question_count: questions.length }, { onConflict: "round_date", ignoreDuplicates: true });
+  if (roundError) throw roundError;
+
+  const { data: existing, error: existingError } = await supabase
+    .from("daily_questions")
+    .select("question_index")
+    .eq("round_date", roundDate)
+    .limit(1);
+  if (existingError) throw existingError;
+
+  if (!existing || existing.length === 0) {
+    const { error: insertError } = await supabase.from("daily_questions").insert(
+      questions.map((q, index) => ({
+        round_date: roundDate,
+        question_index: index,
+        club_a_id: q.clubA.id,
+        club_a_name: q.clubA.name,
+        club_a_logo_url: q.clubA.logoUrl,
+        club_b_id: q.clubB.id,
+        club_b_name: q.clubB.name,
+        club_b_logo_url: q.clubB.logoUrl,
+        answer_player_ids: q.answerPlayerIds,
+      })),
+    );
+    if (insertError && insertError.code !== "23505") throw insertError;
+  }
+
   const created = await getDailyRound(roundDate);
   if (!created) throw new Error("Failed to create or read today's daily round");
   return created;
@@ -128,6 +147,7 @@ export async function getRoundStart(roundDate: string, token: string): Promise<D
 
 export async function recordGuess(
   roundDate: string,
+  questionIndex: number,
   token: string,
   playerId: string,
   correct: boolean,
@@ -136,12 +156,29 @@ export async function recordGuess(
   const { data, error } = await supabase
     .from("daily_guesses")
     .upsert(
-      { round_date: roundDate, player_token: token, guessed_player_id: playerId, correct },
-      { onConflict: "round_date,player_token,guessed_player_id", ignoreDuplicates: true },
+      { round_date: roundDate, question_index: questionIndex, player_token: token, guessed_player_id: playerId, correct },
+      { onConflict: "round_date,question_index,player_token,guessed_player_id", ignoreDuplicates: true },
     )
     .select();
   if (error) throw error;
   return { isNew: (data?.length ?? 0) > 0 };
+}
+
+export async function countCorrectGuessesForQuestion(
+  roundDate: string,
+  questionIndex: number,
+  token: string,
+): Promise<number> {
+  const supabase = getSupabaseServerClient();
+  const { count, error } = await supabase
+    .from("daily_guesses")
+    .select("*", { count: "exact", head: true })
+    .eq("round_date", roundDate)
+    .eq("question_index", questionIndex)
+    .eq("player_token", token)
+    .eq("correct", true);
+  if (error) throw error;
+  return count ?? 0;
 }
 
 const MIN_GUESS_INTERVAL_MS = 250;
@@ -336,23 +373,26 @@ export async function getTodayLeaderboard(roundDate: string, limit = 20): Promis
   }));
 }
 
-export type StreakLeaderboardEntry = {
+export type TotalLeaderboardEntry = {
   username: string;
-  longestStreak: number;
-  currentStreak: number;
+  totalCorrect: number;
+  daysPlayed: number;
 };
 
-export async function getStreakLeaderboard(limit = 20): Promise<StreakLeaderboardEntry[]> {
+/** All-time leaderboard: most correct players found across every day
+ * played, regardless of streaks or gaps — reads the player_totals view
+ * (a GROUP BY over daily_scores) defined in supabase/schema.sql. */
+export async function getTotalLeaderboard(limit = 20): Promise<TotalLeaderboardEntry[]> {
   const supabase = getSupabaseServerClient();
   const { data, error } = await supabase
-    .from("streaks")
-    .select("username, longest_streak, current_streak")
-    .order("longest_streak", { ascending: false })
+    .from("player_totals")
+    .select("username, total_correct, days_played")
+    .order("total_correct", { ascending: false })
     .limit(limit);
   if (error) throw error;
   return (data ?? []).map((r) => ({
     username: r.username,
-    longestStreak: r.longest_streak,
-    currentStreak: r.current_streak,
+    totalCorrect: r.total_correct,
+    daysPlayed: r.days_played,
   }));
 }

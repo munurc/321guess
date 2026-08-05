@@ -21,10 +21,13 @@ function normalize(s: string): string {
 
 type Identity = { token: string; username: string };
 
+type ClubRef = { id: string; name: string; logoUrl: string };
+
+type QuestionInfo = { index: number; clubA: ClubRef; clubB: ClubRef; totalPossible: number };
+
 type RoundInfo = {
   roundDate: string;
-  clubA: { id: string; name: string; logoUrl: string };
-  clubB: { id: string; name: string; logoUrl: string };
+  questions: QuestionInfo[];
   totalPossible: number;
 };
 
@@ -37,7 +40,13 @@ type FinishResult = {
 
 type StoredProgress =
   | { finished: true; result: FinishResult }
-  | { finished: false; foundPlayerIds: string[]; startedAt: number };
+  | {
+      finished: false;
+      questionIndex: number;
+      foundPlayerIds: string[];
+      overallFoundCount: number;
+      startedAt: number;
+    };
 
 function progressKey(roundDate: string) {
   return `${PROGRESS_KEY_PREFIX}${roundDate}`;
@@ -70,7 +79,7 @@ function saveProgress(roundDate: string, progress: StoredProgress) {
 
 type LeaderboardResponse =
   | { type: "today"; roundDate: string; entries: { username: string; correctCount: number; totalPossible: number; durationMs: number }[] }
-  | { type: "streak"; entries: { username: string; longestStreak: number; currentStreak: number }[] };
+  | { type: "total"; entries: { username: string; totalCorrect: number; daysPlayed: number }[] };
 
 export function OnlineScreen() {
   const t = useTranslations("online");
@@ -87,11 +96,13 @@ export function OnlineScreen() {
   const [roundLoadFailed, setRoundLoadFailed] = useState(false);
 
   const [phase, setPhase] = useState<"matchup" | "playing" | "finished">("matchup");
+  const [questionIndex, setQuestionIndex] = useState(0);
   const [foundPlayers, setFoundPlayers] = useState<Player[]>([]);
+  const [overallFoundCount, setOverallFoundCount] = useState(0);
   const [timeLeftMs, setTimeLeftMs] = useState(ROUND_DURATION_MS);
   const [result, setResult] = useState<FinishResult | null>(null);
 
-  const [leaderboardTab, setLeaderboardTab] = useState<"today" | "streak">("today");
+  const [leaderboardTab, setLeaderboardTab] = useState<"today" | "total">("today");
   const [leaderboard, setLeaderboard] = useState<LeaderboardResponse | null>(null);
 
   const startTimeRef = useRef<number | null>(null);
@@ -122,17 +133,13 @@ export function OnlineScreen() {
       return;
     }
     const byId = new Map(dataset.players.map((p) => [p.id, p] as const));
+    setQuestionIndex(saved.questionIndex);
     setFoundPlayers(saved.foundPlayerIds.map((id) => byId.get(id)).filter((p): p is Player => !!p));
+    setOverallFoundCount(saved.overallFoundCount);
     const elapsed = Date.now() - saved.startedAt;
-    if (elapsed >= ROUND_DURATION_MS) {
-      startTimeRef.current = saved.startedAt;
-      setPhase("playing");
-      setTimeLeftMs(0);
-    } else {
-      startTimeRef.current = saved.startedAt;
-      setTimeLeftMs(ROUND_DURATION_MS - elapsed);
-      setPhase("playing");
-    }
+    startTimeRef.current = saved.startedAt;
+    setTimeLeftMs(Math.max(0, ROUND_DURATION_MS - elapsed));
+    setPhase("playing");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round, dataset]);
 
@@ -198,8 +205,17 @@ export function OnlineScreen() {
     if (!round || !identity) return;
     startTimeRef.current = Date.now();
     setPhase("playing");
+    setQuestionIndex(0);
+    setFoundPlayers([]);
+    setOverallFoundCount(0);
     setTimeLeftMs(ROUND_DURATION_MS);
-    saveProgress(round.roundDate, { finished: false, foundPlayerIds: [], startedAt: startTimeRef.current });
+    saveProgress(round.roundDate, {
+      finished: false,
+      questionIndex: 0,
+      foundPlayerIds: [],
+      overallFoundCount: 0,
+      startedAt: startTimeRef.current,
+    });
     try {
       // Server-recorded start time is what actually decides the speed
       // tie-break — this local timestamp only drives the UI countdown.
@@ -219,16 +235,19 @@ export function OnlineScreen() {
       const res = await fetch("/api/online/guess", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: identity.token, playerId: player.id }),
+        body: JSON.stringify({ token: identity.token, questionIndex, playerId: player.id }),
       });
       if (!res.ok) return;
       const data = await res.json();
       if (data.correct) {
         setFoundPlayers((prev) => {
           const next = [...prev, player];
+          setOverallFoundCount(data.overallFoundCount);
           saveProgress(round.roundDate, {
             finished: false,
+            questionIndex,
             foundPlayerIds: next.map((p) => p.id),
+            overallFoundCount: data.overallFoundCount,
             startedAt: startTimeRef.current ?? Date.now(),
           });
           return next;
@@ -237,6 +256,24 @@ export function OnlineScreen() {
     } catch {
       // Best-effort — a dropped guess just doesn't count; the player can retry.
     }
+  }
+
+  function goToNextQuestion() {
+    if (!round) return;
+    const next = questionIndex + 1;
+    if (next >= round.questions.length) {
+      void finish();
+      return;
+    }
+    setQuestionIndex(next);
+    setFoundPlayers([]);
+    saveProgress(round.roundDate, {
+      finished: false,
+      questionIndex: next,
+      foundPlayerIds: [],
+      overallFoundCount,
+      startedAt: startTimeRef.current ?? Date.now(),
+    });
   }
 
   async function finish() {
@@ -260,6 +297,7 @@ export function OnlineScreen() {
   }
 
   const badges = useMemo(() => (result ? computeBadges(result) : []), [result]);
+  const currentQuestion = round?.questions[questionIndex] ?? null;
 
   function shareText(): string {
     if (!result || !round) return "";
@@ -328,26 +366,32 @@ export function OnlineScreen() {
       ) : phase === "matchup" ? (
         <div className="space-y-6">
           <p className="text-sm text-ink/60">{t("welcomeBack", { username: identity.username })}</p>
-          <div className="flex items-center justify-center gap-6 rounded-xl border-2 border-ink/10 bg-ink/5 p-8">
-            <ClubBadge name={round.clubA.name} logoUrl={round.clubA.logoUrl} />
-            <span className="text-sm font-bold uppercase tracking-widest text-ink/40">{t("vs")}</span>
-            <ClubBadge name={round.clubB.name} logoUrl={round.clubB.logoUrl} />
+          <div className="rounded-xl border-2 border-ink/10 bg-ink/5 p-8 text-center">
+            <div className="text-4xl font-black text-accent">{round.questions.length}</div>
+            <p className="mt-1 text-sm text-ink/60">{t("questionCountLabel")}</p>
           </div>
-          <p className="text-center text-xs text-ink/40">{t("instructions", { minutes: ROUND_DURATION_MS / 60000 })}</p>
+          <p className="text-center text-xs text-ink/40">
+            {t("instructions", { minutes: ROUND_DURATION_MS / 60000, questions: round.questions.length })}
+          </p>
           <button
-            onClick={startRound}
+            onClick={() => void startRound()}
             className="w-full rounded-xl bg-accent py-4 text-lg font-bold text-paper shadow-lg shadow-accent/20 hover:bg-accent-strong"
           >
             {t("start")}
           </button>
         </div>
-      ) : phase === "playing" ? (
+      ) : phase === "playing" && currentQuestion ? (
         <div className="space-y-4">
+          <div className="flex items-center justify-between text-xs text-ink/40">
+            <span>{t("questionProgress", { current: questionIndex + 1, total: round.questions.length })}</span>
+            <span>{t("foundCount", { found: overallFoundCount, total: round.totalPossible })}</span>
+          </div>
+
           <div className="flex items-center justify-between rounded-xl border-2 border-ink/10 bg-ink/5 px-4 py-3">
             <div className="flex items-center gap-3 text-sm font-semibold">
-              <span>{round.clubA.name}</span>
+              <span>{currentQuestion.clubA.name}</span>
               <span className="text-ink/40">{t("vs")}</span>
-              <span>{round.clubB.name}</span>
+              <span>{currentQuestion.clubB.name}</span>
             </div>
             <span className="rounded-full bg-accent/10 px-3 py-1 text-sm font-bold tabular-nums text-accent">
               {formatTime(timeLeftMs)}
@@ -362,8 +406,6 @@ export function OnlineScreen() {
             emptyText={t("guessEmpty")}
           />
 
-          <p className="text-xs text-ink/40">{t("foundCount", { found: foundPlayers.length, total: round.totalPossible })}</p>
-
           {foundPlayers.length > 0 && (
             <ul className="flex flex-wrap gap-2">
               {foundPlayers.map((p) => (
@@ -373,6 +415,13 @@ export function OnlineScreen() {
               ))}
             </ul>
           )}
+
+          <button
+            onClick={goToNextQuestion}
+            className="w-full rounded-xl bg-accent py-3 text-sm font-bold text-paper shadow-lg shadow-accent/20 hover:bg-accent-strong"
+          >
+            {foundPlayers.length > 0 ? t("nextQuestion") : t("pass")}
+          </button>
 
           <button
             onClick={() => void finish()}
@@ -414,7 +463,7 @@ export function OnlineScreen() {
 
           <div>
             <div className="mb-3 inline-flex rounded-full border border-ink/10 bg-ink/5 p-1 text-sm">
-              {(["today", "streak"] as const).map((tab) => (
+              {(["today", "total"] as const).map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setLeaderboardTab(tab)}
@@ -454,15 +503,6 @@ function formatTime(ms: number): string {
 
 function LoadingBox({ text }: { text: string }) {
   return <div className="rounded-lg border border-ink/10 bg-ink/5 p-8 text-center text-ink/60">{text}</div>;
-}
-
-function ClubBadge({ name, logoUrl }: { name: string; logoUrl: string }) {
-  return (
-    <div className="flex flex-col items-center gap-2">
-      <img src={logoUrl} alt={name} className="h-16 w-16 object-contain" loading="lazy" />
-      <span className="max-w-[7rem] text-center text-xs font-semibold text-ink/70">{name}</span>
-    </div>
-  );
 }
 
 function GuessInput({
@@ -540,7 +580,7 @@ function Leaderboard({
   t,
 }: {
   data: LeaderboardResponse | null;
-  tab: "today" | "streak";
+  tab: "today" | "total";
   currentUsername: string;
   t: (key: string, values?: Record<string, string | number>) => string;
 }) {
@@ -554,7 +594,7 @@ function Leaderboard({
   const rows =
     data.type === "today"
       ? data.entries.map((e) => ({ username: e.username, value: `${e.correctCount}/${e.totalPossible}` }))
-      : data.entries.map((e) => ({ username: e.username, value: `🔥 ${e.longestStreak}` }));
+      : data.entries.map((e) => ({ username: e.username, value: String(e.totalCorrect) }));
 
   return (
     <ol className="space-y-1">

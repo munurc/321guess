@@ -110,6 +110,12 @@ export function SetupScreen() {
               {t("mode.heading")}
             </h2>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <DailyChallengeCard
+                href={`/${locale}/online`}
+                title={tOnline("modeCard.title")}
+                description={tOnline("modeCard.description")}
+                live={tOnline("modeCard.live")}
+              />
               <ModeCard
                 selected={mode === "clubClub"}
                 onClick={() => setMode("clubClub")}
@@ -125,7 +131,6 @@ export function SetupScreen() {
                 icon={<FlagIcon />}
               />
               <ManualCard href={`/${locale}/manual`} title={tManual("title")} description={tManual("description")} />
-              <ManualCard href={`/${locale}/online`} title={tOnline("modeCard.title")} description={tOnline("modeCard.description")} />
             </div>
           </section>
 
@@ -290,6 +295,59 @@ function ManualCard({
         </div>
       </div>
     </Link>
+  );
+}
+
+/**
+ * Deliberately styled apart from the site's muted --accent palette: a
+ * punchier, self-contained "pitch green" scoped to this single card only,
+ * so the flagship daily feature reads as the thing to click, not a settings
+ * option. See docs discussion — vivid fill approved, illustration badge cut.
+ */
+function DailyChallengeCard({
+  href,
+  title,
+  description,
+  live,
+}: {
+  href: string;
+  title: string;
+  description: string;
+  live: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="group flex items-start gap-4 rounded-xl bg-gradient-to-br from-[#16a34a] to-[#15803d] p-4 text-left shadow-lg shadow-[#16a34a]/25 transition hover:shadow-xl hover:shadow-[#16a34a]/35"
+    >
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-paper/15 text-paper">
+        <TrophyIcon />
+      </div>
+      <div className="min-w-0">
+        <div className="font-semibold text-paper">{title}</div>
+        <div className="mt-1 text-xs leading-relaxed text-paper/80">{description}</div>
+        <div className="mt-2 flex items-center gap-3">
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-paper">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-paper/70 motion-reduce:hidden" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-paper" />
+            </span>
+            {live}
+          </span>
+          <span className="text-[10px] uppercase tracking-wider text-paper/70 opacity-0 transition group-hover:opacity-100">
+            →
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function TrophyIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor">
+      <path d="M6 3h12v2h2a1 1 0 0 1 1 1v1c0 2.4-1.7 4.4-4 4.9-.6 1.7-2 3-3.8 3.5V18h2.3c.9 0 1.5.9 1.2 1.7L16 21H8l-.7-1.3c-.3-.8.3-1.7 1.2-1.7H11v-2.6c-1.8-.5-3.2-1.8-3.8-3.5C4.9 11.4 3 9.4 3 7V6a1 1 0 0 1 1-1h2V3Zm0 4H5c0 1.3.8 2.4 2 2.8V7Zm12 0v2.8c1.2-.4 2-1.5 2-2.8h-1Z" />
+    </svg>
   );
 }
 
