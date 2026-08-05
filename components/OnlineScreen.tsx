@@ -168,12 +168,16 @@ export function OnlineScreen() {
       return;
     }
     const byId = new Map(dataset.players.map((p) => [p.id, p] as const));
-    setQuestionIndex(saved.questionIndex);
-    setFoundPlayers(saved.foundPlayerIds.map((id) => byId.get(id)).filter((p): p is Player => !!p));
-    setWrongPlayers(saved.wrongPlayerIds.map((id) => byId.get(id)).filter((p): p is Player => !!p));
-    setOverallFoundCount(saved.overallFoundCount);
-    const elapsed = Date.now() - saved.startedAt;
-    startTimeRef.current = saved.startedAt;
+    setQuestionIndex(saved.questionIndex ?? 0);
+    // Progress saved by an older client build may be missing fields added
+    // since (e.g. wrongPlayerIds) — default them instead of crashing on
+    // undefined.map() for anyone with an in-progress round from before a deploy.
+    setFoundPlayers((saved.foundPlayerIds ?? []).map((id) => byId.get(id)).filter((p): p is Player => !!p));
+    setWrongPlayers((saved.wrongPlayerIds ?? []).map((id) => byId.get(id)).filter((p): p is Player => !!p));
+    setOverallFoundCount(saved.overallFoundCount ?? 0);
+    const startedAt = saved.startedAt ?? Date.now();
+    const elapsed = Date.now() - startedAt;
+    startTimeRef.current = startedAt;
     setTimeLeftMs(Math.max(0, ROUND_DURATION_MS - elapsed));
     setPhase("playing");
     // eslint-disable-next-line react-hooks/exhaustive-deps
