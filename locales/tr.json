@@ -153,7 +153,9 @@
     "finishEarly": "Bitir",
     "resultLabel": "doğru futbolcu",
     "streakLabel": "{count} günlük seri",
-    "share": "Sonucu kopyala",
+    "share": "Sonucu Paylaş",
+    "shareCopied": "Kopyalandı ✓",
+    "shareText": "⚽ 321guess Günlük Meydan Okuma #{day}\n🎯 {correct}/{total} futbolcu bulundu\n{bar}\n🔥 {streak} günlük seri\n\nSen de dene 👉 {url}",
     "badges": {
       "perfect": "💯 Tüm futbolcuları buldun",
       "streak3": "🔥 3 günlük seri",
@@ -177,7 +179,8 @@
         "format": "Kullanıcı adı kurallara uymuyor.",
         "blocked": "Bu kullanıcı adı kullanılamaz.",
         "taken": "Bu kullanıcı adı zaten alınmış.",
-        "server": "Bir şeyler ters gitti. Lütfen tekrar dene."
+        "server": "Bir şeyler ters gitti. Lütfen tekrar dene.",
+        "expired": "Oturumun sona ermiş görünüyor. Lütfen tekrar bir kullanıcı adı seç."
       }
     }
   }

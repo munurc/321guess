@@ -153,7 +153,9 @@
     "finishEarly": "Finish",
     "resultLabel": "correct players",
     "streakLabel": "{count}-day streak",
-    "share": "Copy result",
+    "share": "Share Result",
+    "shareCopied": "Copied ✓",
+    "shareText": "⚽ 321guess Daily Challenge #{day}\n🎯 {correct}/{total} players found\n{bar}\n🔥 {streak}-day streak\n\nTry it yourself 👉 {url}",
     "badges": {
       "perfect": "💯 Found every player",
       "streak3": "🔥 3-day streak",
@@ -177,7 +179,8 @@
         "format": "That username doesn't meet the rules.",
         "blocked": "That username isn't allowed.",
         "taken": "That username is already taken.",
-        "server": "Something went wrong. Please try again."
+        "server": "Something went wrong. Please try again.",
+        "expired": "Your session seems to have expired. Please pick a username again."
       }
     }
   }
