@@ -115,5 +115,53 @@
     "newRound": "Yeni oyun",
     "backHome": "Ana sayfa",
     "hint": "Rastgele değil — seçtiğin takımların ortak oyuncuları gelir."
+  },
+  "online": {
+    "modeCard": {
+      "title": "Online mod",
+      "description": "Kullanıcı adınla günün bilmecesinde başkalarıyla yarış."
+    },
+    "title": "Online mod",
+    "description": "Günün eşleşmesini yazarak çöz, başkalarıyla liderlik tablosunda yarış.",
+    "backHome": "Ana sayfa",
+    "loading": "Yükleniyor…",
+    "roundError": "Günün bilmecesi yüklenemedi. Az sonra tekrar dene.",
+    "welcomeBack": "Tekrar hoş geldin, {username}!",
+    "vs": "vs",
+    "instructions": "{minutes} dakikan var — iki takımda da oynamış futbolcuların isimlerini yaz.",
+    "start": "Başla",
+    "guessPlaceholder": "Futbolcu adı yaz…",
+    "guessEmpty": "Eşleşme yok",
+    "foundCount": "{found} / {total} futbolcu bulundu",
+    "finishEarly": "Bitir",
+    "resultLabel": "doğru futbolcu",
+    "streakLabel": "{count} günlük seri",
+    "share": "Sonucu kopyala",
+    "badges": {
+      "perfect": "💯 Tüm futbolcuları buldun",
+      "streak3": "🔥 3 günlük seri",
+      "streak7": "🔥 7 günlük seri",
+      "streak30": "🔥 30 günlük seri"
+    },
+    "leaderboard": {
+      "tab": {
+        "today": "Bugün",
+        "streak": "Seri"
+      },
+      "empty": "Henüz kimse oynamamış."
+    },
+    "username": {
+      "label": "Kullanıcı adı seç",
+      "placeholder": "örn. futbolsever23",
+      "hint": "3-20 karakter, harfle başlamalı, harf/rakam/alt çizgi içerebilir.",
+      "submit": "Devam et",
+      "submitting": "Kontrol ediliyor…",
+      "error": {
+        "format": "Kullanıcı adı kurallara uymuyor.",
+        "blocked": "Bu kullanıcı adı kullanılamaz.",
+        "taken": "Bu kullanıcı adı zaten alınmış.",
+        "server": "Bir şeyler ters gitti. Lütfen tekrar dene."
+      }
+    }
   }
 }

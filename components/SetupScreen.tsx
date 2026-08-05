@@ -14,6 +14,7 @@ const SETTINGS_KEY = "321guess.settings";
 export function SetupScreen() {
   const t = useTranslations("setup");
   const tManual = useTranslations("manual");
+  const tOnline = useTranslations("online");
   const locale = useLocale();
   const router = useRouter();
   const [dataset, setDataset] = useState<Dataset | null>(null);
@@ -108,7 +109,7 @@ export function SetupScreen() {
             <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-ink/70">
               {t("mode.heading")}
             </h2>
-            <div className="grid gap-3 sm:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <ModeCard
                 selected={mode === "clubClub"}
                 onClick={() => setMode("clubClub")}
@@ -124,6 +125,7 @@ export function SetupScreen() {
                 icon={<FlagIcon />}
               />
               <ManualCard href={`/${locale}/manual`} title={tManual("title")} description={tManual("description")} />
+              <ManualCard href={`/${locale}/online`} title={tOnline("modeCard.title")} description={tOnline("modeCard.description")} />
             </div>
           </section>
 

@@ -115,5 +115,53 @@
     "newRound": "New game",
     "backHome": "Home",
     "hint": "Not random — you'll see the players who played for both teams you picked."
+  },
+  "online": {
+    "modeCard": {
+      "title": "Online mode",
+      "description": "Race others on today's puzzle under your username."
+    },
+    "title": "Online mode",
+    "description": "Type today's answers and compete on the leaderboard.",
+    "backHome": "Home",
+    "loading": "Loading…",
+    "roundError": "Couldn't load today's puzzle. Try again shortly.",
+    "welcomeBack": "Welcome back, {username}!",
+    "vs": "vs",
+    "instructions": "You have {minutes} minutes — name players who played for both teams.",
+    "start": "Start",
+    "guessPlaceholder": "Type a player's name…",
+    "guessEmpty": "No matches",
+    "foundCount": "{found} / {total} players found",
+    "finishEarly": "Finish",
+    "resultLabel": "correct players",
+    "streakLabel": "{count}-day streak",
+    "share": "Copy result",
+    "badges": {
+      "perfect": "💯 Found every player",
+      "streak3": "🔥 3-day streak",
+      "streak7": "🔥 7-day streak",
+      "streak30": "🔥 30-day streak"
+    },
+    "leaderboard": {
+      "tab": {
+        "today": "Today",
+        "streak": "Streak"
+      },
+      "empty": "Nobody has played yet."
+    },
+    "username": {
+      "label": "Choose a username",
+      "placeholder": "e.g. footyfan23",
+      "hint": "3-20 characters, must start with a letter, letters/digits/underscore allowed.",
+      "submit": "Continue",
+      "submitting": "Checking…",
+      "error": {
+        "format": "That username doesn't meet the rules.",
+        "blocked": "That username isn't allowed.",
+        "taken": "That username is already taken.",
+        "server": "Something went wrong. Please try again."
+      }
+    }
   }
 }
