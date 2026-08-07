@@ -11,7 +11,7 @@ import { ThemeToggle } from "./ThemeToggle";
 
 const IDENTITY_KEY = "321guess.online.player";
 const PROGRESS_KEY_PREFIX = "321guess.online.progress.";
-const ROUND_DURATION_MS = 3 * 60 * 1000;
+const ROUND_DURATION_MS = 1 * 60 * 1000;
 // Day the Daily Challenge launched — every shared result gets a puzzle
 // number counting up from here, the same way Wordle numbers its puzzles.
 const LAUNCH_DATE = "2026-08-05";

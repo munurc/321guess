@@ -243,7 +243,7 @@ export type FinishResult = {
   longestStreak: number;
 };
 
-const ROUND_DURATION_MS = 3 * 60 * 1000;
+const ROUND_DURATION_MS = 1 * 60 * 1000;
 const CLOCK_SKEW_SLACK_MS = 5000;
 
 /** How long the round took, from server-recorded timestamps only — never

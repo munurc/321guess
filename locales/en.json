@@ -142,7 +142,7 @@
     "welcomeBack": "Welcome back, {username}!",
     "vs": "vs",
     "todaysMatchupsLabel": "Today's matchups",
-    "instructions": "You have {minutes} minutes for {questions} questions — name players who played for both teams. Move on to the next question whenever you want.",
+    "instructions": "You have {minutes, plural, one {# minute} other {# minutes}} for {questions} questions — name players who played for both teams. Move on to the next question whenever you want.",
     "questionProgress": "Question {current} / {total}",
     "start": "Start",
     "guessPlaceholder": "Type a player's name…",
