@@ -81,26 +81,46 @@ function makeRng(seed: number) {
 
 const pickRandom = <T,>(arr: T[], rng: () => number): T => arr[Math.floor(rng() * arr.length)];
 
+const EASY_CLUBS_PER_LEAGUE = 8;
+const MEDIUM_CLUBS_PER_LEAGUE = 15;
+
 /**
- * Pool-relative popularity bands.
- *  - easy:   both clubs must be in the top 25% by sitelink count
- *  - medium: both clubs must be in the top 65%
- *  - hard:   both clubs must be in the bottom 50%
- * Bands are recomputed from the pool (not the whole dataset) so a user who
- * excludes all top leagues can still play with the clubs they picked.
+ * Per-league popularity bands — a club's difficulty tier comes from its
+ * popularity rank within its OWN league, not a single ranking across every
+ * included league pooled together. A global percentile let a bottom-table
+ * Premier League club (still more "famous" by raw Wikidata sitelink count
+ * than an entire smaller league's best clubs) crowd into "easy" — e.g.
+ * Ipswich Town ranked 18th of 20 in the Premier League but still landed in
+ * the pool's global top 25%. Ranking within each club's own league fixes
+ * that without needing a different popularity signal.
+ *  - easy:   top 8 by popularity within the club's own league
+ *  - medium: top 15 within the club's own league
+ *  - hard:   ranked 16th or lower within the club's own league
  */
 export function clubsForDifficulty(pool: Pool, difficulty: Difficulty): Club[] {
-  const sorted = [...pool.clubs].sort((a, b) => b.popularity - a.popularity);
-  if (sorted.length === 0) return [];
-  const n = sorted.length;
-  switch (difficulty) {
-    case "easy":
-      return sorted.slice(0, Math.max(2, Math.ceil(n * 0.25)));
-    case "medium":
-      return sorted.slice(0, Math.max(2, Math.ceil(n * 0.65)));
-    case "hard":
-      return sorted.slice(Math.floor(n * 0.5));
+  const byLeague = new Map<string, Club[]>();
+  for (const club of pool.clubs) {
+    const list = byLeague.get(club.leagueId);
+    if (list) list.push(club);
+    else byLeague.set(club.leagueId, [club]);
   }
+
+  const result: Club[] = [];
+  for (const leagueClubs of byLeague.values()) {
+    const sorted = [...leagueClubs].sort((a, b) => b.popularity - a.popularity);
+    switch (difficulty) {
+      case "easy":
+        result.push(...sorted.slice(0, EASY_CLUBS_PER_LEAGUE));
+        break;
+      case "medium":
+        result.push(...sorted.slice(0, MEDIUM_CLUBS_PER_LEAGUE));
+        break;
+      case "hard":
+        result.push(...sorted.slice(MEDIUM_CLUBS_PER_LEAGUE));
+        break;
+    }
+  }
+  return result;
 }
 
 /** Core club×club pairing loop, given an already-decided eligible list.

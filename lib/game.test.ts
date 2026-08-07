@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Dataset, Settings } from "./types";
-import { buildPool, pickClubClubRound, pickCountryClubRound } from "./game";
+import { buildPool, clubsForDifficulty, pickClubClubRound, pickCountryClubRound } from "./game";
 
 const dataset: Dataset = {
   countries: [
@@ -139,7 +139,7 @@ describe("pickClubClubRound", () => {
     expect(a).toEqual(b);
   });
 
-  it("easy difficulty on a 4-club pool returns null (top 25% = only 1 club)", () => {
+  it("easy difficulty includes every club when each league has 8 or fewer clubs", () => {
     const settings: Settings = {
       mode: "clubClub",
       difficulty: "medium",
@@ -147,31 +147,78 @@ describe("pickClubClubRound", () => {
       excludedCountries: [],
     };
     const pool = buildPool(dataset, settings);
-    // ceil(4 * 0.25) = 1 → but we floor at 2 → still 2 clubs (Barça + Real).
-    // They don't share players → no valid round found within MAX_ATTEMPTS.
-    expect(pickClubClubRound(pool, "easy", 1)).toBeNull();
-  });
-
-  it("hard difficulty restricts to the bottom-50% band", () => {
-    const settings: Settings = {
-      mode: "clubClub",
-      difficulty: "medium",
-      includedLeagues: allLeagues,
-      excludedCountries: [],
-    };
-    const pool = buildPool(dataset, settings);
-    // Bottom 50% = PSG (90) + Flamengo (30). Neymar played for both.
+    // Every league in this fixture has 1-2 clubs, so all qualify for "easy"
+    // (top-8-per-league) — Barcelona × PSG (Messi + Neymar) should be reachable.
     let found = false;
-    for (let s = 1; s < 300; s++) {
-      const r = pickClubClubRound(pool, "hard", s);
+    for (let s = 1; s < 500; s++) {
+      const r = pickClubClubRound(pool, "easy", s);
       if (!r || r.kind !== "clubClub") continue;
-      const hardIds = new Set(["C_PSG", "C_FLA"]);
-      expect(hardIds.has(r.clubA.id)).toBe(true);
-      expect(hardIds.has(r.clubB.id)).toBe(true);
-      found = true;
-      break;
+      const ids = [r.clubA.id, r.clubB.id].sort();
+      if (ids[0] === "C_BAR" && ids[1] === "C_PSG") {
+        found = true;
+        break;
+      }
     }
     expect(found).toBe(true);
+  });
+
+  it("hard difficulty is empty when no league has more than 15 clubs", () => {
+    const settings: Settings = {
+      mode: "clubClub",
+      difficulty: "medium",
+      includedLeagues: allLeagues,
+      excludedCountries: [],
+    };
+    const pool = buildPool(dataset, settings);
+    // Every league here has far fewer than 16 clubs, so nothing ranks
+    // 16th-or-lower within its own league — the "hard" band is empty.
+    expect(pickClubClubRound(pool, "hard", 1)).toBeNull();
+  });
+});
+
+describe("clubsForDifficulty (per-league bands)", () => {
+  it("ranks clubs within their own league, not across the whole pool", () => {
+    // League A: 3 clubs, all far more popular (by raw score) than every
+    // club in League B. League B: 20 clubs with modest popularity.
+    // A global percentile would let League A crowd out League B entirely;
+    // per-league bands must still surface League B's own top 8.
+    const leagueDataset: Dataset = {
+      countries: [],
+      leagues: [
+        { id: "A", nameEn: "League A", nameTr: "Lig A", countryCode: "XX" },
+        { id: "B", nameEn: "League B", nameTr: "Lig B", countryCode: "YY" },
+      ],
+      clubs: [
+        { id: "A1", name: "A1", logoUrl: "", leagueId: "A", countryCode: "XX", popularity: 200 },
+        { id: "A2", name: "A2", logoUrl: "", leagueId: "A", countryCode: "XX", popularity: 190 },
+        { id: "A3", name: "A3", logoUrl: "", leagueId: "A", countryCode: "XX", popularity: 180 },
+        ...Array.from({ length: 20 }, (_, i) => ({
+          id: `B${i + 1}`,
+          name: `B${i + 1}`,
+          logoUrl: "",
+          leagueId: "B",
+          countryCode: "YY",
+          popularity: 50 - i, // B1=50 (league's most popular) down to B20=31
+        })),
+      ],
+      players: [],
+    };
+    const settings: Settings = {
+      mode: "clubClub",
+      difficulty: "medium",
+      includedLeagues: ["A", "B"],
+      excludedCountries: [],
+    };
+    const pool = buildPool(leagueDataset, settings);
+
+    const easy = clubsForDifficulty(pool, "easy").map((c) => c.id).sort();
+    expect(easy).toEqual(["A1", "A2", "A3", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8"].sort());
+
+    const medium = clubsForDifficulty(pool, "medium").map((c) => c.id).sort();
+    expect(medium.filter((id) => id.startsWith("B")).length).toBe(15); // B1..B15
+
+    const hard = clubsForDifficulty(pool, "hard").map((c) => c.id).sort();
+    expect(hard).toEqual(["B16", "B17", "B18", "B19", "B20"].sort()); // League A never reaches rank 16
   });
 });
 
