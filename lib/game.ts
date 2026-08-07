@@ -103,12 +103,11 @@ export function clubsForDifficulty(pool: Pool, difficulty: Difficulty): Club[] {
   }
 }
 
-export function pickClubClubRound(
-  pool: Pool,
-  difficulty: Difficulty = "medium",
-  seed = Date.now(),
-): Round | null {
-  const eligible = clubsForDifficulty(pool, difficulty);
+/** Core club×club pairing loop, given an already-decided eligible list.
+ * Shared by pickClubClubRound (which derives eligibility from the
+ * easy/medium/hard bands) and callers that need a differently-curated pool,
+ * e.g. online mode's tighter "everyone recognizes these" club list. */
+function pickClubClubRoundFromEligible(pool: Pool, eligible: Club[], seed: number): Round | null {
   if (eligible.length < 2) return null;
   const rng = makeRng(seed);
 
@@ -133,6 +132,20 @@ export function pickClubClubRound(
     };
   }
   return null;
+}
+
+export function pickClubClubRound(
+  pool: Pool,
+  difficulty: Difficulty = "medium",
+  seed = Date.now(),
+): Round | null {
+  return pickClubClubRoundFromEligible(pool, clubsForDifficulty(pool, difficulty), seed);
+}
+
+/** Same pairing logic as pickClubClubRound, but against a caller-provided
+ * eligible-club list instead of one derived from the easy/medium/hard bands. */
+export function pickClubClubRoundFromClubs(pool: Pool, eligible: Club[], seed: number): Round | null {
+  return pickClubClubRoundFromEligible(pool, eligible, seed);
 }
 
 export function pickCountryClubRound(

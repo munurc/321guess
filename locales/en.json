@@ -141,7 +141,7 @@
     "roundError": "Couldn't load today's puzzle. Try again shortly.",
     "welcomeBack": "Welcome back, {username}!",
     "vs": "vs",
-    "questionCountLabel": "questions",
+    "todaysMatchupsLabel": "Today's matchups",
     "instructions": "You have {minutes} minutes for {questions} questions — name players who played for both teams. Move on to the next question whenever you want.",
     "questionProgress": "Question {current} / {total}",
     "start": "Start",

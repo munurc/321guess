@@ -141,7 +141,7 @@
     "roundError": "Günün bilmecesi yüklenemedi. Az sonra tekrar dene.",
     "welcomeBack": "Tekrar hoş geldin, {username}!",
     "vs": "vs",
-    "questionCountLabel": "soru",
+    "todaysMatchupsLabel": "Bugünün eşleşmeleri",
     "instructions": "{minutes} dakikan var — {questions} soruda iki takımda da oynamış futbolcuların isimlerini yaz. İstediğin an sonraki soruya geçebilirsin.",
     "questionProgress": "Soru {current} / {total}",
     "start": "Başla",

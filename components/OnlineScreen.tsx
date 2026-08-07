@@ -6,6 +6,7 @@ import type { Dataset, Player } from "@/lib/types";
 import { loadDataset } from "@/lib/data";
 import { validateUsername } from "@/lib/profanity";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { LogoTile } from "./LogoTile";
 import { ThemeToggle } from "./ThemeToggle";
 
 const IDENTITY_KEY = "321guess.online.player";
@@ -484,12 +485,27 @@ export function OnlineScreen() {
       ) : !round || !dataset ? (
         <LoadingBox text={t("loading")} />
       ) : phase === "matchup" ? (
-        <div className="space-y-6">
+        <div className="animate-fade-in space-y-6">
           <p className="text-sm text-ink/60">{t("welcomeBack", { username: identity.username })}</p>
-          <div className="rounded-xl border-2 border-ink/10 bg-ink/5 p-8 text-center">
-            <div className="text-4xl font-black text-accent">{round.questions.length}</div>
-            <p className="mt-1 text-sm text-ink/60">{t("questionCountLabel")}</p>
+
+          <div className="space-y-3">
+            <h2 className="text-center text-xs font-semibold uppercase tracking-wider text-ink/50">
+              {t("todaysMatchupsLabel")}
+            </h2>
+            <div className="flex flex-wrap justify-center gap-2">
+              {round.questions.map((q) => (
+                <div
+                  key={q.index}
+                  className="flex items-center gap-1.5 rounded-xl border border-ink/10 bg-ink/5 p-2"
+                >
+                  <img src={`${q.clubA.logoUrl}?width=100`} alt={q.clubA.name} className="h-8 w-8 object-contain" />
+                  <span className="text-[10px] font-bold text-ink/25">×</span>
+                  <img src={`${q.clubB.logoUrl}?width=100`} alt={q.clubB.name} className="h-8 w-8 object-contain" />
+                </div>
+              ))}
+            </div>
           </div>
+
           <p className="text-center text-xs text-ink/40">
             {t("instructions", { minutes: ROUND_DURATION_MS / 60000, questions: round.questions.length })}
           </p>
@@ -507,15 +523,15 @@ export function OnlineScreen() {
             <span>{t("foundCount", { found: overallFoundCount, total: round.totalPossible })}</span>
           </div>
 
-          <div className="flex items-center justify-between rounded-xl border-2 border-ink/10 bg-ink/5 px-4 py-3">
-            <div className="flex items-center gap-3 text-sm font-semibold">
-              <span>{currentQuestion.clubA.name}</span>
-              <span className="text-ink/40">{t("vs")}</span>
-              <span>{currentQuestion.clubB.name}</span>
-            </div>
-            <span className="rounded-full bg-accent/10 px-3 py-1 text-sm font-bold tabular-nums text-accent">
+          <div key={currentQuestion.index} className="animate-fade-in relative rounded-2xl border-2 border-ink/10 bg-ink/5 px-4 pb-4 pt-3">
+            <span className="absolute right-3 top-3 rounded-full bg-accent/10 px-3 py-1 text-sm font-bold tabular-nums text-accent">
               {formatTime(timeLeftMs)}
             </span>
+            <div className="flex items-center justify-center gap-4 pt-4 sm:gap-6">
+              <LogoTile size="sm" src={currentQuestion.clubA.logoUrl} alt={currentQuestion.clubA.name} caption={currentQuestion.clubA.name} />
+              <span className="text-xs font-black text-ink/25">{t("vs")}</span>
+              <LogoTile size="sm" src={currentQuestion.clubB.logoUrl} alt={currentQuestion.clubB.name} caption={currentQuestion.clubB.name} />
+            </div>
           </div>
 
           <GuessInput

@@ -1,8 +1,17 @@
-import { buildPool, pickClubClubRound } from "./game";
+import { buildPool, pickClubClubRoundFromClubs } from "./game";
 import { loadServerDataset } from "./server-dataset";
 import type { Club, Settings } from "./types";
 
 export const QUESTIONS_PER_ROUND = 5;
+
+// Online mode draws only from clubs anyone would recognize on sight, not the
+// broader "easy" band local mode uses (~25% of enabled leagues, still ~90
+// clubs including e.g. Valencia, Mainz, Twente — whose shared-player lists
+// skew toward domestic squad players a casual visitor won't know). Checked
+// against the real dataset: these 12 clubs cover all 66 possible pairs with
+// at least one shared player, and the shared lists lean toward genuinely
+// famous transfers (Figo, Ronaldo, Eto'o, Pirlo, Cassano, ...).
+const ONLINE_TOP_CLUBS = 12;
 
 export function todayRoundDate(): string {
   return new Date().toISOString().slice(0, 10);
@@ -31,12 +40,11 @@ function pairKey(clubA: Club, clubB: Club): string {
   return [clubA.id, clubB.id].sort().join("|");
 }
 
-/** Deterministic set of `count` distinct "easy" club×club matchups for a
- * date — same date always yields the same ordered set of questions for
- * every player. Reuses the exact pool-building/round-picking engine the
- * local game uses (lib/game.ts) so online mode never reimplements matchup
- * logic; just draws repeatedly with per-attempt seeds until `count` distinct
- * club pairs are found. */
+/** Deterministic set of `count` distinct club×club matchups for a date —
+ * same date always yields the same ordered set of questions for every
+ * player. Reuses the pool-building engine the local game uses (lib/game.ts)
+ * so online mode never reimplements dataset filtering, but picks pairs from
+ * ONLINE_TOP_CLUBS rather than local mode's percentage-based "easy" band. */
 export async function pickDailyQuestions(roundDate: string, count: number): Promise<DailyMatchup[]> {
   const dataset = await loadServerDataset();
   const settings: Settings = {
@@ -46,13 +54,14 @@ export async function pickDailyQuestions(roundDate: string, count: number): Prom
     excludedCountries: [],
   };
   const pool = buildPool(dataset, settings);
+  const eligibleClubs = [...pool.clubs].sort((a, b) => b.popularity - a.popularity).slice(0, ONLINE_TOP_CLUBS);
 
   const questions: DailyMatchup[] = [];
   const usedPairs = new Set<string>();
   const maxAttempts = count * 20;
   for (let attempt = 0; questions.length < count && attempt < maxAttempts; attempt++) {
     const seed = dateSeed(`${roundDate}#${attempt}`);
-    const round = pickClubClubRound(pool, "easy", seed);
+    const round = pickClubClubRoundFromClubs(pool, eligibleClubs, seed);
     if (!round || round.kind !== "clubClub") continue;
     const key = pairKey(round.clubA, round.clubB);
     if (usedPairs.has(key)) continue;
