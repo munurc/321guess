@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import type { Dataset } from "./types";
+import type { Dataset } from "@321guess/core";
 
 let cached: Dataset | null = null;
 
