@@ -7,11 +7,33 @@ export const QUESTIONS_PER_ROUND = 5;
 // Online mode draws only from clubs anyone would recognize on sight, not the
 // broader "easy" band local mode uses (~25% of enabled leagues, still ~90
 // clubs including e.g. Valencia, Mainz, Twente — whose shared-player lists
-// skew toward domestic squad players a casual visitor won't know). Checked
-// against the real dataset: these 12 clubs cover all 66 possible pairs with
-// at least one shared player, and the shared lists lean toward genuinely
-// famous transfers (Figo, Ronaldo, Eto'o, Pirlo, Cassano, ...).
-const ONLINE_TOP_CLUBS = 12;
+// skew toward domestic squad players a casual visitor won't know). Curated
+// and data-verified pairwise (171 of the 171 possible pairs share at least
+// one recognizable player) against sortitoutsi-caliber giants across the
+// top 5 leagues plus Turkey/Portugal/Netherlands, deliberately excluding
+// lower-profile leagues (Belgian Pro League, Saudi league, Brasileirão,
+// Argentine Primera, MLS) whose fame doesn't travel as far.
+const ONLINE_CLUB_IDS = new Set([
+  "Q7156", // FC Barcelona
+  "Q8682", // Real Madrid
+  "Q18656", // Manchester United
+  "Q1130849", // Liverpool
+  "Q1422", // Juventus
+  "Q9616", // Chelsea
+  "Q9617", // Arsenal
+  "Q15789", // Bayern Munich
+  "Q1543", // AC Milan
+  "Q631", // Inter Milan
+  "Q50602", // Manchester City
+  "Q2641", // Napoli
+  "Q41420", // Borussia Dortmund
+  "Q81888", // Ajax
+  "Q128446", // Porto
+  "Q131499", // Benfica
+  "Q483020", // Paris Saint-Germain
+  "Q495299", // Galatasaray
+  "Q6601875", // Fenerbahçe
+]);
 
 export function todayRoundDate(): string {
   return new Date().toISOString().slice(0, 10);
@@ -44,7 +66,7 @@ function pairKey(clubA: Club, clubB: Club): string {
  * same date always yields the same ordered set of questions for every
  * player. Reuses the pool-building engine the local game uses (lib/game.ts)
  * so online mode never reimplements dataset filtering, but picks pairs from
- * ONLINE_TOP_CLUBS rather than local mode's percentage-based "easy" band. */
+ * ONLINE_CLUB_IDS rather than local mode's percentage-based "easy" band. */
 export async function pickDailyQuestions(roundDate: string, count: number): Promise<DailyMatchup[]> {
   const dataset = await loadServerDataset();
   const settings: Settings = {
@@ -54,7 +76,7 @@ export async function pickDailyQuestions(roundDate: string, count: number): Prom
     excludedCountries: [],
   };
   const pool = buildPool(dataset, settings);
-  const eligibleClubs = [...pool.clubs].sort((a, b) => b.popularity - a.popularity).slice(0, ONLINE_TOP_CLUBS);
+  const eligibleClubs = pool.clubs.filter((c) => ONLINE_CLUB_IDS.has(c.id));
 
   const questions: DailyMatchup[] = [];
   const usedPairs = new Set<string>();

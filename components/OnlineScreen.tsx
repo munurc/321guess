@@ -488,22 +488,12 @@ export function OnlineScreen() {
         <div className="animate-fade-in space-y-6">
           <p className="text-sm text-ink/60">{t("welcomeBack", { username: identity.username })}</p>
 
-          <div className="space-y-3">
-            <h2 className="text-center text-xs font-semibold uppercase tracking-wider text-ink/50">
-              {t("todaysMatchupsLabel")}
-            </h2>
-            <div className="flex flex-wrap justify-center gap-2">
-              {round.questions.map((q) => (
-                <div
-                  key={q.index}
-                  className="flex items-center gap-1.5 rounded-xl border border-ink/10 bg-ink/5 p-2"
-                >
-                  <img src={`${q.clubA.logoUrl}?width=100`} alt={q.clubA.name} className="h-8 w-8 object-contain" />
-                  <span className="text-[10px] font-bold text-ink/25">×</span>
-                  <img src={`${q.clubB.logoUrl}?width=100`} alt={q.clubB.name} className="h-8 w-8 object-contain" />
-                </div>
-              ))}
+          <div className="rounded-xl border-2 border-ink/10 bg-ink/5 p-8 text-center">
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-accent text-paper">
+              <ClockIcon />
             </div>
+            <p className="text-lg font-bold">{t("readyHeading", { questions: round.questions.length })}</p>
+            <p className="mt-1 text-xs text-ink/50">{t("readySubheading")}</p>
           </div>
 
           <p className="text-center text-xs text-ink/40">
@@ -661,6 +651,15 @@ function formatTime(ms: number): string {
 
 function LoadingBox({ text }: { text: string }) {
   return <div className="rounded-lg border border-ink/10 bg-ink/5 p-8 text-center text-ink/60">{text}</div>;
+}
+
+function ClockIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-6 w-6">
+      <circle cx="12" cy="12" r="9" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 7v5l3 3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
 }
 
 function GuessInput({
