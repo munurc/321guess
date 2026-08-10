@@ -183,5 +183,36 @@
         "expired": "Oturumun sona ermiş görünüyor. Lütfen tekrar bir kullanıcı adı seç."
       }
     }
+  },
+  "privacy": {
+    "title": "Gizlilik Politikası",
+    "updated": "Son güncelleme: {date}",
+    "intro": "321guess, ücretsiz bir futbolcu tahmin oyunudur. Bu sayfa, web sitesinin ve mobil uygulamanın topladığı az sayıda veriyi ve nedenini açıklar.",
+    "sections": [
+      {
+        "heading": "Hesap yok, kişisel bilgi yok",
+        "body": "321guess senden hiçbir zaman isim, e-posta adresi ya da şifre istemez. Yerel (çevrimdışı) oyun modu sunucularımıza hiçbir veri göndermez."
+      },
+      {
+        "heading": "Günlük Meydan Okuma (online mod)",
+        "body": "Günlük Meydan Okuma'yı oynamayı seçersen, tarayıcın ya da uygulaman rastgele bir kimlik oluşturur ve bunu seçtiğin kullanıcı adıyla birlikte cihazında saklar. Bu kimlik ve kullanıcı adı, günlük skorunu, serini ve liderlik tablosundaki yerini takip etmek için sunucumuza gönderilir. Bu kimliği gerçek kimliğinle eşleştirmemizin hiçbir yolu yoktur."
+      },
+      {
+        "heading": "Push bildirimleri (mobil uygulama)",
+        "body": "321guess mobil uygulaması push bildirimi gönderme izni isteyebilir. İzin verirsen, cihazın sunucumuza bir push token'ı kaydeder; bu token yalnızca yeni bir Günlük Meydan Okuma hazır olduğunda gönderilen tek bir günlük bildirim için kullanılır. Push token'larını başka hiçbir amaçla kullanmayız ve bildirimleri istediğin an cihazının sistem ayarlarından kapatabilirsin."
+      },
+      {
+        "heading": "Analitik",
+        "body": "Genel trafiği anlamak için (hangi sayfaların ziyaret edildiği, yaklaşık kaç kişinin oynadığı gibi) Google Analytics ve Vercel Analytics kullanıyoruz. Bu araçlar Günlük Meydan Okuma kullanıcı adını ya da push token'ını almaz."
+      },
+      {
+        "heading": "Veri saklama",
+        "body": "Günlük Meydan Okuma skorları ve serileri liderlik tablosunu çalıştırmak için saklanır. Online modu oynamayı istediğin an bırakabilirsin; yerel oyunla ilgili hiçbir şey hiçbir zaman saklanmaz."
+      },
+      {
+        "heading": "İletişim",
+        "body": "Bu politikayla ilgili sorularını site altbilgisindeki Instagram bağlantısı üzerinden gönderebilirsin."
+      }
+    ]
   }
 }

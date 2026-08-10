@@ -183,5 +183,36 @@
         "expired": "Your session seems to have expired. Please pick a username again."
       }
     }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "updated": "Last updated: {date}",
+    "intro": "321guess is a free football player guessing game. This page explains what little data the website and mobile app collect and why.",
+    "sections": [
+      {
+        "heading": "No account, no personal information",
+        "body": "321guess never asks for your name, email address, or password. Local (offline) play doesn't send anything to our servers at all."
+      },
+      {
+        "heading": "Daily Challenge (online mode)",
+        "body": "If you choose to play the Daily Challenge, your browser or app generates a random identifier and stores it on your device together with the username you pick. That identifier and username are sent to our server to track your daily score, streak, and leaderboard position. There is no way for us to link this identifier to your real identity."
+      },
+      {
+        "heading": "Push notifications (mobile app)",
+        "body": "The 321guess mobile app can ask permission to send push notifications. If you allow it, your device registers a push token with our server, used only to send one daily notification announcing that a new Daily Challenge is ready. We don't use push tokens for anything else, and you can disable notifications at any time in your device's system settings."
+      },
+      {
+        "heading": "Analytics",
+        "body": "We use Google Analytics and Vercel Analytics to understand overall traffic (e.g. which pages are visited, roughly how many people play). These tools do not receive your Daily Challenge username or push token."
+      },
+      {
+        "heading": "Data retention",
+        "body": "Daily Challenge scores and streaks are kept to power the leaderboard. You can stop playing online mode at any time; nothing about local play is ever stored."
+      },
+      {
+        "heading": "Contact",
+        "body": "Questions about this policy can be sent via the Instagram link in the site footer."
+      }
+    ]
   }
 }
