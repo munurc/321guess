@@ -4,6 +4,7 @@ import { getMessages, getTranslations, setRequestLocale } from "next-intl/server
 import { notFound } from "next/navigation";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
+import { PushRegistration } from "@/components/PushRegistration";
 import { THEME_INIT_SCRIPT } from "@/components/ThemeToggle";
 import { ThemeSync } from "@/components/ThemeSync";
 import { locales, type Locale } from "@/i18n/request";
@@ -106,6 +107,7 @@ export default async function LocaleLayout({
       </head>
       <body>
         <ThemeSync />
+        <PushRegistration />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <div className="flex min-h-screen flex-col">
             <div className="flex-1">{children}</div>

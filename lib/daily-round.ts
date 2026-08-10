@@ -1,6 +1,7 @@
 import { buildPool, pickClubClubRoundFromClubs } from "./game";
+import { createDailyRound, getDailyRound, type DailyRoundRow } from "./online-db";
 import { loadServerDataset } from "./server-dataset";
-import type { Club, Settings } from "./types";
+import type { Club, Player, Settings } from "./types";
 
 export const QUESTIONS_PER_ROUND = 5;
 
@@ -73,4 +74,70 @@ export async function pickDailyQuestions(roundDate: string, count: number): Prom
     });
   }
   return questions;
+}
+
+export class NoDailyMatchupsError extends Error {
+  constructor() {
+    super("no_matchups");
+    this.name = "NoDailyMatchupsError";
+  }
+}
+
+// Deliberately NOT derived from the incoming request (e.g. new URL(req.url))
+// — that origin tracks the Host header, which can be attacker-controlled
+// behind some proxy configs. Since this URL's response gets frozen as the
+// entire day's answer key for every player, a spoofed origin would let an
+// attacker poison the shared daily puzzle. INTERNAL_BASE_URL/VERCEL_URL are
+// set by the platform, not by the request.
+function getInternalOrigin(): string {
+  if (process.env.INTERNAL_BASE_URL) return process.env.INTERNAL_BASE_URL;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return `http://localhost:${process.env.PORT ?? 3000}`;
+}
+
+async function fetchLiveAnswers(clubAId: string, clubBId: string, fallback: string[]): Promise<string[]> {
+  try {
+    const origin = getInternalOrigin();
+    const res = await fetch(`${origin}/api/round`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mode: "clubClub", clubA: clubAId, clubB: clubBId }),
+    });
+    if (res.ok) {
+      const data = (await res.json()) as { players?: Player[] };
+      if (Array.isArray(data.players) && data.players.length > 0) {
+        return data.players.map((p) => p.id);
+      }
+    }
+  } catch {
+    // Wikidata unreachable — keep the local-dataset fallback list.
+  }
+  return fallback;
+}
+
+/**
+ * Returns today's online-mode round, lazily generating it on first call:
+ * QUESTIONS_PER_ROUND deterministic "easy" club×club matchups, each backed
+ * by the same authoritative Wikidata answer source /api/round already uses
+ * — falling back to the local dataset intersection per question if that
+ * call fails. Safe to call concurrently (from a visitor's request or the
+ * daily-notification cron) — createDailyRound() in lib/online-db.ts handles
+ * the race.
+ */
+export async function ensureDailyRound(roundDate: string): Promise<DailyRoundRow> {
+  const existing = await getDailyRound(roundDate);
+  if (existing) return existing;
+
+  const matchups = await pickDailyQuestions(roundDate, QUESTIONS_PER_ROUND);
+  if (matchups.length === 0) throw new NoDailyMatchupsError();
+
+  const questions = await Promise.all(
+    matchups.map(async (m) => ({
+      clubA: m.clubA,
+      clubB: m.clubB,
+      answerPlayerIds: await fetchLiveAnswers(m.clubA.id, m.clubB.id, m.fallbackAnswerPlayerIds),
+    })),
+  );
+
+  return createDailyRound(roundDate, questions);
 }
