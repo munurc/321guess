@@ -9,7 +9,7 @@
  */
 
 import fs from "node:fs/promises";
-import type { Player, Club } from "../lib/types";
+import type { Player, Club } from "@321guess/core";
 
 async function main() {
   const [oldPath, newPath, outPath] = process.argv.slice(2);

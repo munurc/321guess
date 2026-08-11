@@ -10,7 +10,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { targetLeagues } from "./target-leagues";
-import type { Club, Country, Dataset, League, Player } from "../lib/types";
+import type { Club, Country, Dataset, League, Player } from "@321guess/core";
 
 const SPARQL_ENDPOINT = "https://query.wikidata.org/sparql";
 const USER_AGENT =

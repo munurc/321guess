@@ -6,6 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "fetch-data": "tsx scripts/fetch-wikidata.ts",
+    "enrich-popularity": "tsx scripts/enrich-popularity.ts",
+    "refetch-logos": "tsx scripts/refetch-logos.ts",
     "test": "vitest run"
   },
   "dependencies": {
@@ -19,6 +22,7 @@
   "devDependencies": {
     "@types/node": "^22",
     "@types/react": "^19",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.3",
     "vitest": "^3.0.4"
   }

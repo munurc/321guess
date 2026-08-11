@@ -7,31 +7,10 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "fetch-data": "tsx scripts/fetch-wikidata.ts",
-    "enrich-popularity": "tsx scripts/enrich-popularity.ts",
-    "refetch-logos": "tsx scripts/refetch-logos.ts",
-    "test": "vitest run"
-  },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.45.4",
-    "@vercel/analytics": "^2.0.1",
-    "next": "^15.5.20",
-    "next-intl": "^3.26.3",
-    "react": "19.0.0",
-    "react-dom": "19.0.0"
+    "test": "npm run test --workspaces --if-present"
   },
   "devDependencies": {
     "@types/node": "^22",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.5.1",
-    "tailwindcss": "^3.4.17",
-    "tsx": "^4.19.2",
     "typescript": "^5.7.3",
     "vitest": "^3.0.4"
   }

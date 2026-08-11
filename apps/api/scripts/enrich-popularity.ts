@@ -7,7 +7,7 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { Club } from "../lib/types";
+import type { Club } from "@321guess/core";
 
 const SPARQL_ENDPOINT = "https://query.wikidata.org/sparql";
 const USER_AGENT =
