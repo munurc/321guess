@@ -1,0 +1,218 @@
+{
+  "meta": {
+    "title": "Futbolcu Tahmin Oyunu — 321guess",
+    "description": "Ücretsiz futbolcu tahmin oyunu. İki kulüp logosu veya bir bayrak + bir logo gösterilir, iki takımda da oynamış futbolcuyu bul. Arkadaşınla ekran başında oyna."
+  },
+  "home": {
+    "h1": "Futbolcu Tahmin Oyunu",
+    "tagline": "İki takımda da forma giymiş futbolcuyu bulmaya çalış — arkadaşınla, tarayıcıda, kayıt olmadan.",
+    "intro": "321guess, futbol severler için hazırlanmış ücretsiz bir futbolcu tahmin oyunudur. Sana iki kulüp logosu ya da bir bayrak + bir kulüp logosu gösterilir; hedef, o iki takımda da oynamış bir futbolcunun ismini bulmaktır. Fenerbahçe, Galatasaray, Beşiktaş, Barcelona, Real Madrid, Manchester United gibi dünya devlerinden Süper Lig'e kadar geniş bir kulüp havuzundan sorular gelir. Kayıt yok, indirme yok — tarayıcıyı aç ve arkadaşınla oyna. Rakip aramak istemeyenler için Günlük Meydan Okuma modunda, sadece bir kullanıcı adıyla (hesap gerekmez) her gün değişen 5 soruda dünyanın dört bir yanından oyuncularla yarışabilirsin.",
+    "howToHeading": "Nasıl Oynanır?",
+    "howToSteps": [
+      "Oyun modunu seç: Kulüp × Kulüp veya Ülke × Kulüp.",
+      "Zorluk ve dahil edilecek ligleri belirle.",
+      "3-2-1 geri sayımı biter bitmez iki takımda da oynamış futbolcunun ismini söyle."
+    ],
+    "faqHeading": "Sıkça Sorulan Sorular",
+    "faq": [
+      {
+        "q": "321guess futbolcu tahmin oyunu ücretsiz mi?",
+        "a": "Evet, tamamen ücretsiz. Kayıt olmadan, hiçbir uygulama indirmeden tarayıcıda oynayabilirsin."
+      },
+      {
+        "q": "Kaç kişi oynayabilir?",
+        "a": "Ekran başında en az iki kişi öneririz. Bir kişi soruyu okur, diğerleri iki takımda da oynamış futbolcuyu tahmin eder. Tek başına da oynayabilirsin."
+      },
+      {
+        "q": "Hangi ligler ve kulüpler var?",
+        "a": "Türkiye Süper Lig, Premier League, LaLiga, Bundesliga, Serie A, Ligue 1 ve daha fazlası. Ayarlar ekranından istediğin ligleri açıp kapatabilirsin."
+      },
+      {
+        "q": "Ülke × Kulüp modu nedir?",
+        "a": "Bir bayrak ve bir kulüp logosu görürsün. O milliyetten olup o kulüpte oynamış bir futbolcunun ismini bulman gerekir."
+      },
+      {
+        "q": "Cevaplar nasıl doğrulanıyor?",
+        "a": "Oyuncu verileri Wikidata'dan çekilir ve düzenli olarak güncellenir. Tur sonunda 'Cevabı Göster' ile doğru futbolcuları görebilirsin."
+      },
+      {
+        "q": "Günlük Meydan Okuma nedir?",
+        "a": "Her gün değişen, herkes için aynı 5 soruluk online bir mod. 3 dakika içinde bildiğin futbolcuları yaz, liderlik tablosunda başkalarıyla yarış."
+      },
+      {
+        "q": "Online modda oynamak için hesap açmam mı gerekiyor?",
+        "a": "Hayır. E-posta ya da şifre yok — sadece bir kullanıcı adı seç, hemen oynamaya başla."
+      },
+      {
+        "q": "Liderlik tablosu nasıl sıralanıyor?",
+        "a": "En çok doğru futbolcu bulan önde; eşitlikte daha hızlı bitiren öne geçer. Ayrıca tüm zamanların en çok futbolcu bulan oyuncularını gösteren ayrı bir tablo da var."
+      }
+    ]
+  },
+  "setup": {
+    "title": "321guess",
+    "mode": {
+      "heading": "Oyun modu",
+      "clubClub": {
+        "title": "Kulüp × Kulüp",
+        "description": "İki kulüp logosu — iki takımda da oynamış futbolcuyu bul."
+      },
+      "countryClub": {
+        "title": "Ülke × Kulüp",
+        "description": "Bir bayrak + bir logo — o milliyetten olup o kulüpte oynamış futbolcuyu bul."
+      }
+    },
+    "difficulty": {
+      "heading": "Zorluk",
+      "easy": {
+        "title": "Kolay",
+        "description": "Sadece dünya devleri (Barça, Man Utd…)."
+      },
+      "medium": {
+        "title": "Orta",
+        "description": "Bilinen kulüplerin çoğu."
+      },
+      "hard": {
+        "title": "Zor",
+        "description": "Az bilinen kulüpler karışıyor."
+      }
+    },
+    "leagues": {
+      "heading": "Dahil edilecek ligler",
+      "hint": "İşareti kaldırdığın ligler oyuna girmez.",
+      "selectAll": "Tümünü seç",
+      "clearAll": "Tümünü temizle"
+    },
+    "excludedCountries": {
+      "heading": "Sorulmayacak ülkeler (bayrak)",
+      "hint": "Ülke × Kulüp modunda bayrağı hangi ülkelerin sorulmayacağını seç. Tikini kaldırdığın ülkelerin bayrağı gelmez."
+    },
+    "start": "Oyunu Başlat",
+    "startDisabled": "En az bir lig seçmelisin",
+    "loading": "Veri yükleniyor…"
+  },
+  "play": {
+    "getReady": "Hazır ol",
+    "go": "Başla",
+    "vs": "vs",
+    "showAnswers": "Cevabı Göster",
+    "nextRound": "Sonraki Tur",
+    "backToSetup": "Ayarlara dön",
+    "noSettings": "Ayarlar bulunamadı, ana sayfaya yönlendiriliyorsun…",
+    "answersHeading": "Doğru futbolcular",
+    "noAnswers": "Kayıtlarda uygun futbolcu bulunamadı — sonraki tura geç.",
+    "rerolling": "Uygun eşleşme aranıyor…"
+  },
+  "language": {
+    "tr": "Türkçe",
+    "en": "English"
+  },
+  "manual": {
+    "link": "Manuel oyun",
+    "title": "Manuel oyun",
+    "description": "İki takımı kendin seç, cevabı gör.",
+    "mode": {
+      "clubClub": "Kulüp × Kulüp",
+      "countryClub": "Ülke × Kulüp"
+    },
+    "search": {
+      "clubA": "Birinci takımı ara",
+      "clubB": "İkinci takımı ara",
+      "country": "Ülke ara",
+      "club": "Takım ara",
+      "empty": "Sonuç yok",
+      "clear": "Sıfırla"
+    },
+    "start": "Başlat",
+    "newRound": "Yeni oyun",
+    "backHome": "Ana sayfa",
+    "hint": "Rastgele değil — seçtiğin takımların ortak oyuncuları gelir."
+  },
+  "online": {
+    "modeCard": {
+      "title": "Günlük Meydan Okuma",
+      "description": "Her gün değişen 5 soruyla futbol bilgini dünyayla yarıştır.",
+      "live": "CANLI"
+    },
+    "title": "Günlük Meydan Okuma",
+    "description": "Her gün değişen 5 soruyla futbol bilgini dünyayla yarıştır.",
+    "backHome": "Ana sayfa",
+    "loading": "Yükleniyor…",
+    "roundError": "Günün bilmecesi yüklenemedi. Az sonra tekrar dene.",
+    "welcomeBack": "Tekrar hoş geldin, {username}!",
+    "vs": "vs",
+    "todaysMatchupsLabel": "Bugünün eşleşmeleri",
+    "instructions": "{minutes} dakikan var — {questions} soruda iki takımda da oynamış futbolcuların isimlerini yaz. İstediğin an sonraki soruya geçebilirsin.",
+    "questionProgress": "Soru {current} / {total}",
+    "start": "Başla",
+    "guessPlaceholder": "Futbolcu adı yaz…",
+    "guessEmpty": "Eşleşme yok",
+    "foundCount": "{found} / {total} toplam bulundu",
+    "pass": "Pas",
+    "nextQuestion": "Sonraki Soru",
+    "finishEarly": "Bitir",
+    "resultLabel": "doğru futbolcu",
+    "streakLabel": "{count} günlük seri",
+    "share": "Sonucu Paylaş",
+    "shareCopied": "Kopyalandı ✓",
+    "shareText": "⚽ 321guess Günlük Meydan Okuma #{day}\n🎯 {correct}/{total} futbolcu bulundu\n{bar}\n🔥 {streak} günlük seri\n\nSen de dene 👉 {url}",
+    "badges": {
+      "perfect": "💯 Tüm futbolcuları buldun",
+      "streak3": "🔥 3 günlük seri",
+      "streak7": "🔥 7 günlük seri",
+      "streak30": "🔥 30 günlük seri"
+    },
+    "leaderboard": {
+      "tab": {
+        "today": "Bugün",
+        "total": "Toplam"
+      },
+      "empty": "Henüz kimse oynamamış."
+    },
+    "username": {
+      "label": "Kullanıcı adı seç",
+      "placeholder": "örn. futbolsever23",
+      "hint": "3-20 karakter, harfle başlamalı, harf/rakam/alt çizgi içerebilir.",
+      "submit": "Devam et",
+      "submitting": "Kontrol ediliyor…",
+      "error": {
+        "format": "Kullanıcı adı kurallara uymuyor.",
+        "blocked": "Bu kullanıcı adı kullanılamaz.",
+        "taken": "Bu kullanıcı adı zaten alınmış.",
+        "server": "Bir şeyler ters gitti. Lütfen tekrar dene.",
+        "expired": "Oturumun sona ermiş görünüyor. Lütfen tekrar bir kullanıcı adı seç."
+      }
+    }
+  },
+  "privacy": {
+    "title": "Gizlilik Politikası",
+    "updated": "Son güncelleme: {date}",
+    "intro": "321guess, ücretsiz bir futbolcu tahmin oyunudur. Bu sayfa, web sitesinin ve mobil uygulamanın topladığı az sayıda veriyi ve nedenini açıklar.",
+    "sections": [
+      {
+        "heading": "Hesap yok, kişisel bilgi yok",
+        "body": "321guess senden hiçbir zaman isim, e-posta adresi ya da şifre istemez. Yerel (çevrimdışı) oyun modu sunucularımıza hiçbir veri göndermez."
+      },
+      {
+        "heading": "Günlük Meydan Okuma (online mod)",
+        "body": "Günlük Meydan Okuma'yı oynamayı seçersen, tarayıcın ya da uygulaman rastgele bir kimlik oluşturur ve bunu seçtiğin kullanıcı adıyla birlikte cihazında saklar. Bu kimlik ve kullanıcı adı, günlük skorunu, serini ve liderlik tablosundaki yerini takip etmek için sunucumuza gönderilir. Bu kimliği gerçek kimliğinle eşleştirmemizin hiçbir yolu yoktur."
+      },
+      {
+        "heading": "Push bildirimleri (mobil uygulama)",
+        "body": "321guess mobil uygulaması push bildirimi gönderme izni isteyebilir. İzin verirsen, cihazın sunucumuza bir push token'ı kaydeder; bu token yalnızca yeni bir Günlük Meydan Okuma hazır olduğunda gönderilen tek bir günlük bildirim için kullanılır. Push token'larını başka hiçbir amaçla kullanmayız ve bildirimleri istediğin an cihazının sistem ayarlarından kapatabilirsin."
+      },
+      {
+        "heading": "Analitik",
+        "body": "Genel trafiği anlamak için (hangi sayfaların ziyaret edildiği, yaklaşık kaç kişinin oynadığı gibi) Google Analytics ve Vercel Analytics kullanıyoruz. Bu araçlar Günlük Meydan Okuma kullanıcı adını ya da push token'ını almaz."
+      },
+      {
+        "heading": "Veri saklama",
+        "body": "Günlük Meydan Okuma skorları ve serileri liderlik tablosunu çalıştırmak için saklanır. Online modu oynamayı istediğin an bırakabilirsin; yerel oyunla ilgili hiçbir şey hiçbir zaman saklanmaz."
+      },
+      {
+        "heading": "İletişim",
+        "body": "Bu politikayla ilgili sorularını site altbilgisindeki Instagram bağlantısı üzerinden gönderebilirsin."
+      }
+    ]
+  }
+}
