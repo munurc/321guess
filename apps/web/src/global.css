@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --font-display:
     Spline Sans, Inter, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji,
@@ -6,4 +10,25 @@
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
   --font-rounded: 'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif;
   --font-serif: Georgia, 'Times New Roman', serif;
+
+  /* 321guess theme tokens, ported from the old site's app/globals.css */
+  --paper: 246 242 234;
+  --paper-2: 237 232 220;
+  --ink: 30 28 25;
+  --ink-soft: 74 70 64;
+  --ink-mute: 122 116 106;
+  --rule: 217 211 196;
+  --accent: 63 107 86;
+  --accent-strong: 47 84 67;
+}
+
+.dark {
+  --paper: 20 19 15;
+  --paper-2: 30 28 23;
+  --ink: 232 226 211;
+  --ink-soft: 184 176 160;
+  --ink-mute: 138 132 120;
+  --rule: 58 53 43;
+  --accent: 108 163 136;
+  --accent-strong: 85 135 111;
 }
