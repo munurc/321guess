@@ -7,6 +7,7 @@ import type { ReactNode } from 'react';
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import { AppLocaleProvider, useAppLocale } from '@/i18n/AppLocaleContext';
 import { messages } from '@/i18n/messages';
+import { GameSettingsProvider } from '@/lib/game-settings-context';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -23,12 +24,14 @@ export default function TabLayout() {
   const colorScheme = useColorScheme();
   return (
     <AppLocaleProvider>
-      <IntlBridge>
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <AnimatedSplashOverlay />
-          <Stack screenOptions={{ headerShown: false }} />
-        </ThemeProvider>
-      </IntlBridge>
+      <GameSettingsProvider>
+        <IntlBridge>
+          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+            <AnimatedSplashOverlay />
+            <Stack screenOptions={{ headerShown: false }} />
+          </ThemeProvider>
+        </IntlBridge>
+      </GameSettingsProvider>
     </AppLocaleProvider>
   );
 }
