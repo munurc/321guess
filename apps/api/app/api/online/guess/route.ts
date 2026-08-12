@@ -13,6 +13,16 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 
 type Body = { token?: unknown; questionIndex?: unknown; playerId?: unknown };
 
+// Browsers preflight cross-origin POST requests with a JSON body
+// (apps/web calling this from a different origin) before sending the
+// real request — next.config.ts's headers() sets the CORS headers on
+// the response, but a route with no OPTIONS export gets Next.js's
+// default 405 for it, which fails the preflight. An empty 204 here is
+// all a preflight needs.
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 204 });
+}
+
 export async function POST(req: Request) {
   let body: Body;
   try {
