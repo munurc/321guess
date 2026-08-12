@@ -101,10 +101,7 @@ export function SetupScreen() {
             </Text>
             <View className="gap-3">
               <Pressable
-                // /online (OnlineScreen / Daily Challenge) doesn't exist yet —
-                // ported in a later plan. Typed-routes doesn't know this path
-                // yet, hence the cast; remove it once that route exists.
-                onPress={() => router.push("/online" as never)}
+                onPress={() => router.push("/online")}
                 className="flex-row items-center gap-4 rounded-xl bg-accent p-4"
               >
                 <Text className="text-2xl">🏆</Text>
