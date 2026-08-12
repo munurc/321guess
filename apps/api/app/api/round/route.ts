@@ -132,6 +132,15 @@ function isValidCountryCode(s: unknown): s is string {
   return typeof s === "string" && /^[A-Z]{2}$/.test(s);
 }
 
+// Browsers preflight cross-origin POST requests with a JSON body (apps/web
+// calling this from a different origin) before sending the real request —
+// next.config.ts's headers() sets the CORS headers on the response, but a
+// route with no OPTIONS export gets Next.js's default 405 for it, which
+// fails the preflight. An empty 204 here is all a preflight needs.
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 204 });
+}
+
 export async function POST(req: Request) {
   let body: unknown;
   try {
