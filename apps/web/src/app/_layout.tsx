@@ -1,6 +1,5 @@
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useColorScheme } from 'react-native';
 import { IntlProvider } from 'use-intl';
 import type { ReactNode } from 'react';
 
@@ -21,15 +20,12 @@ function IntlBridge({ children }: { children: ReactNode }) {
 }
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
   return (
     <AppLocaleProvider>
       <GameSettingsProvider>
         <IntlBridge>
-          <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-            <AnimatedSplashOverlay />
-            <Stack screenOptions={{ headerShown: false }} />
-          </ThemeProvider>
+          <AnimatedSplashOverlay />
+          <Stack screenOptions={{ headerShown: false }} />
         </IntlBridge>
       </GameSettingsProvider>
     </AppLocaleProvider>

@@ -53,7 +53,7 @@ export async function clearIdentity(): Promise<void> {
     await AsyncStorage.removeItem(IDENTITY_KEY);
     const keys = await AsyncStorage.getAllKeys();
     const progressKeys = keys.filter((k) => k.startsWith(PROGRESS_KEY_PREFIX));
-    if (progressKeys.length > 0) await AsyncStorage.removeMany(progressKeys);
+    if (progressKeys.length > 0) await AsyncStorage.multiRemove(progressKeys);
   } catch {}
 }
 
