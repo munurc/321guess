@@ -1,11 +1,10 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useColorScheme } from 'react-native';
 import { IntlProvider } from 'use-intl';
 import type { ReactNode } from 'react';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
 import { AppLocaleProvider, useAppLocale } from '@/i18n/AppLocaleContext';
 import { messages } from '@/i18n/messages';
 
@@ -27,7 +26,7 @@ export default function TabLayout() {
       <IntlBridge>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <AnimatedSplashOverlay />
-          <AppTabs />
+          <Stack screenOptions={{ headerShown: false }} />
         </ThemeProvider>
       </IntlBridge>
     </AppLocaleProvider>
