@@ -1,5 +1,3 @@
-// firebase-admin needs Node APIs (crypto signing for OAuth2) — not available
-// on the Edge runtime.
 export const runtime = "nodejs";
 
 import { NextResponse } from "next/server";

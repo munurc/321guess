@@ -1,16 +1,18 @@
 {
   "expo": {
-    "name": "web",
-    "slug": "web",
+    "name": "321guess",
+    "slug": "321guess",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "web",
+    "scheme": "guess321",
     "userInterfaceStyle": "automatic",
     "ios": {
+      "bundleIdentifier": "com.threetwoone.guess",
       "icon": "./assets/expo.icon"
     },
     "android": {
+      "package": "com.threetwoone.guess",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -33,7 +35,15 @@
           "imageWidth": 76
         }
       ],
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/android-icon-foreground.png",
+          "color": "#208AEF"
+        }
+      ],
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,

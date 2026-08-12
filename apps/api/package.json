@@ -14,7 +14,7 @@
   "dependencies": {
     "@321guess/core": "*",
     "@supabase/supabase-js": "^2.45.4",
-    "firebase-admin": "^13.0.0",
+    "expo-server-sdk": "^7.1.0",
     "next": "^15.5.20",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"

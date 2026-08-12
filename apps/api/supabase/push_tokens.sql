@@ -1,9 +1,9 @@
 -- 321guess push notifications — additive migration, run after schema.sql in
 -- the Supabase SQL editor. Does not alter any existing table.
 --
--- Stores device push tokens (unified FCM registration tokens for both iOS
--- and Android, obtained client-side via @capacitor-community/fcm) used for
--- the daily "today's challenge is ready" broadcast. player_token is
+-- Stores device push tokens (Expo push tokens, "ExponentPushToken[...]",
+-- obtained client-side via expo-notifications) used for the daily
+-- "today's challenge is ready" broadcast. player_token is
 -- nullable: a device can opt into push before ever registering a username
 -- in online mode. Same RLS convention as schema.sql — server-side
 -- service-role access only.

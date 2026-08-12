@@ -4,6 +4,7 @@ import { IntlProvider } from 'use-intl';
 import type { ReactNode } from 'react';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
+import { PushRegistration } from '@/components/PushRegistration';
 import { AppLocaleProvider, useAppLocale } from '@/i18n/AppLocaleContext';
 import { messages } from '@/i18n/messages';
 import { GameSettingsProvider } from '@/lib/game-settings-context';
@@ -25,6 +26,7 @@ export default function TabLayout() {
       <GameSettingsProvider>
         <IntlBridge>
           <AnimatedSplashOverlay />
+          <PushRegistration />
           <Stack screenOptions={{ headerShown: false }} />
         </IntlBridge>
       </GameSettingsProvider>

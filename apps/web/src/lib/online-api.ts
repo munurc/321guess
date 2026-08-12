@@ -100,6 +100,22 @@ export async function finishRound(token: string): Promise<FinishApiResult> {
   }
 }
 
+export async function registerPushToken(
+  expoPushToken: string,
+  platform: "ios" | "android",
+  playerToken: string | undefined,
+): Promise<void> {
+  try {
+    await fetch(`${apiBaseUrl()}/api/push/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: expoPushToken, platform, playerToken }),
+    });
+  } catch {
+    // Best-effort: a failed push registration shouldn't disrupt the game.
+  }
+}
+
 export type LeaderboardResponse =
   | { type: "today"; roundDate: string; entries: { username: string; correctCount: number; totalPossible: number; durationMs: number }[] }
   | { type: "total"; entries: { username: string; totalCorrect: number; daysPlayed: number }[] };
