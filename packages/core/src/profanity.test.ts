@@ -22,6 +22,16 @@ describe("validateUsername", () => {
     expect(validateUsername("a__b")).toEqual({ valid: false, reason: "format" });
   });
 
+  it("rejects usernames with a repeated character run (keyboard-mash spam)", () => {
+    expect(validateUsername("aaaaaa")).toEqual({ valid: false, reason: "format" });
+    expect(validateUsername("bbbb")).toEqual({ valid: false, reason: "format" });
+    expect(validateUsername("a1111111")).toEqual({ valid: false, reason: "format" });
+  });
+
+  it("still accepts a normal double letter (only 2 in a row)", () => {
+    expect(validateUsername("coolguy99")).toEqual({ valid: true });
+  });
+
   it("rejects a blocked word", () => {
     expect(validateUsername("fuckboy")).toEqual({ valid: false, reason: "blocked" });
   });

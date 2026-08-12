@@ -96,12 +96,17 @@ export function containsBlockedWord(username: string): boolean {
 // rejected separately below.
 const USERNAME_FORMAT_RE = /^\p{L}[\p{L}\p{N}_]{2,19}$/u;
 
+// Any character repeated 3+ times in a row ("aaaaaa", "bbbb", "1111") reads
+// as keyboard-mash spam rather than a real handle — reject at the format
+// stage instead of growing the profanity blocklist for this.
+const REPEATED_CHAR_RE = /(.)\1{2,}/iu;
+
 export type UsernameValidation =
   | { valid: true }
   | { valid: false; reason: "format" | "blocked" };
 
 export function validateUsername(username: string): UsernameValidation {
-  if (!USERNAME_FORMAT_RE.test(username) || username.includes("__")) {
+  if (!USERNAME_FORMAT_RE.test(username) || username.includes("__") || REPEATED_CHAR_RE.test(username)) {
     return { valid: false, reason: "format" };
   }
   if (containsBlockedWord(username)) {
