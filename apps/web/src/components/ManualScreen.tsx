@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { useRouter } from "expo-router";
 import { useLocale, useTranslations } from "use-intl";
 import type { Club, Country, Dataset, GameMode, Round } from "@321guess/core";
 import { loadDataset } from "../lib/dataset";
@@ -8,6 +9,7 @@ import { ArenaPressable } from "./ArenaPressable";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { LogoTile } from "./LogoTile";
 import { RoundView } from "./RoundView";
+import { ScrollFadeBottom } from "./ScrollFadeBottom";
 import { ThemeToggle } from "./ThemeToggle";
 
 function stripDiacritics(s: string): string {
@@ -20,6 +22,7 @@ function normalize(s: string): string {
 export function ManualScreen() {
   const t = useTranslations("manual");
   const locale = useLocale();
+  const router = useRouter();
   const [dataset, setDataset] = useState<Dataset | null>(null);
   const [mode, setMode] = useState<GameMode>("clubClub");
   const [clubA, setClubA] = useState<Club | null>(null);
@@ -95,111 +98,117 @@ export function ManualScreen() {
   if (Platform.OS !== "web") {
     return (
       <View className="flex-1 bg-arena-bg">
-        <ScrollView className="flex-1 px-4 py-8">
-          <Text className="text-2xl font-black text-arena-accent">{t("title")}</Text>
-          <Text className="mt-1 text-sm text-arena-text-soft">{t("description")}</Text>
+        <View className="relative flex-1">
+          <ScrollView className="flex-1 px-4 py-8" contentContainerClassName="pb-10">
+            <Pressable onPress={() => router.push("/")} className="mb-4">
+              <Text className="text-xs uppercase tracking-wider text-arena-text-soft">← {t("backHome")}</Text>
+            </Pressable>
+            <Text className="text-2xl font-black text-arena-accent">{t("title")}</Text>
+            <Text className="mt-1 text-sm text-arena-text-soft">{t("description")}</Text>
 
-          {!round ? (
-            <>
-              <View className="mb-6 mt-6 flex-row self-start rounded-full border border-arena-accent-2 bg-arena-bg-soft p-1">
-                {(["clubClub", "countryClub"] as const).map((m) => (
+            {!round ? (
+              <>
+                <View className="mb-6 mt-6 flex-row self-start rounded-full border border-arena-accent-2 bg-arena-bg-soft p-1">
+                  {(["clubClub", "countryClub"] as const).map((m) => (
+                    <ArenaPressable
+                      key={m}
+                      onPress={() => switchMode(m)}
+                      className={`rounded-full px-4 py-1.5 ${mode === m ? "bg-arena-accent" : ""}`}
+                    >
+                      <Text className={mode === m ? "font-semibold text-[#2A1E00]" : "text-arena-text-soft"}>
+                        {t(`mode.${m}`)}
+                      </Text>
+                    </ArenaPressable>
+                  ))}
+                </View>
+
+                {!dataset ? (
+                  <View className="items-center rounded-2xl bg-arena-bg-soft p-8">
+                    <Text className="text-arena-text-soft">…</Text>
+                  </View>
+                ) : mode === "clubClub" ? (
+                  <View className="gap-4">
+                    <SearchBox
+                      label={t("search.clubA")}
+                      selected={clubA}
+                      onChange={setClubA}
+                      items={dataset.clubs}
+                      getKey={(c) => c.id}
+                      getLabel={(c) => c.name}
+                      getSubtitle={(c) => c.countryCode}
+                      getMedallion={(c) => ({ src: c.logoUrl, color: c.color })}
+                      emptyText={t("search.empty")}
+                    />
+                    <SearchBox
+                      label={t("search.clubB")}
+                      selected={clubB}
+                      onChange={setClubB}
+                      items={dataset.clubs.filter((c) => clubA === null || c.id !== clubA.id)}
+                      getKey={(c) => c.id}
+                      getLabel={(c) => c.name}
+                      getSubtitle={(c) => c.countryCode}
+                      getMedallion={(c) => ({ src: c.logoUrl, color: c.color })}
+                      emptyText={t("search.empty")}
+                    />
+                  </View>
+                ) : (
+                  <View className="gap-4">
+                    <SearchBox
+                      label={t("search.country")}
+                      selected={country}
+                      onChange={setCountry}
+                      items={countries}
+                      getKey={(c) => c.code}
+                      getLabel={(c) => (locale === "tr" ? c.nameTr : c.nameEn)}
+                      getSubtitle={(c) => c.code}
+                      emptyText={t("search.empty")}
+                    />
+                    <SearchBox
+                      label={t("search.club")}
+                      selected={clubA}
+                      onChange={setClubA}
+                      items={dataset.clubs}
+                      getKey={(c) => c.id}
+                      getLabel={(c) => c.name}
+                      getSubtitle={(c) => c.countryCode}
+                      getMedallion={(c) => ({ src: c.logoUrl, color: c.color })}
+                      emptyText={t("search.empty")}
+                    />
+                  </View>
+                )}
+
+                <Text className="mt-4 text-xs text-arena-text-soft">{t("hint")}</Text>
+
+                <View className="mt-8 flex-row gap-3">
                   <ArenaPressable
-                    key={m}
-                    onPress={() => switchMode(m)}
-                    className={`rounded-full px-4 py-1.5 ${mode === m ? "bg-arena-accent" : ""}`}
+                    onPress={startRound}
+                    disabled={!canStart}
+                    className={`flex-1 items-center rounded-2xl py-4 ${
+                      canStart ? "border-b-4 border-arena-accent-strong bg-arena-accent" : "bg-arena-bg-soft"
+                    }`}
                   >
-                    <Text className={mode === m ? "font-semibold text-[#2A1E00]" : "text-arena-text-soft"}>
-                      {t(`mode.${m}`)}
+                    <Text className={`text-lg font-bold ${canStart ? "text-[#2A1E00]" : "text-arena-text-soft"}`}>
+                      {t("start")}
                     </Text>
                   </ArenaPressable>
-                ))}
-              </View>
-
-              {!dataset ? (
-                <View className="items-center rounded-2xl bg-arena-bg-soft p-8">
-                  <Text className="text-arena-text-soft">…</Text>
+                  {(clubA || clubB || country) && (
+                    <ArenaPressable onPress={reset} className="justify-center rounded-2xl border border-arena-accent-2 px-4">
+                      <Text className="text-sm text-arena-text-soft">{t("search.clear")}</Text>
+                    </ArenaPressable>
+                  )}
                 </View>
-              ) : mode === "clubClub" ? (
-                <View className="gap-4">
-                  <SearchBox
-                    label={t("search.clubA")}
-                    selected={clubA}
-                    onChange={setClubA}
-                    items={dataset.clubs}
-                    getKey={(c) => c.id}
-                    getLabel={(c) => c.name}
-                    getSubtitle={(c) => c.countryCode}
-                    getMedallion={(c) => ({ src: c.logoUrl, color: c.color })}
-                    emptyText={t("search.empty")}
-                  />
-                  <SearchBox
-                    label={t("search.clubB")}
-                    selected={clubB}
-                    onChange={setClubB}
-                    items={dataset.clubs.filter((c) => clubA === null || c.id !== clubA.id)}
-                    getKey={(c) => c.id}
-                    getLabel={(c) => c.name}
-                    getSubtitle={(c) => c.countryCode}
-                    getMedallion={(c) => ({ src: c.logoUrl, color: c.color })}
-                    emptyText={t("search.empty")}
-                  />
-                </View>
-              ) : (
-                <View className="gap-4">
-                  <SearchBox
-                    label={t("search.country")}
-                    selected={country}
-                    onChange={setCountry}
-                    items={countries}
-                    getKey={(c) => c.code}
-                    getLabel={(c) => (locale === "tr" ? c.nameTr : c.nameEn)}
-                    getSubtitle={(c) => c.code}
-                    emptyText={t("search.empty")}
-                  />
-                  <SearchBox
-                    label={t("search.club")}
-                    selected={clubA}
-                    onChange={setClubA}
-                    items={dataset.clubs}
-                    getKey={(c) => c.id}
-                    getLabel={(c) => c.name}
-                    getSubtitle={(c) => c.countryCode}
-                    getMedallion={(c) => ({ src: c.logoUrl, color: c.color })}
-                    emptyText={t("search.empty")}
-                  />
-                </View>
-              )}
-
-              <Text className="mt-4 text-xs text-arena-text-soft">{t("hint")}</Text>
-
-              <View className="mt-8 flex-row gap-3">
-                <ArenaPressable
-                  onPress={startRound}
-                  disabled={!canStart}
-                  className={`flex-1 items-center rounded-2xl py-4 ${
-                    canStart ? "border-b-4 border-arena-accent-strong bg-arena-accent" : "bg-arena-bg-soft"
-                  }`}
-                >
-                  <Text className={`text-lg font-bold ${canStart ? "text-[#2A1E00]" : "text-arena-text-soft"}`}>
-                    {t("start")}
-                  </Text>
+              </>
+            ) : (
+              <>
+                <RoundView round={round} onNext={() => setRound(null)} />
+                <ArenaPressable onPress={reset} className="mt-4 items-center">
+                  <Text className="text-xs uppercase tracking-wider text-arena-text-soft">{t("newRound")}</Text>
                 </ArenaPressable>
-                {(clubA || clubB || country) && (
-                  <ArenaPressable onPress={reset} className="justify-center rounded-2xl border border-arena-accent-2 px-4">
-                    <Text className="text-sm text-arena-text-soft">{t("search.clear")}</Text>
-                  </ArenaPressable>
-                )}
-              </View>
-            </>
-          ) : (
-            <>
-              <RoundView round={round} onNext={() => setRound(null)} />
-              <ArenaPressable onPress={reset} className="mt-4 items-center">
-                <Text className="text-xs uppercase tracking-wider text-arena-text-soft">{t("newRound")}</Text>
-              </ArenaPressable>
-            </>
-          )}
-        </ScrollView>
+              </>
+            )}
+          </ScrollView>
+          <ScrollFadeBottom />
+        </View>
       </View>
     );
   }

@@ -2,17 +2,26 @@ import { useRef } from 'react';
 import { Animated, Pressable, type GestureResponderEvent, type PressableProps } from 'react-native';
 
 import { hapticTap } from '@/lib/haptics';
+import { playSound } from '@/lib/sound';
 import { useGameSettings } from '@/lib/game-settings-context';
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type ArenaPressableProps = PressableProps & { children: React.ReactNode };
 
-/** Drop-in replacement for RN's Pressable: adds a spring press-down scale
- * and a light haptic tap on every press. The haptic is native-only and
- * respects the Settings screen's toggle; the scale animation runs on both
- * platforms (harmless, cheap) but web screens don't use this component. */
-export function ArenaPressable({ onPress, disabled, children, className, ...rest }: ArenaPressableProps) {
+/** Drop-in replacement for RN's Pressable: adds a spring press-down scale,
+ * a light haptic tap, and a soft tap sound on every press. Haptic/sound are
+ * native-only and respect the Settings screen's toggles; the scale
+ * animation runs on both platforms (harmless, cheap) but web screens don't
+ * use this component. A single Animated-wrapped Pressable (not a Pressable
+ * nested inside a separate Animated.View) so `style` (the transform) and
+ * `className` (everything visual) land on the same node — a wrapper/inner
+ * split previously broke `flex-1` layouts, since `className` reached the
+ * inner node while the outer node (unstyled) governed the parent's flex
+ * layout. */
+export function ArenaPressable({ onPress, disabled, children, ...rest }: ArenaPressableProps) {
   const scale = useRef(new Animated.Value(1)).current;
-  const { hapticsEnabled } = useGameSettings();
+  const { hapticsEnabled, soundEnabled } = useGameSettings();
 
   function pressIn() {
     if (disabled) return;
@@ -24,14 +33,20 @@ export function ArenaPressable({ onPress, disabled, children, className, ...rest
   function handlePress(e: GestureResponderEvent) {
     if (disabled) return;
     void hapticTap(hapticsEnabled);
+    playSound('tap', soundEnabled);
     onPress?.(e);
   }
 
   return (
-    <Animated.View style={{ transform: [{ scale }] }}>
-      <Pressable onPressIn={pressIn} onPressOut={pressOut} onPress={handlePress} disabled={disabled} className={className} {...rest}>
-        {children}
-      </Pressable>
-    </Animated.View>
+    <AnimatedPressable
+      onPressIn={pressIn}
+      onPressOut={pressOut}
+      onPress={handlePress}
+      disabled={disabled}
+      style={{ transform: [{ scale }] }}
+      {...rest}
+    >
+      {children}
+    </AnimatedPressable>
   );
 }

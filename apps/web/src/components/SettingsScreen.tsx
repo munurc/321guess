@@ -1,7 +1,8 @@
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useTranslations } from 'use-intl';
 
+import { ArenaPressable } from './ArenaPressable';
 import { useAppLocale } from '@/i18n/AppLocaleContext';
 import { messages } from '@/i18n/messages';
 import { useGameSettings } from '@/lib/game-settings-context';
@@ -16,9 +17,9 @@ export function SettingsScreen() {
 
   return (
     <View className="flex-1 bg-arena-bg px-4 py-8">
-      <Pressable onPress={() => router.back()}>
+      <ArenaPressable onPress={() => router.back()}>
         <Text className="text-xs uppercase tracking-wider text-arena-text-soft">← {t('back')}</Text>
-      </Pressable>
+      </ArenaPressable>
 
       <Text className="mt-6 text-2xl font-black text-arena-text">{t('title')}</Text>
 
@@ -26,7 +27,7 @@ export function SettingsScreen() {
         <SettingsRow label={t('language')}>
           <View className="flex-row gap-1 rounded-full border border-arena-accent-2 bg-arena-bg-soft p-1">
             {locales.map((l) => (
-              <Pressable
+              <ArenaPressable
                 key={l}
                 onPress={() => setLocale(l)}
                 className={`rounded-full px-3 py-1 ${locale === l ? 'bg-arena-accent' : ''}`}
@@ -36,7 +37,7 @@ export function SettingsScreen() {
                 >
                   {tLang(l)}
                 </Text>
-              </Pressable>
+              </ArenaPressable>
             ))}
           </View>
         </SettingsRow>
@@ -64,11 +65,13 @@ function SettingsRow({ label, children }: { label: string; children: React.React
 
 function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) => void }) {
   return (
-    <Pressable
+    <ArenaPressable
       onPress={() => onChange(!value)}
+      accessibilityRole="switch"
+      accessibilityState={{ checked: value }}
       className={`h-6 w-10 justify-center rounded-full p-0.5 ${value ? 'bg-arena-accent-2' : 'bg-arena-bg-soft'}`}
     >
       <View className={`h-5 w-5 rounded-full bg-arena-card ${value ? 'self-end' : 'self-start'}`} />
-    </Pressable>
+    </ArenaPressable>
   );
 }
