@@ -107,6 +107,13 @@
     "tr": "Türkçe",
     "en": "English"
   },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "sound": "Sound effects",
+    "haptics": "Haptics",
+    "back": "Home"
+  },
   "manual": {
     "link": "Manual game",
     "title": "Manual game",

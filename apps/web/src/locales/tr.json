@@ -97,7 +97,7 @@
     "vs": "vs",
     "showAnswers": "Cevabı Göster",
     "nextRound": "Sonraki Tur",
-    "backToSetup": "Ayarlara dön",
+    "backToSetup": "Ana ekrana dön",
     "noSettings": "Ayarlar bulunamadı, ana sayfaya yönlendiriliyorsun…",
     "answersHeading": "Doğru futbolcular",
     "noAnswers": "Kayıtlarda uygun futbolcu bulunamadı — sonraki tura geç.",
@@ -106,6 +106,13 @@
   "language": {
     "tr": "Türkçe",
     "en": "English"
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "language": "Dil",
+    "sound": "Ses efektleri",
+    "haptics": "Titreşim",
+    "back": "Ana ekran"
   },
   "manual": {
     "link": "Manuel oyun",
