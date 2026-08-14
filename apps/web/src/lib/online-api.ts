@@ -1,6 +1,6 @@
 import { apiBaseUrl } from "./api-base-url";
 
-type ClubRef = { id: string; name: string; logoUrl: string };
+type ClubRef = { id: string; name: string; logoUrl: string; color?: string };
 export type QuestionInfo = { index: number; clubA: ClubRef; clubB: ClubRef; totalPossible: number };
 export type RoundInfo = { roundDate: string; questions: QuestionInfo[]; totalPossible: number };
 

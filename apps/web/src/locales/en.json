@@ -155,6 +155,7 @@
     "guessPlaceholder": "Type a player's name…",
     "guessEmpty": "No matches",
     "foundCount": "{found} / {total} found overall",
+    "possibleCount": "{count, plural, one {# shared player} other {# shared players}} in this matchup",
     "pass": "Pass",
     "nextQuestion": "Next Question",
     "finishEarly": "Finish",

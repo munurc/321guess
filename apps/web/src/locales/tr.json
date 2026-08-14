@@ -155,6 +155,7 @@
     "guessPlaceholder": "Futbolcu adı yaz…",
     "guessEmpty": "Eşleşme yok",
     "foundCount": "{found} / {total} toplam bulundu",
+    "possibleCount": "Bu eşleşmede {count} ortak futbolcu var",
     "pass": "Pas",
     "nextQuestion": "Sonraki Soru",
     "finishEarly": "Bitir",
