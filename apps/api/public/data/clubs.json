@@ -1068,7 +1068,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Columbian_fc_logo.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
     "leagueId": "Q223170",
     "countryCode": "AR",
-    "popularity": 6
+    "popularity": 6,
+    "color": "#75a2bd"
   },
   {
     "id": "Q457163",
@@ -1112,7 +1113,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a5/Club_de_Regatas_Vasco_da_Gama_logo_%282021%29.svg/330px-Club_de_Regatas_Vasco_da_Gama_logo_%282021%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q206813",
     "countryCode": "BR",
-    "popularity": 51
+    "popularity": 51,
+    "color": "#b8926c"
   },
   {
     "id": "Q598834",
@@ -1129,7 +1131,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cruz_Azul_2026.png/3840px-Cruz_Azul_2026.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q764690",
     "countryCode": "MX",
-    "popularity": 46
+    "popularity": 46,
+    "color": "#9075bd"
   },
   {
     "id": "Q188277",
@@ -1146,7 +1149,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/Crystal_Palace_FC_logo_%282022%29.svg/330px-Crystal_Palace_FC_logo_%282022%29.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q9448",
     "countryCode": "GB",
-    "popularity": 82
+    "popularity": 82,
+    "color": "#7595bd"
   },
   {
     "id": "Q238593",
@@ -1163,7 +1167,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Escudo_del_Club_Social_y_Deportivo_Defensa_y_Justicia.svg/250px-Escudo_del_Club_Social_y_Deportivo_Defensa_y_Justicia.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q223170",
     "countryCode": "AR",
-    "popularity": 29
+    "popularity": 29,
+    "color": "#94b95e"
   },
   {
     "id": "Q223620",
@@ -1189,7 +1194,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Escudo_del_Club_Deportivo_Riestra.svg/500px-Escudo_del_Club_Deportivo_Riestra.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q223170",
     "countryCode": "AR",
-    "popularity": 16
+    "popularity": 16,
+    "color": "#bd9975"
   },
   {
     "id": "Q335483",
@@ -1277,7 +1283,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Estudiantes_de_la_Plata_crest_%282025%29_cropped.svg/960px-Estudiantes_de_la_Plata_crest_%282025%29_cropped.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q223170",
     "countryCode": "AR",
-    "popularity": 51
+    "popularity": 51,
+    "color": "#c8736a"
   },
   {
     "id": "Q5794",
@@ -1294,7 +1301,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Excelsior_Rotterdam_logo_2021.svg/960px-Excelsior_Rotterdam_logo_2021.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q167541",
     "countryCode": "NL",
-    "popularity": 44
+    "popularity": 44,
+    "color": "#bd7578"
   },
   {
     "id": "Q118919",
@@ -1311,7 +1319,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/F.C._Alverca_logo.svg/330px-F.C._Alverca_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q182994",
     "countryCode": "PT",
-    "popularity": 26
+    "popularity": 26,
+    "color": "#bdad75"
   },
   {
     "id": "Q1386869",
@@ -1319,7 +1328,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/F.C._Arouca_logo.svg/330px-F.C._Arouca_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q182994",
     "countryCode": "PT",
-    "popularity": 38
+    "popularity": 38,
+    "color": "#b1bd75"
   },
   {
     "id": "Q1387110",
@@ -1335,7 +1345,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/4/4c/FC_Lorient_logo.svg/330px-FC_Lorient_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q13394",
     "countryCode": "FR",
-    "popularity": 57
+    "popularity": 57,
+    "color": "#b9936f"
   },
   {
     "id": "Q1387471",
@@ -1778,7 +1789,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/4/43/Ipswich_Town.svg/330px-Ipswich_Town.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q9448",
     "countryCode": "GB",
-    "popularity": 68
+    "popularity": 68,
+    "color": "#bd75a9"
   },
   {
     "id": "Q857938",
@@ -2412,7 +2424,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/5/5a/RWD-Molenbeek.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
     "leagueId": "Q216022",
     "countryCode": "BE",
-    "popularity": 23
+    "popularity": 23,
+    "color": "#99554a"
   },
   {
     "id": "Q19597",
@@ -2464,7 +2477,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/9/92/RCD_Espanyol_crest.svg/330px-RCD_Espanyol_crest.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q324867",
     "countryCode": "ES",
-    "popularity": 82
+    "popularity": 82,
+    "color": "#c08a72"
   },
   {
     "id": "Q8723",
@@ -2490,7 +2504,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Barracas_central_logo.svg/960px-Barracas_central_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q223170",
     "countryCode": "AR",
-    "popularity": 19
+    "popularity": 19,
+    "color": "#d95959"
   },
   {
     "id": "Q8682",
@@ -2609,7 +2624,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/7/79/S.C._Braga_logo.svg/330px-S.C._Braga_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q182994",
     "countryCode": "PT",
-    "popularity": 67
+    "popularity": 67,
+    "color": "#bd8b75"
   },
   {
     "id": "Q35933",
