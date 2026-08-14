@@ -14,6 +14,19 @@ module.exports = {
         rule: "rgb(var(--rule) / <alpha-value>)",
         accent: "rgb(var(--accent) / <alpha-value>)",
         "accent-strong": "rgb(var(--accent-strong) / <alpha-value>)",
+        // Mobile-only "arena" identity — fixed regardless of device
+        // light/dark mode, so plain hex (not CSS-var-driven like the
+        // tokens above). Never used on web; see
+        // docs/superpowers/specs/2026-08-13-mobile-lively-design-design.md.
+        "arena-bg": "#0F2A1E",
+        "arena-bg-soft": "#153A28",
+        "arena-card": "#F7F5F0",
+        "arena-accent": "#FFC738",
+        "arena-accent-strong": "#C99418",
+        "arena-accent-2": "#2ECC8F",
+        "arena-accent-2-strong": "#1F9C6C",
+        "arena-text": "#F0FBF5",
+        "arena-text-soft": "#8FE8C4",
       },
       keyframes: {
         "fade-in": {
