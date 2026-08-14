@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Animated, Text, View } from "react-native";
+import { Animated, Platform, Text, View } from "react-native";
 import { useTranslations } from "use-intl";
 
 export function Countdown({ onDone }: { onDone: () => void }) {
@@ -30,12 +30,15 @@ export function Countdown({ onDone }: { onDone: () => void }) {
   }, [n, onDone]);
 
   const isGo = n === 0;
+  const isNative = Platform.OS !== "web";
   return (
     <View className="min-h-[70vh] items-center justify-center gap-6">
-      <Text className="text-xs uppercase tracking-[0.3em] text-ink-mute">{t("getReady")}</Text>
+      <Text className={`text-xs uppercase tracking-[0.3em] ${isNative ? "text-arena-text-soft" : "text-ink-mute"}`}>
+        {t("getReady")}
+      </Text>
       <Animated.Text
         style={{ transform: [{ scale }], opacity }}
-        className={`font-bold text-accent ${isGo ? "text-7xl" : "text-[8rem]"}`}
+        className={`font-bold ${isNative ? "text-arena-accent" : "text-accent"} ${isGo ? "text-7xl" : "text-[8rem]"}`}
       >
         {isGo ? t("go") : n}
       </Animated.Text>

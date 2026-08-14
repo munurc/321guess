@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Platform, Pressable, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { useTranslations } from "use-intl";
 import type { Dataset, Round } from "@321guess/core";
@@ -59,6 +59,28 @@ export function PlayScreen() {
   }, [dataset, settings, round, rollNext]);
 
   if (!settings) return null; // redirecting, per the effect above
+
+  if (Platform.OS !== "web") {
+    return (
+      <View className="flex-1 bg-arena-bg">
+        <View className="px-4 py-4">
+          <Pressable onPress={() => router.push("/")}>
+            <Text className="text-xs uppercase tracking-wider text-arena-text-soft">← {t("backToSetup")}</Text>
+          </Pressable>
+        </View>
+
+        {phase === "countdown" ? (
+          <Countdown onDone={() => setPhase("round")} />
+        ) : !round ? (
+          <View className="flex-1 items-center justify-center">
+            <Text className="text-arena-text-soft">{t("rerolling")}</Text>
+          </View>
+        ) : (
+          <RoundView key={roundKey(round)} round={round} onNext={rollNext} />
+        )}
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1 bg-paper">
