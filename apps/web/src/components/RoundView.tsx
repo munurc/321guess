@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from "use-intl";
 import type { Round } from "@321guess/core";
 import { ArenaPressable } from "./ArenaPressable";
 import { LogoTile } from "./LogoTile";
+import { localeUpper } from "../lib/locale-upper";
 
 function codeToFlag(code: string): string {
   if (!code || code.length !== 2) return "";
@@ -23,7 +24,7 @@ export function RoundView({ round, onNext }: { round: Round; onNext: () => void 
           {round.kind === "clubClub" ? (
             <>
               <LogoTile src={round.clubA.logoUrl} alt={round.clubA.name} caption={round.clubA.name} color={round.clubA.color} />
-              <Text className="text-2xl font-black text-arena-text-soft">{t("vs")}</Text>
+              <Text className="text-3xl font-black text-arena-text-soft">{t("vs")}</Text>
               <LogoTile src={round.clubB.logoUrl} alt={round.clubB.name} caption={round.clubB.name} color={round.clubB.color} />
             </>
           ) : (
@@ -34,35 +35,35 @@ export function RoundView({ round, onNext }: { round: Round; onNext: () => void 
                 caption={locale === "tr" ? round.country.nameTr : round.country.nameEn}
                 variant="flag"
               />
-              <Text className="text-2xl font-black text-arena-text-soft">{t("vs")}</Text>
+              <Text className="text-3xl font-black text-arena-text-soft">{t("vs")}</Text>
               <LogoTile src={round.club.logoUrl} alt={round.club.name} caption={round.club.name} color={round.club.color} />
             </>
           )}
         </View>
 
-        <View className="w-full max-w-md gap-3">
+        <View className="w-full max-w-md gap-4">
           {!revealed ? (
             <ArenaPressable
               onPress={() => setRevealed(true)}
-              className="items-center rounded-2xl border-b-4 border-arena-accent-strong bg-arena-accent py-4"
+              className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-6"
             >
-              <Text className="text-lg font-bold text-[#2A1E00]">{t("showAnswers")}</Text>
+              <Text className="text-2xl font-bold text-[#2A1E00]">{t("showAnswers")}</Text>
             </ArenaPressable>
           ) : (
             <>
-              <View className="rounded-2xl bg-arena-bg-soft p-4">
-                <Text className="mb-3 text-xs font-semibold uppercase tracking-wider text-arena-accent-2">
-                  {t("answersHeading")} ({round.correctPlayers.length})
+              <View className="rounded-2xl bg-arena-bg-soft p-5">
+                <Text className="mb-4 text-sm font-semibold tracking-wider text-arena-accent-2">
+                  {localeUpper(t("answersHeading"), locale)} ({round.correctPlayers.length})
                 </Text>
                 {round.correctPlayers.length === 0 ? (
-                  <Text className="text-sm text-arena-text-soft">{t("noAnswers")}</Text>
+                  <Text className="text-base text-arena-text-soft">{t("noAnswers")}</Text>
                 ) : (
-                  <View className="gap-1">
+                  <View className="gap-2">
                     {round.correctPlayers.map((p) => (
-                      <View key={p.id} className="flex-row items-center gap-2 rounded-md bg-arena-bg px-3 py-2">
-                        <Text>{codeToFlag(p.nationalityCode)}</Text>
-                        <Text className="flex-1 text-sm text-arena-text">{p.name}</Text>
-                        <Text className="text-[10px] font-medium uppercase text-arena-text-soft">
+                      <View key={p.id} className="flex-row items-center gap-2 rounded-md bg-arena-bg px-4 py-3">
+                        <Text className="text-lg">{codeToFlag(p.nationalityCode)}</Text>
+                        <Text className="flex-1 text-lg text-arena-text">{p.name}</Text>
+                        <Text className="text-xs font-medium uppercase text-arena-text-soft">
                           {p.nationalityCode}
                         </Text>
                       </View>
@@ -72,9 +73,9 @@ export function RoundView({ round, onNext }: { round: Round; onNext: () => void 
               </View>
               <ArenaPressable
                 onPress={onNext}
-                className="items-center rounded-2xl border-b-4 border-arena-accent-strong bg-arena-accent py-4"
+                className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-6"
               >
-                <Text className="text-lg font-bold text-[#2A1E00]">{t("nextRound")}</Text>
+                <Text className="text-2xl font-bold text-[#2A1E00]">{t("nextRound")}</Text>
               </ArenaPressable>
             </>
           )}

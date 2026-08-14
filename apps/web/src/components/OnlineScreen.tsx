@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { useRouter } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocale, useTranslations } from "use-intl";
 import * as Crypto from "expo-crypto";
 import type { Dataset, Player } from "@321guess/core";
 import { validateUsername } from "@321guess/core";
 import { loadDataset } from "../lib/dataset";
 import { hapticError, hapticSuccess } from "../lib/haptics";
+import { localeUpper } from "../lib/locale-upper";
 import { playSound } from "../lib/sound";
 import { useGameSettings } from "../lib/game-settings-context";
 import {
@@ -73,6 +75,7 @@ export function OnlineScreen() {
   const t = useTranslations("online");
   const locale = useLocale();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { soundEnabled, hapticsEnabled } = useGameSettings();
 
   const [identity, setIdentity] = useState<Identity | null>(null);
@@ -333,21 +336,25 @@ export function OnlineScreen() {
     return (
       <View className="flex-1 bg-arena-bg">
         <View className="relative flex-1">
-          <ScrollView className="flex-1 px-4 py-8" contentContainerClassName="pb-10">
+          <ScrollView
+            className="flex-1 px-4 pb-8"
+            contentContainerClassName="pb-10"
+            contentContainerStyle={{ paddingTop: insets.top + 32 }}
+          >
             <View className="mb-8 flex-row items-center justify-between">
               <Pressable onPress={() => router.push("/")}>
-                <Text className="text-xs uppercase tracking-wider text-arena-text-soft">← {t("backHome")}</Text>
+                <Text className="text-sm tracking-wider text-arena-text-soft">← {localeUpper(t("backHome"), locale)}</Text>
               </Pressable>
             </View>
 
-            <Text className="text-2xl font-black text-arena-accent">{t("title")}</Text>
-            <Text className="mb-6 mt-1 text-sm text-arena-text-soft">{t("description")}</Text>
+            <Text className="text-4xl font-black text-arena-accent">{t("title")}</Text>
+            <Text className="mb-6 mt-2 text-base text-arena-text-soft">{t("description")}</Text>
 
             {!identityLoaded ? (
               <LoadingBox text={t("loading")} />
             ) : !identity ? (
-              <View className="gap-3">
-                <Text className="text-sm font-semibold text-arena-text">{t("username.label")}</Text>
+              <View className="gap-4">
+                <Text className="text-base font-semibold text-arena-text">{t("username.label")}</Text>
                 <TextInput
                   value={usernameInput}
                   onChangeText={(v) => {
@@ -358,21 +365,21 @@ export function OnlineScreen() {
                   placeholderTextColor="#8FE8C4"
                   maxLength={20}
                   autoCapitalize="none"
-                  className="rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-4 py-3 text-base text-arena-text"
+                  className="rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-4 py-4 text-lg text-arena-text"
                 />
-                {usernameError && <Text className="text-xs text-red-400">{t(`username.error.${usernameError}`)}</Text>}
-                <Text className="text-xs text-arena-text-soft">{t("username.hint")}</Text>
+                {usernameError && <Text className="text-sm text-red-400">{t(`username.error.${usernameError}`)}</Text>}
+                <Text className="text-sm text-arena-text-soft">{t("username.hint")}</Text>
                 <ArenaPressable
                   onPress={handleRegister}
                   disabled={registering || usernameInput.trim().length === 0}
-                  className={`items-center rounded-2xl py-4 ${
+                  className={`items-center rounded-2xl border-b-[6px] py-6 ${
                     registering || usernameInput.trim().length === 0
-                      ? "bg-arena-bg-soft"
-                      : "border-b-4 border-arena-accent-strong bg-arena-accent"
+                      ? "border-arena-bg-soft bg-arena-bg-soft"
+                      : "border-arena-accent-strong bg-arena-accent"
                   }`}
                 >
                   <Text
-                    className={`text-lg font-bold ${
+                    className={`text-2xl font-bold ${
                       registering || usernameInput.trim().length === 0 ? "text-arena-text-soft" : "text-[#2A1E00]"
                     }`}
                   >
@@ -386,44 +393,44 @@ export function OnlineScreen() {
               <LoadingBox text={t("loading")} />
             ) : phase === "matchup" ? (
               <View className="gap-6">
-                <Text className="text-sm text-arena-text-soft">{t("welcomeBack", { username: identity.username })}</Text>
+                <Text className="text-base text-arena-text-soft">{t("welcomeBack", { username: identity.username })}</Text>
                 <View className="gap-3">
-                  <Text className="text-center text-xs font-semibold uppercase tracking-wider text-arena-text-soft">
-                    {t("todaysMatchupsLabel")}
+                  <Text className="text-center text-sm font-semibold tracking-wider text-arena-text-soft">
+                    {localeUpper(t("todaysMatchupsLabel"), locale)}
                   </Text>
                   <View className="flex-row flex-wrap justify-center gap-2">
                     {round.questions.map((q) => (
                       <View key={q.index} className="flex-row items-center gap-1.5 rounded-2xl bg-arena-bg-soft p-2">
                         <LogoTile size="sm" src={q.clubA.logoUrl} alt={q.clubA.name} caption="" color={q.clubA.color} />
-                        <Text className="text-[10px] font-bold text-arena-text-soft">×</Text>
+                        <Text className="text-xs font-bold text-arena-text-soft">×</Text>
                         <LogoTile size="sm" src={q.clubB.logoUrl} alt={q.clubB.name} caption="" color={q.clubB.color} />
                       </View>
                     ))}
                   </View>
                 </View>
-                <Text className="text-center text-xs text-arena-text-soft">
+                <Text className="text-center text-sm text-arena-text-soft">
                   {t("instructions", { minutes: ROUND_DURATION_MS / 60000, questions: round.questions.length })}
                 </Text>
                 <ArenaPressable
                   onPress={() => void startRound()}
-                  className="items-center rounded-2xl border-b-4 border-arena-accent-strong bg-arena-accent py-4"
+                  className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-6"
                 >
-                  <Text className="text-lg font-bold text-[#2A1E00]">{t("start")}</Text>
+                  <Text className="text-2xl font-bold text-[#2A1E00]">{t("start")}</Text>
                 </ArenaPressable>
               </View>
             ) : phase === "playing" && currentQuestion ? (
               <View className="gap-4">
                 <View className="flex-row items-center justify-between">
-                  <Text className="text-xs text-arena-text-soft">
+                  <Text className="text-sm text-arena-text-soft">
                     {t("questionProgress", { current: questionIndex + 1, total: round.questions.length })}
                   </Text>
-                  <Text className="text-xs text-arena-text-soft">
+                  <Text className="text-sm text-arena-text-soft">
                     {t("foundCount", { found: overallFoundCount, total: round.totalPossible })}
                   </Text>
                 </View>
 
-                <View className="rounded-2xl bg-arena-bg-soft px-4 pb-4 pt-3">
-                  <Text className="mb-2 self-end rounded-full bg-arena-accent/20 px-3 py-1 text-sm font-bold text-arena-accent">
+                <View className="rounded-2xl bg-arena-bg-soft px-4 pb-5 pt-3">
+                  <Text className="mb-3 self-end rounded-full bg-arena-accent/20 px-4 py-1.5 text-base font-bold text-arena-accent">
                     {formatTime(timeLeftMs)}
                   </Text>
                   <CelebrationPulse trigger={celebrationTick}>
@@ -435,7 +442,7 @@ export function OnlineScreen() {
                         caption={currentQuestion.clubA.name}
                         color={currentQuestion.clubA.color}
                       />
-                      <Text className="text-xs font-black text-arena-text-soft">{t("vs")}</Text>
+                      <Text className="text-sm font-black text-arena-text-soft">{t("vs")}</Text>
                       <LogoTile
                         size="sm"
                         src={currentQuestion.clubB.logoUrl}
@@ -446,15 +453,15 @@ export function OnlineScreen() {
                     </View>
                   </CelebrationPulse>
 
-                  <View className="mt-3 items-center gap-1.5">
-                    <Text className="text-[10px] text-arena-text-soft">
+                  <View className="mt-4 items-center gap-2">
+                    <Text className="text-xs text-arena-text-soft">
                       {t("possibleCount", { count: currentQuestion.totalPossible })}
                     </Text>
-                    <View className="flex-row gap-1.5">
+                    <View className="flex-row gap-2">
                       {Array.from({ length: currentQuestion.totalPossible }).map((_, i) => (
                         <View
                           key={i}
-                          className={`h-2.5 w-2.5 rounded-full border border-arena-accent-2 ${
+                          className={`h-3 w-3 rounded-full border border-arena-accent-2 ${
                             i < foundPlayers.length ? "bg-arena-accent-2" : ""
                           }`}
                         />
@@ -473,11 +480,13 @@ export function OnlineScreen() {
 
                 {guessFeedback && (
                   <View
-                    className={`flex-row items-center gap-2 rounded-lg px-3 py-2 ${
+                    className={`flex-row items-center gap-2 rounded-lg px-4 py-2.5 ${
                       guessFeedback.status === "correct" ? "bg-arena-accent-2/20" : "bg-red-500/15"
                     }`}
                   >
-                    <Text className={guessFeedback.status === "correct" ? "text-arena-accent-2" : "text-red-300"}>
+                    <Text
+                      className={`text-base ${guessFeedback.status === "correct" ? "text-arena-accent-2" : "text-red-300"}`}
+                    >
                       {guessFeedback.status === "correct" ? "✓" : "✗"} {guessFeedback.label}
                     </Text>
                   </View>
@@ -486,13 +495,13 @@ export function OnlineScreen() {
                 {(foundPlayers.length > 0 || wrongPlayers.length > 0) && (
                   <View className="flex-row flex-wrap gap-2">
                     {foundPlayers.map((p) => (
-                      <View key={p.id} className="rounded-full bg-arena-accent-2/20 px-3 py-1">
-                        <Text className="text-xs font-medium text-arena-text">{p.name}</Text>
+                      <View key={p.id} className="rounded-full bg-arena-accent-2/20 px-4 py-2">
+                        <Text className="text-sm font-medium text-arena-text">{p.name}</Text>
                       </View>
                     ))}
                     {wrongPlayers.map((p) => (
-                      <View key={p.id} className="rounded-full bg-red-500/15 px-3 py-1">
-                        <Text className="text-xs font-medium text-red-300">✕ {p.name}</Text>
+                      <View key={p.id} className="rounded-full bg-red-500/15 px-4 py-2">
+                        <Text className="text-sm font-medium text-red-300">✕ {p.name}</Text>
                       </View>
                     ))}
                   </View>
@@ -500,28 +509,28 @@ export function OnlineScreen() {
 
                 <ArenaPressable
                   onPress={() => void goToNextQuestion()}
-                  className="items-center rounded-2xl border-b-4 border-arena-accent-strong bg-arena-accent py-3"
+                  className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-5"
                 >
-                  <Text className="text-sm font-bold text-[#2A1E00]">
+                  <Text className="text-lg font-bold text-[#2A1E00]">
                     {foundPlayers.length > 0 ? t("nextQuestion") : t("pass")}
                   </Text>
                 </ArenaPressable>
                 <ArenaPressable
                   onPress={() => void finish()}
-                  className="items-center rounded-2xl border border-arena-accent-2 py-3"
+                  className="items-center rounded-2xl border border-arena-accent-2 py-4"
                 >
-                  <Text className="text-sm font-semibold text-arena-text-soft">{t("finishEarly")}</Text>
+                  <Text className="text-base font-semibold text-arena-text-soft">{t("finishEarly")}</Text>
                 </ArenaPressable>
               </View>
             ) : result ? (
               <View className="gap-6">
-                <View className="items-center rounded-2xl border-2 border-arena-accent bg-arena-accent/10 p-6">
-                  <Text className="text-3xl font-black text-arena-text">
+                <View className="items-center rounded-2xl border-[3px] border-arena-accent bg-arena-accent/10 p-6">
+                  <Text className="text-4xl font-black text-arena-text">
                     {result.correctCount} / {result.totalPossible}
                   </Text>
-                  <Text className="mt-1 text-sm text-arena-text-soft">{t("resultLabel")}</Text>
+                  <Text className="mt-1 text-base text-arena-text-soft">{t("resultLabel")}</Text>
                   {result.currentStreak > 0 && (
-                    <Text className="mt-3 text-sm font-semibold text-arena-accent">
+                    <Text className="mt-3 text-base font-semibold text-arena-accent">
                       🔥 {t("streakLabel", { count: result.currentStreak })}
                     </Text>
                   )}
@@ -530,8 +539,8 @@ export function OnlineScreen() {
                 {badges.length > 0 && (
                   <View className="flex-row flex-wrap justify-center gap-2">
                     {badges.map((badge) => (
-                      <View key={badge} className="rounded-full bg-arena-bg-soft px-3 py-1">
-                        <Text className="text-xs font-semibold text-arena-text">{t(`badges.${badge}`)}</Text>
+                      <View key={badge} className="rounded-full bg-arena-bg-soft px-4 py-2">
+                        <Text className="text-sm font-semibold text-arena-text">{t(`badges.${badge}`)}</Text>
                       </View>
                     ))}
                   </View>
@@ -539,22 +548,24 @@ export function OnlineScreen() {
 
                 <ArenaPressable
                   onPress={() => void handleShare()}
-                  className="items-center rounded-2xl border-b-4 border-arena-accent-strong bg-arena-accent py-3"
+                  className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-5"
                 >
-                  <Text className="text-sm font-bold text-[#2A1E00]">
+                  <Text className="text-lg font-bold text-[#2A1E00]">
                     {shareStatus === "copied" ? t("shareCopied") : t("share")}
                   </Text>
                 </ArenaPressable>
 
                 <View>
-                  <View className="mb-3 flex-row self-start rounded-full border border-arena-accent-2 bg-arena-bg-soft p-1">
+                  <View className="mb-4 flex-row self-start rounded-full border border-arena-accent-2 bg-arena-bg-soft p-1.5">
                     {(["today", "total"] as const).map((tab) => (
                       <ArenaPressable
                         key={tab}
                         onPress={() => setLeaderboardTab(tab)}
-                        className={`rounded-full px-4 py-1.5 ${leaderboardTab === tab ? "bg-arena-accent" : ""}`}
+                        className={`rounded-full px-5 py-2.5 ${leaderboardTab === tab ? "bg-arena-accent" : ""}`}
                       >
-                        <Text className={leaderboardTab === tab ? "font-semibold text-[#2A1E00]" : "text-arena-text-soft"}>
+                        <Text
+                          className={`text-base ${leaderboardTab === tab ? "font-semibold text-[#2A1E00]" : "text-arena-text-soft"}`}
+                        >
                           {t(`leaderboard.tab.${tab}`)}
                         </Text>
                       </ArenaPressable>
@@ -778,7 +789,7 @@ function LoadingBox({ text }: { text: string }) {
   const isNative = Platform.OS !== "web";
   return (
     <View className={`items-center p-8 ${isNative ? "rounded-2xl bg-arena-bg-soft" : "rounded-lg border border-rule bg-ink/5"}`}>
-      <Text className={isNative ? "text-arena-text-soft" : "text-ink-mute"}>{text}</Text>
+      <Text className={isNative ? "text-lg text-arena-text-soft" : "text-ink-mute"}>{text}</Text>
     </View>
   );
 }
@@ -824,17 +835,17 @@ function GuessInput({
           onFocus={() => setOpen(true)}
           placeholder={placeholder}
           placeholderTextColor="#8FE8C4"
-          className="rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-4 py-3 text-base text-arena-text"
+          className="rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-4 py-4 text-lg text-arena-text"
         />
         {open && query.trim().length >= 2 && (
-          <View className="absolute top-16 z-20 max-h-72 w-full rounded-2xl border border-arena-accent-2 bg-arena-bg-soft">
+          <View className="absolute top-[70px] z-20 max-h-72 w-full rounded-2xl border border-arena-accent-2 bg-arena-bg-soft">
             {filtered.length === 0 ? (
-              <Text className="px-4 py-3 text-sm text-arena-text-soft">{emptyText}</Text>
+              <Text className="px-4 py-3 text-base text-arena-text-soft">{emptyText}</Text>
             ) : (
               <ScrollView>
                 {filtered.map((p) => (
-                  <Pressable key={p.id} onPress={() => pick(p)} className="px-4 py-2">
-                    <Text className="text-sm text-arena-text">{p.name}</Text>
+                  <Pressable key={p.id} onPress={() => pick(p)} className="px-4 py-3">
+                    <Text className="text-lg text-arena-text">{p.name}</Text>
                   </Pressable>
                 ))}
               </ScrollView>
@@ -895,7 +906,9 @@ function Leaderboard({
   if (data.entries.length === 0) {
     return (
       <View className="py-6">
-        <Text className={`text-center text-sm ${isNative ? "text-arena-text-soft" : "text-ink-mute"}`}>{emptyText}</Text>
+        <Text className={`text-center ${isNative ? "text-base text-arena-text-soft" : "text-sm text-ink-mute"}`}>
+          {emptyText}
+        </Text>
       </View>
     );
   }
@@ -907,21 +920,23 @@ function Leaderboard({
 
   if (isNative) {
     return (
-      <View className="gap-1">
+      <View className="gap-2">
         {rows.map((row, idx) => {
           const isMe = row.username === currentUsername;
           return (
             <View
               key={row.username}
-              className={`flex-row items-center justify-between rounded-lg px-3 py-2 ${
+              className={`flex-row items-center justify-between rounded-lg px-4 py-3 ${
                 isMe ? "border border-arena-accent-2 bg-arena-accent-2/15" : "bg-arena-bg-soft"
               }`}
             >
-              <View className="flex-row items-center gap-2">
-                <Text className="w-5 text-right text-arena-text-soft">{idx + 1}</Text>
-                <Text className={isMe ? "font-semibold text-arena-accent-2" : "text-arena-text"}>{row.username}</Text>
+              <View className="flex-row items-center gap-3">
+                <Text className="w-6 text-right text-base text-arena-text-soft">{idx + 1}</Text>
+                <Text className={`text-lg ${isMe ? "font-semibold text-arena-accent-2" : "text-arena-text"}`}>
+                  {row.username}
+                </Text>
               </View>
-              <Text className="text-arena-text-soft">{row.value}</Text>
+              <Text className="text-lg text-arena-text-soft">{row.value}</Text>
             </View>
           );
         })}

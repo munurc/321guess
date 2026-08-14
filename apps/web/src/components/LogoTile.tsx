@@ -25,16 +25,16 @@ export function LogoTile({ src, alt, caption, variant = "logo", size = "lg", col
       <View className={`items-center ${isSmall ? "gap-1.5" : "gap-3"}`}>
         <View
           className={`aspect-square items-center justify-center rounded-full bg-arena-card ${
-            isSmall ? "w-14 p-2" : "w-24 p-4"
+            isSmall ? "w-16 p-2.5" : "w-28 p-4"
           }`}
           style={{
-            borderWidth: isSmall ? 1.5 : 2.5,
+            borderWidth: isSmall ? 3 : 4.5,
             borderColor: ringColor,
             shadowColor: "#000",
-            shadowOpacity: 0.25,
+            shadowOpacity: 0.3,
             shadowRadius: 6,
             shadowOffset: { width: 0, height: 3 },
-            elevation: 3,
+            elevation: 4,
           }}
         >
           <Image
@@ -46,7 +46,7 @@ export function LogoTile({ src, alt, caption, variant = "logo", size = "lg", col
         </View>
         <Text
           className={`text-center font-medium text-arena-text-soft ${
-            isSmall ? "max-w-[5.5rem] text-[11px]" : "max-w-[16rem] text-sm"
+            isSmall ? "max-w-[6rem] text-sm" : "max-w-[16rem] text-base"
           }`}
         >
           {caption}
@@ -71,7 +71,13 @@ export function LogoTile({ src, alt, caption, variant = "logo", size = "lg", col
       </View>
       <Text
         className={`text-center font-medium ${Platform.OS === "web" ? "text-ink-soft" : "text-arena-text-soft"} ${
-          isSmall ? "max-w-[5.5rem] text-[11px]" : "max-w-[16rem] text-sm"
+          Platform.OS === "web"
+            ? isSmall
+              ? "max-w-[5.5rem] text-[11px]"
+              : "max-w-[16rem] text-sm"
+            : isSmall
+              ? "max-w-[6rem] text-sm"
+              : "max-w-[16rem] text-base"
         }`}
       >
         {caption}

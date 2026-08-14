@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { Platform, Pressable, Text, View } from "react-native";
 import { useRouter } from "expo-router";
-import { useTranslations } from "use-intl";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useLocale, useTranslations } from "use-intl";
+import { localeUpper } from "../lib/locale-upper";
 import type { Dataset, Round } from "@321guess/core";
 import { buildPool, pickRound } from "@321guess/core";
 import { loadDataset } from "../lib/dataset";
@@ -23,6 +25,8 @@ function roundKey(round: Round): string {
 export function PlayScreen() {
   const t = useTranslations("play");
   const router = useRouter();
+  const locale = useLocale();
+  const insets = useSafeAreaInsets();
   const { settings } = useGameSettings();
   const [phase, setPhase] = useState<Phase>("countdown");
   const [round, setRound] = useState<Round | null>(null);
@@ -63,9 +67,9 @@ export function PlayScreen() {
   if (Platform.OS !== "web") {
     return (
       <View className="flex-1 bg-arena-bg">
-        <View className="px-4 py-4">
+        <View className="px-4 pb-4" style={{ paddingTop: insets.top + 16 }}>
           <Pressable onPress={() => router.push("/")}>
-            <Text className="text-xs uppercase tracking-wider text-arena-text-soft">← {t("backToSetup")}</Text>
+            <Text className="text-sm tracking-wider text-arena-text-soft">← {localeUpper(t("backToSetup"), locale)}</Text>
           </Pressable>
         </View>
 
@@ -73,7 +77,7 @@ export function PlayScreen() {
           <Countdown onDone={() => setPhase("round")} />
         ) : !round ? (
           <View className="flex-1 items-center justify-center">
-            <Text className="text-arena-text-soft">{t("rerolling")}</Text>
+            <Text className="text-lg text-arena-text-soft">{t("rerolling")}</Text>
           </View>
         ) : (
           <RoundView key={roundKey(round)} round={round} onNext={rollNext} />

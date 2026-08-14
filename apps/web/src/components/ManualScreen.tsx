@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { useRouter } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocale, useTranslations } from "use-intl";
 import type { Club, Country, Dataset, GameMode, Round } from "@321guess/core";
 import { loadDataset } from "../lib/dataset";
 import { fetchLiveRoundPlayers } from "../lib/live-players";
+import { localeUpper } from "../lib/locale-upper";
 import { ArenaPressable } from "./ArenaPressable";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { LogoTile } from "./LogoTile";
@@ -23,6 +25,7 @@ export function ManualScreen() {
   const t = useTranslations("manual");
   const locale = useLocale();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const [dataset, setDataset] = useState<Dataset | null>(null);
   const [mode, setMode] = useState<GameMode>("clubClub");
   const [clubA, setClubA] = useState<Club | null>(null);
@@ -99,23 +102,29 @@ export function ManualScreen() {
     return (
       <View className="flex-1 bg-arena-bg">
         <View className="relative flex-1">
-          <ScrollView className="flex-1 px-4 py-8" contentContainerClassName="pb-10">
+          <ScrollView
+            className="flex-1 px-4 pb-8"
+            contentContainerClassName="pb-10"
+            contentContainerStyle={{ paddingTop: insets.top + 32 }}
+          >
             <Pressable onPress={() => router.push("/")} className="mb-4">
-              <Text className="text-xs uppercase tracking-wider text-arena-text-soft">← {t("backHome")}</Text>
+              <Text className="text-sm tracking-wider text-arena-text-soft">← {localeUpper(t("backHome"), locale)}</Text>
             </Pressable>
-            <Text className="text-2xl font-black text-arena-accent">{t("title")}</Text>
-            <Text className="mt-1 text-sm text-arena-text-soft">{t("description")}</Text>
+            <Text className="text-4xl font-black text-arena-accent">{t("title")}</Text>
+            <Text className="mt-2 text-base text-arena-text-soft">{t("description")}</Text>
 
             {!round ? (
               <>
-                <View className="mb-6 mt-6 flex-row self-start rounded-full border border-arena-accent-2 bg-arena-bg-soft p-1">
+                <View className="mb-6 mt-6 flex-row self-start rounded-full border border-arena-accent-2 bg-arena-bg-soft p-1.5">
                   {(["clubClub", "countryClub"] as const).map((m) => (
                     <ArenaPressable
                       key={m}
                       onPress={() => switchMode(m)}
-                      className={`rounded-full px-4 py-1.5 ${mode === m ? "bg-arena-accent" : ""}`}
+                      className={`rounded-full px-5 py-2.5 ${mode === m ? "bg-arena-accent" : ""}`}
                     >
-                      <Text className={mode === m ? "font-semibold text-[#2A1E00]" : "text-arena-text-soft"}>
+                      <Text
+                        className={`text-base ${mode === m ? "font-semibold text-[#2A1E00]" : "text-arena-text-soft"}`}
+                      >
                         {t(`mode.${m}`)}
                       </Text>
                     </ArenaPressable>
@@ -177,23 +186,23 @@ export function ManualScreen() {
                   </View>
                 )}
 
-                <Text className="mt-4 text-xs text-arena-text-soft">{t("hint")}</Text>
+                <Text className="mt-4 text-sm text-arena-text-soft">{t("hint")}</Text>
 
                 <View className="mt-8 flex-row gap-3">
                   <ArenaPressable
                     onPress={startRound}
                     disabled={!canStart}
-                    className={`flex-1 items-center rounded-2xl py-4 ${
-                      canStart ? "border-b-4 border-arena-accent-strong bg-arena-accent" : "bg-arena-bg-soft"
+                    className={`flex-1 items-center rounded-2xl border-b-[6px] py-6 ${
+                      canStart ? "border-arena-accent-strong bg-arena-accent" : "border-arena-bg-soft bg-arena-bg-soft"
                     }`}
                   >
-                    <Text className={`text-lg font-bold ${canStart ? "text-[#2A1E00]" : "text-arena-text-soft"}`}>
+                    <Text className={`text-2xl font-bold ${canStart ? "text-[#2A1E00]" : "text-arena-text-soft"}`}>
                       {t("start")}
                     </Text>
                   </ArenaPressable>
                   {(clubA || clubB || country) && (
-                    <ArenaPressable onPress={reset} className="justify-center rounded-2xl border border-arena-accent-2 px-4">
-                      <Text className="text-sm text-arena-text-soft">{t("search.clear")}</Text>
+                    <ArenaPressable onPress={reset} className="justify-center rounded-2xl border border-arena-accent-2 px-5">
+                      <Text className="text-base text-arena-text-soft">{t("search.clear")}</Text>
                     </ArenaPressable>
                   )}
                 </View>
@@ -202,7 +211,7 @@ export function ManualScreen() {
               <>
                 <RoundView round={round} onNext={() => setRound(null)} />
                 <ArenaPressable onPress={reset} className="mt-4 items-center">
-                  <Text className="text-xs uppercase tracking-wider text-arena-text-soft">{t("newRound")}</Text>
+                  <Text className="text-sm tracking-wider text-arena-text-soft">{localeUpper(t("newRound"), locale)}</Text>
                 </ArenaPressable>
               </>
             )}
@@ -351,6 +360,7 @@ function SearchBox<T>({
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const isNative = Platform.OS !== "web";
+  const locale = useLocale();
 
   const filtered = useMemo(() => {
     const q = normalize(query.trim());
@@ -362,23 +372,23 @@ function SearchBox<T>({
     if (isNative) {
       const medallion = getMedallion?.(selected);
       return (
-        <View className="flex-row items-center gap-3 rounded-2xl border-2 border-arena-accent-2 bg-arena-accent-2/15 p-3">
+        <View className="flex-row items-center gap-4 rounded-2xl border-[3px] border-arena-accent-2 bg-arena-accent-2/15 p-4">
           {medallion && (
             <LogoTile size="sm" src={medallion.src} alt={getLabel(selected)} caption="" color={medallion.color} />
           )}
           <View className="flex-1">
-            <Text className="mb-1 text-[10px] uppercase tracking-wider text-arena-text-soft">{label}</Text>
-            <Text className="text-base font-semibold text-arena-text">{getLabel(selected)}</Text>
-            <Text className="text-xs text-arena-text-soft">{getSubtitle(selected)}</Text>
+            <Text className="mb-1 text-xs tracking-wider text-arena-text-soft">{localeUpper(label, locale)}</Text>
+            <Text className="text-lg font-semibold text-arena-text">{getLabel(selected)}</Text>
+            <Text className="text-sm text-arena-text-soft">{getSubtitle(selected)}</Text>
           </View>
           <Pressable
             onPress={() => {
               onChange(null);
               setQuery("");
             }}
-            className="rounded-md px-2 py-1"
+            className="rounded-md px-3 py-2"
           >
-            <Text className="text-xs text-arena-text-soft">✕</Text>
+            <Text className="text-base text-arena-text-soft">✕</Text>
           </Pressable>
         </View>
       );
@@ -409,24 +419,24 @@ function SearchBox<T>({
     return (
       <View className="flex-row items-center gap-3">
         {getMedallion && (
-          <View className="h-14 w-14 items-center justify-center rounded-full border-2 border-dashed border-arena-accent-2">
-            <Text className="text-lg text-arena-accent-2">+</Text>
+          <View className="h-16 w-16 items-center justify-center rounded-full border-[3px] border-dashed border-arena-accent-2">
+            <Text className="text-xl text-arena-accent-2">+</Text>
           </View>
         )}
         <View className="relative flex-1">
-          <Text className="mb-1 text-[10px] uppercase tracking-wider text-arena-text-soft">{label}</Text>
+          <Text className="mb-1 text-xs tracking-wider text-arena-text-soft">{localeUpper(label, locale)}</Text>
           <TextInput
             value={query}
             onChangeText={setQuery}
             onFocus={() => setOpen(true)}
             placeholder={label}
             placeholderTextColor="#8FE8C4"
-            className="rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-4 py-3 text-base text-arena-text"
+            className="rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-4 py-4 text-lg text-arena-text"
           />
           {open && (
-            <View className="absolute top-16 z-20 max-h-72 w-full rounded-2xl border border-arena-accent-2 bg-arena-bg-soft">
+            <View className="absolute top-[70px] z-20 max-h-72 w-full rounded-2xl border border-arena-accent-2 bg-arena-bg-soft">
               {filtered.length === 0 ? (
-                <Text className="px-4 py-3 text-sm text-arena-text-soft">{emptyText}</Text>
+                <Text className="px-4 py-3 text-base text-arena-text-soft">{emptyText}</Text>
               ) : (
                 <ScrollView>
                   {filtered.map((item) => (
@@ -437,10 +447,10 @@ function SearchBox<T>({
                         setQuery("");
                         setOpen(false);
                       }}
-                      className="flex-row items-center justify-between px-4 py-2"
+                      className="flex-row items-center justify-between px-4 py-3"
                     >
-                      <Text className="flex-1 text-arena-text">{getLabel(item)}</Text>
-                      <Text className="text-xs text-arena-text-soft">{getSubtitle(item)}</Text>
+                      <Text className="flex-1 text-lg text-arena-text">{getLabel(item)}</Text>
+                      <Text className="text-sm text-arena-text-soft">{getSubtitle(item)}</Text>
                     </Pressable>
                   ))}
                 </ScrollView>

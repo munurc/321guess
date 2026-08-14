@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Animated, Platform, Text, View } from "react-native";
-import { useTranslations } from "use-intl";
+import { useLocale, useTranslations } from "use-intl";
+import { localeUpper } from "../lib/locale-upper";
 
 export function Countdown({ onDone }: { onDone: () => void }) {
   const [n, setN] = useState(3);
   const t = useTranslations("play");
+  const locale = useLocale();
   const scale = useRef(new Animated.Value(0.85)).current;
   const opacity = useRef(new Animated.Value(0)).current;
 
@@ -33,8 +35,10 @@ export function Countdown({ onDone }: { onDone: () => void }) {
   const isNative = Platform.OS !== "web";
   return (
     <View className="min-h-[70vh] items-center justify-center gap-6">
-      <Text className={`text-xs uppercase tracking-[0.3em] ${isNative ? "text-arena-text-soft" : "text-ink-mute"}`}>
-        {t("getReady")}
+      <Text
+        className={`tracking-[0.3em] ${isNative ? "text-sm text-arena-text-soft" : "text-xs uppercase text-ink-mute"}`}
+      >
+        {isNative ? localeUpper(t("getReady"), locale) : t("getReady")}
       </Text>
       <Animated.Text
         style={{ transform: [{ scale }], opacity }}

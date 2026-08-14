@@ -1,24 +1,27 @@
 import { Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslations } from 'use-intl';
 
 import { ArenaPressable } from './ArenaPressable';
 import { useAppLocale } from '@/i18n/AppLocaleContext';
 import { messages } from '@/i18n/messages';
 import { useGameSettings } from '@/lib/game-settings-context';
+import { localeUpper } from '@/lib/locale-upper';
 
 export function SettingsScreen() {
   const t = useTranslations('settings');
   const tLang = useTranslations('language');
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { locale, setLocale } = useAppLocale();
   const { soundEnabled, setSoundEnabled, hapticsEnabled, setHapticsEnabled } = useGameSettings();
   const locales = Object.keys(messages) as (keyof typeof messages)[];
 
   return (
-    <View className="flex-1 bg-arena-bg px-4 py-8">
+    <View className="flex-1 bg-arena-bg px-4 pb-8" style={{ paddingTop: insets.top + 32 }}>
       <ArenaPressable onPress={() => router.back()}>
-        <Text className="text-xs uppercase tracking-wider text-arena-text-soft">← {t('back')}</Text>
+        <Text className="text-xs tracking-wider text-arena-text-soft">← {localeUpper(t('back'), locale)}</Text>
       </ArenaPressable>
 
       <Text className="mt-6 text-2xl font-black text-arena-text">{t('title')}</Text>
