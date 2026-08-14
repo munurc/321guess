@@ -163,7 +163,7 @@
     "streakLabel": "{count}-day streak",
     "share": "Share Result",
     "shareCopied": "Copied ✓",
-    "shareText": "⚽ 321guess Daily Challenge #{day}\n🎯 {correct}/{total} players found\n{bar}\n🔥 {streak}-day streak\n\nTry it yourself 👉 {url}",
+    "shareText": "⚽ 321guess #{day}: {correct}/{total} 🎯 · 🔥{streak}-day streak\n{bar}\n\nCan you beat me? 👉 {url}",
     "badges": {
       "perfect": "💯 Found every player",
       "streak3": "🔥 3-day streak",

@@ -163,7 +163,7 @@
     "streakLabel": "{count} günlük seri",
     "share": "Sonucu Paylaş",
     "shareCopied": "Kopyalandı ✓",
-    "shareText": "⚽ 321guess Günlük Meydan Okuma #{day}\n🎯 {correct}/{total} futbolcu bulundu\n{bar}\n🔥 {streak} günlük seri\n\nSen de dene 👉 {url}",
+    "shareText": "⚽ 321guess #{day}: {correct}/{total} 🎯 · 🔥{streak} gün\n{bar}\n\nBeni geçebilir misin? 👉 {url}",
     "badges": {
       "perfect": "💯 Tüm futbolcuları buldun",
       "streak3": "🔥 3 günlük seri",
