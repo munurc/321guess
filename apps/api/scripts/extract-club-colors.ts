@@ -20,7 +20,9 @@ const UA = "321guess-color-extract/0.1 (https://github.com/munurcoskun/321guess)
 // arena-card — the medallion badge's own background.
 const MEDALLION_BACKGROUND = { r: 247, g: 245, b: 240 };
 
-async function extractColorForLogo(logoUrl: string): Promise<string | null> {
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+async function fetchOnce(logoUrl: string): Promise<string | null> {
   const res = await fetch(logoUrl, { headers: { "User-Agent": UA } });
   if (!res.ok) return null;
   const buffer = Buffer.from(await res.arrayBuffer());
@@ -30,6 +32,24 @@ async function extractColorForLogo(logoUrl: string): Promise<string | null> {
     .raw()
     .toBuffer({ resolveWithObject: true });
   return clampForRing({ r: data[0], g: data[1], b: data[2] });
+}
+
+// A sustained run of ~350 sequential requests sees a meaningful fraction
+// fail transiently (connection resets, brief rate-limiting) even with a
+// delay between requests — the same URL fetched in isolation right after
+// almost always succeeds. Retry a couple of times before giving up.
+async function extractColorForLogo(logoUrl: string): Promise<string | null> {
+  if (!logoUrl) return null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const color = await fetchOnce(logoUrl);
+      if (color) return color;
+    } catch {
+      // fall through to retry
+    }
+    if (attempt < 2) await sleep(500 * (attempt + 1));
+  }
+  return null;
 }
 
 async function main() {
@@ -42,6 +62,7 @@ async function main() {
 
   for (let i = 0; i < clubs.length; i++) {
     const c = clubs[i];
+    if (c.color) continue; // already colored by a previous run — skip, don't re-hit the network
     try {
       const color = await extractColorForLogo(c.logoUrl);
       if (color) {
@@ -53,6 +74,7 @@ async function main() {
     } catch {
       failed++;
     }
+    await sleep(200); // stay well under Wikipedia's rate limits across 369 sequential requests
     if ((i + 1) % 20 === 0 || i === clubs.length - 1) {
       console.log(`  ${i + 1}/${clubs.length}  updated:${updated}  failed:${failed}`);
     }
