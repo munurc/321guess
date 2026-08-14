@@ -1,5 +1,5 @@
 import { Platform } from "react-native";
-import { createAudioPlayer } from "expo-audio";
+import { createAudioPlayer, type AudioPlayer } from "expo-audio";
 
 const SOURCES = {
   tap: require("../../assets/sounds/tap.wav"),
@@ -9,28 +9,27 @@ const SOURCES = {
 
 export type SoundName = keyof typeof SOURCES;
 
-// Longest bundled effect is ~380ms; this is a generous safety margin for
-// the fallback release below, not a tuned value.
-const RELEASE_FALLBACK_MS = 3000;
+// Reused across calls (seek-to-start + replay) instead of created fresh per
+// call — allocating/decoding a brand new AudioPlayer on every tap was
+// expensive enough to be felt as UI lag, since ArenaPressable calls this on
+// nearly every button press across the whole app. Lazily created on first
+// use, one per sound name, and kept alive for the app's lifetime.
+const players: Partial<Record<SoundName, AudioPlayer>> = {};
 
-/** Fire-and-forget: creates a short-lived player, plays once, and releases
- * itself when done (or after a fallback timeout, in case playback is
- * interrupted — e.g. a call or audio-focus loss — and
- * `playbackStatusUpdate` never fires `didJustFinish`). No-ops on web and
+function getPlayer(name: SoundName): AudioPlayer {
+  let player = players[name];
+  if (!player) {
+    player = createAudioPlayer(SOURCES[name]);
+    players[name] = player;
+  }
+  return player;
+}
+
+/** Fire-and-forget: replays a pre-created, reused player. No-ops on web and
  * whenever `enabled` (the Settings screen's sound toggle) is off. */
 export function playSound(name: SoundName, enabled: boolean): void {
   if (!enabled || Platform.OS === "web") return;
-  const player = createAudioPlayer(SOURCES[name]);
-  let released = false;
-  function release() {
-    if (released) return;
-    released = true;
-    subscription.remove();
-    player.remove();
-  }
-  const subscription = player.addListener("playbackStatusUpdate", (status) => {
-    if (status.didJustFinish) release();
-  });
-  setTimeout(release, RELEASE_FALLBACK_MS);
+  const player = getPlayer(name);
+  player.seekTo(0).catch(() => {});
   player.play();
 }
