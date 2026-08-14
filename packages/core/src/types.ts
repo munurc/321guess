@@ -20,6 +20,11 @@ export type Club = {
   countryCode: string;
   /** Wikidata sitelink count — proxy for how famous the club is (higher = more famous). */
   popularity: number;
+  /** Hex ring color for the mobile "arena" logo medallion, extracted from
+   * the club's own logo (see apps/api/scripts/extract-club-colors.ts).
+   * Optional: older/not-yet-refreshed clubs.json snapshots won't have it,
+   * and consumers must fall back to a neutral color rather than crash. */
+  color?: string;
 };
 
 export type Player = {

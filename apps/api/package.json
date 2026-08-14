@@ -9,6 +9,7 @@
     "fetch-data": "tsx scripts/fetch-wikidata.ts",
     "enrich-popularity": "tsx scripts/enrich-popularity.ts",
     "refetch-logos": "tsx scripts/refetch-logos.ts",
+    "extract-club-colors": "tsx scripts/extract-club-colors.ts",
     "test": "vitest run"
   },
   "dependencies": {
@@ -17,7 +18,8 @@
     "expo-server-sdk": "^7.1.0",
     "next": "^15.5.20",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@types/node": "^22",
