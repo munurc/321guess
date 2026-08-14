@@ -1,17 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { useLocale, useTranslations } from "use-intl";
 import type { Dataset, Difficulty, GameMode } from "@321guess/core";
 import { loadDataset } from "../lib/dataset";
 import { useGameSettings } from "../lib/game-settings-context";
+import { ArenaPressable } from "./ArenaPressable";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { ScrollFadeBottom } from "./ScrollFadeBottom";
 import { ThemeToggle } from "./ThemeToggle";
 
 export function SetupScreen() {
   const t = useTranslations("setup");
   const tManual = useTranslations("manual");
   const tOnline = useTranslations("online");
+  const tSettings = useTranslations("settings");
   const locale = useLocale();
   const router = useRouter();
   const { setSettings } = useGameSettings();
@@ -75,6 +78,165 @@ export function SetupScreen() {
       excludedCountries: [...excludedCountries],
     });
     router.push("/play");
+  }
+
+  if (Platform.OS !== "web") {
+    return (
+      <View className="flex-1 bg-arena-bg">
+        <View className="flex-row items-center justify-between px-4 pb-2 pt-8">
+          <Text className="text-3xl font-black text-arena-text">
+            <Text className="text-arena-accent">3·2·1</Text>guess
+          </Text>
+          <Pressable onPress={() => router.push("/settings")} accessibilityLabel={tSettings("title")}>
+            <Text className="text-xl">⚙️</Text>
+          </Pressable>
+        </View>
+
+        {!dataset ? (
+          <View className="flex-1 items-center justify-center px-8">
+            <Text className="text-arena-text-soft">{t("loading")}</Text>
+          </View>
+        ) : (
+          <>
+            <View className="relative flex-1">
+              <ScrollView className="flex-1 px-4" contentContainerClassName="gap-8 pb-10">
+                <View>
+                  <Text className="mb-3 text-sm font-semibold uppercase tracking-wider text-arena-text-soft">
+                    {t("mode.heading")}
+                  </Text>
+                  <View className="gap-3">
+                    <ArenaPressable
+                      onPress={() => router.push("/online")}
+                      className="flex-row items-center gap-4 rounded-2xl border-b-4 border-arena-accent-strong bg-arena-accent p-4"
+                    >
+                      <Text className="text-2xl">🏆</Text>
+                      <View className="flex-1">
+                        <Text className="font-semibold text-[#2A1E00]">{tOnline("modeCard.title")}</Text>
+                        <Text className="mt-1 text-xs text-[#5C4300]">{tOnline("modeCard.description")}</Text>
+                        <Text className="mt-2 text-[10px] font-bold uppercase tracking-wider text-[#2A1E00]">
+                          ● {tOnline("modeCard.live")}
+                        </Text>
+                      </View>
+                    </ArenaPressable>
+
+                    <ArenaModeCard
+                      selected={mode === "clubClub"}
+                      onPress={() => setMode("clubClub")}
+                      title={t("mode.clubClub.title")}
+                      description={t("mode.clubClub.description")}
+                      icon="🛡️"
+                    />
+                    <ArenaModeCard
+                      selected={mode === "countryClub"}
+                      onPress={() => setMode("countryClub")}
+                      title={t("mode.countryClub.title")}
+                      description={t("mode.countryClub.description")}
+                      icon="🚩"
+                    />
+
+                    <ArenaPressable
+                      onPress={() => router.push("/manual")}
+                      className="flex-row items-center gap-4 rounded-2xl border-2 border-dashed border-arena-bg-soft p-4"
+                    >
+                      <Text className="text-2xl">🔍</Text>
+                      <View className="flex-1">
+                        <Text className="font-semibold text-arena-text">{tManual("title")}</Text>
+                        <Text className="mt-1 text-xs text-arena-text-soft">{tManual("description")}</Text>
+                      </View>
+                    </ArenaPressable>
+                  </View>
+                </View>
+
+                <View>
+                  <Text className="mb-3 text-sm font-semibold uppercase tracking-wider text-arena-text-soft">
+                    {t("difficulty.heading")}
+                  </Text>
+                  <View className="flex-row gap-2">
+                    {(["easy", "medium", "hard"] as const).map((d) => (
+                      <ArenaPressable
+                        key={d}
+                        onPress={() => setDifficulty(d)}
+                        className={`flex-1 items-center rounded-xl border-2 px-3 py-3 ${
+                          difficulty === d
+                            ? "border-arena-accent-2 bg-arena-accent-2/15"
+                            : "border-arena-bg-soft bg-arena-bg-soft"
+                        }`}
+                      >
+                        <Text className="text-sm font-semibold text-arena-text">{t(`difficulty.${d}.title`)}</Text>
+                        <Text className="mt-1 text-center text-[10px] text-arena-text-soft">
+                          {t(`difficulty.${d}.description`)}
+                        </Text>
+                      </ArenaPressable>
+                    ))}
+                  </View>
+                </View>
+
+                <View>
+                  <View className="mb-3 flex-row items-baseline justify-between">
+                    <Text className="text-sm font-semibold uppercase tracking-wider text-arena-text-soft">
+                      {t("leagues.heading")}
+                    </Text>
+                    <View className="flex-row gap-3">
+                      <Pressable onPress={selectAllLeagues}>
+                        <Text className="text-xs text-arena-accent-2">{t("leagues.selectAll")}</Text>
+                      </Pressable>
+                      <Pressable onPress={clearAllLeagues}>
+                        <Text className="text-xs text-arena-text-soft">{t("leagues.clearAll")}</Text>
+                      </Pressable>
+                    </View>
+                  </View>
+                  <Text className="mb-3 text-xs text-arena-text-soft">{t("leagues.hint")}</Text>
+                  <View className="gap-2">
+                    {dataset.leagues.map((l) => (
+                      <ArenaChip
+                        key={l.id}
+                        checked={includedLeagues.has(l.id)}
+                        onPress={() => toggleLeague(l.id)}
+                        label={locale === "tr" ? l.nameTr : l.nameEn}
+                      />
+                    ))}
+                  </View>
+                </View>
+
+                {mode === "countryClub" && (
+                  <View>
+                    <Text className="mb-3 text-sm font-semibold uppercase tracking-wider text-arena-text-soft">
+                      {t("excludedCountries.heading")}
+                    </Text>
+                    <Text className="mb-3 text-xs text-arena-text-soft">{t("excludedCountries.hint")}</Text>
+                    <View className="gap-2">
+                      {clubCountries.map((c) => (
+                        <ArenaChip
+                          key={c.code}
+                          checked={!excludedCountries.has(c.code)}
+                          onPress={() => toggleCountry(c.code)}
+                          label={locale === "tr" ? c.nameTr : c.nameEn}
+                        />
+                      ))}
+                    </View>
+                  </View>
+                )}
+              </ScrollView>
+              <ScrollFadeBottom />
+            </View>
+
+            <View className="border-t border-arena-bg-soft px-4 pb-6 pt-3">
+              <ArenaPressable
+                onPress={start}
+                disabled={!canStart}
+                className={`items-center rounded-2xl py-4 ${
+                  canStart ? "border-b-4 border-arena-accent-strong bg-arena-accent" : "bg-arena-bg-soft"
+                }`}
+              >
+                <Text className={`text-lg font-bold ${canStart ? "text-[#2A1E00]" : "text-arena-text-soft"}`}>
+                  {canStart ? t("start") : t("startDisabled")}
+                </Text>
+              </ArenaPressable>
+            </View>
+          </>
+        )}
+      </View>
+    );
   }
 
   return (
@@ -221,6 +383,49 @@ export function SetupScreen() {
         </View>
       )}
     </ScrollView>
+  );
+}
+
+function ArenaModeCard({
+  selected,
+  onPress,
+  title,
+  description,
+  icon,
+}: {
+  selected: boolean;
+  onPress: () => void;
+  title: string;
+  description: string;
+  icon: string;
+}) {
+  return (
+    <ArenaPressable
+      onPress={onPress}
+      className={`flex-row items-center gap-4 rounded-2xl border-2 p-4 ${
+        selected ? "border-arena-accent-2 bg-arena-accent-2/15" : "border-arena-bg-soft bg-arena-bg-soft"
+      }`}
+    >
+      <Text className="text-2xl">{icon}</Text>
+      <View className="flex-1">
+        <Text className="font-semibold text-arena-text">{title}</Text>
+        <Text className="mt-1 text-xs text-arena-text-soft">{description}</Text>
+      </View>
+    </ArenaPressable>
+  );
+}
+
+function ArenaChip({ checked, onPress, label }: { checked: boolean; onPress: () => void; label: string }) {
+  return (
+    <ArenaPressable
+      onPress={onPress}
+      className={`flex-row items-center gap-3 rounded-lg border px-3 py-2 ${
+        checked ? "border-arena-accent-2 bg-arena-accent-2/15" : "border-arena-bg-soft bg-arena-bg-soft"
+      }`}
+    >
+      <Text className={checked ? "text-arena-accent-2" : "text-arena-text-soft"}>{checked ? "☑" : "☐"}</Text>
+      <Text className={checked ? "text-arena-text" : "text-arena-text-soft"}>{label}</Text>
+    </ArenaPressable>
   );
 }
 
