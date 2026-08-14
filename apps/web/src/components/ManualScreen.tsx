@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { useLocale, useTranslations } from "use-intl";
 import type { Club, Country, Dataset, GameMode, Round } from "@321guess/core";
 import { loadDataset } from "../lib/dataset";
 import { fetchLiveRoundPlayers } from "../lib/live-players";
-import { RoundView } from "./RoundView";
+import { ArenaPressable } from "./ArenaPressable";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { LogoTile } from "./LogoTile";
+import { RoundView } from "./RoundView";
 import { ThemeToggle } from "./ThemeToggle";
 
 function stripDiacritics(s: string): string {
@@ -89,6 +91,118 @@ export function ManualScreen() {
     mode === "clubClub"
       ? clubA !== null && clubB !== null && clubA.id !== clubB.id
       : country !== null && clubA !== null;
+
+  if (Platform.OS !== "web") {
+    return (
+      <View className="flex-1 bg-arena-bg">
+        <ScrollView className="flex-1 px-4 py-8">
+          <Text className="text-2xl font-black text-arena-accent">{t("title")}</Text>
+          <Text className="mt-1 text-sm text-arena-text-soft">{t("description")}</Text>
+
+          {!round ? (
+            <>
+              <View className="mb-6 mt-6 flex-row self-start rounded-full border border-arena-accent-2 bg-arena-bg-soft p-1">
+                {(["clubClub", "countryClub"] as const).map((m) => (
+                  <ArenaPressable
+                    key={m}
+                    onPress={() => switchMode(m)}
+                    className={`rounded-full px-4 py-1.5 ${mode === m ? "bg-arena-accent" : ""}`}
+                  >
+                    <Text className={mode === m ? "font-semibold text-[#2A1E00]" : "text-arena-text-soft"}>
+                      {t(`mode.${m}`)}
+                    </Text>
+                  </ArenaPressable>
+                ))}
+              </View>
+
+              {!dataset ? (
+                <View className="items-center rounded-2xl bg-arena-bg-soft p-8">
+                  <Text className="text-arena-text-soft">…</Text>
+                </View>
+              ) : mode === "clubClub" ? (
+                <View className="gap-4">
+                  <SearchBox
+                    label={t("search.clubA")}
+                    selected={clubA}
+                    onChange={setClubA}
+                    items={dataset.clubs}
+                    getKey={(c) => c.id}
+                    getLabel={(c) => c.name}
+                    getSubtitle={(c) => c.countryCode}
+                    getMedallion={(c) => ({ src: c.logoUrl, color: c.color })}
+                    emptyText={t("search.empty")}
+                  />
+                  <SearchBox
+                    label={t("search.clubB")}
+                    selected={clubB}
+                    onChange={setClubB}
+                    items={dataset.clubs.filter((c) => clubA === null || c.id !== clubA.id)}
+                    getKey={(c) => c.id}
+                    getLabel={(c) => c.name}
+                    getSubtitle={(c) => c.countryCode}
+                    getMedallion={(c) => ({ src: c.logoUrl, color: c.color })}
+                    emptyText={t("search.empty")}
+                  />
+                </View>
+              ) : (
+                <View className="gap-4">
+                  <SearchBox
+                    label={t("search.country")}
+                    selected={country}
+                    onChange={setCountry}
+                    items={countries}
+                    getKey={(c) => c.code}
+                    getLabel={(c) => (locale === "tr" ? c.nameTr : c.nameEn)}
+                    getSubtitle={(c) => c.code}
+                    emptyText={t("search.empty")}
+                  />
+                  <SearchBox
+                    label={t("search.club")}
+                    selected={clubA}
+                    onChange={setClubA}
+                    items={dataset.clubs}
+                    getKey={(c) => c.id}
+                    getLabel={(c) => c.name}
+                    getSubtitle={(c) => c.countryCode}
+                    getMedallion={(c) => ({ src: c.logoUrl, color: c.color })}
+                    emptyText={t("search.empty")}
+                  />
+                </View>
+              )}
+
+              <Text className="mt-4 text-xs text-arena-text-soft">{t("hint")}</Text>
+
+              <View className="mt-8 flex-row gap-3">
+                <ArenaPressable
+                  onPress={startRound}
+                  disabled={!canStart}
+                  className={`flex-1 items-center rounded-2xl py-4 ${
+                    canStart ? "border-b-4 border-arena-accent-strong bg-arena-accent" : "bg-arena-bg-soft"
+                  }`}
+                >
+                  <Text className={`text-lg font-bold ${canStart ? "text-[#2A1E00]" : "text-arena-text-soft"}`}>
+                    {t("start")}
+                  </Text>
+                </ArenaPressable>
+                {(clubA || clubB || country) && (
+                  <ArenaPressable onPress={reset} className="justify-center rounded-2xl border border-arena-accent-2 px-4">
+                    <Text className="text-sm text-arena-text-soft">{t("search.clear")}</Text>
+                  </ArenaPressable>
+                )}
+              </View>
+            </>
+          ) : (
+            <>
+              <RoundView round={round} onNext={() => setRound(null)} />
+              <ArenaPressable onPress={reset} className="mt-4 items-center">
+                <Text className="text-xs uppercase tracking-wider text-arena-text-soft">{t("newRound")}</Text>
+              </ArenaPressable>
+            </>
+          )}
+        </ScrollView>
+      </View>
+    );
+  }
 
   return (
     <ScrollView className="flex-1 bg-paper px-4 py-8">
@@ -207,12 +321,27 @@ type SearchBoxProps<T> = {
   getKey: (item: T) => string;
   getLabel: (item: T) => string;
   getSubtitle: (item: T) => string;
+  /** Optional — only club-type SearchBox calls pass this. Renders a small
+   * LogoTile medallion next to the selected item on native. Country
+   * selections never pass it (a flag already carries its own color). */
+  getMedallion?: (item: T) => { src: string; color?: string };
   emptyText: string;
 };
 
-function SearchBox<T>({ label, selected, onChange, items, getKey, getLabel, getSubtitle, emptyText }: SearchBoxProps<T>) {
+function SearchBox<T>({
+  label,
+  selected,
+  onChange,
+  items,
+  getKey,
+  getLabel,
+  getSubtitle,
+  getMedallion,
+  emptyText,
+}: SearchBoxProps<T>) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
+  const isNative = Platform.OS !== "web";
 
   const filtered = useMemo(() => {
     const q = normalize(query.trim());
@@ -221,6 +350,30 @@ function SearchBox<T>({ label, selected, onChange, items, getKey, getLabel, getS
   }, [query, items, getLabel]);
 
   if (selected) {
+    if (isNative) {
+      const medallion = getMedallion?.(selected);
+      return (
+        <View className="flex-row items-center gap-3 rounded-2xl border-2 border-arena-accent-2 bg-arena-accent-2/15 p-3">
+          {medallion && (
+            <LogoTile size="sm" src={medallion.src} alt={getLabel(selected)} caption="" color={medallion.color} />
+          )}
+          <View className="flex-1">
+            <Text className="mb-1 text-[10px] uppercase tracking-wider text-arena-text-soft">{label}</Text>
+            <Text className="text-base font-semibold text-arena-text">{getLabel(selected)}</Text>
+            <Text className="text-xs text-arena-text-soft">{getSubtitle(selected)}</Text>
+          </View>
+          <Pressable
+            onPress={() => {
+              onChange(null);
+              setQuery("");
+            }}
+            className="rounded-md px-2 py-1"
+          >
+            <Text className="text-xs text-arena-text-soft">✕</Text>
+          </Pressable>
+        </View>
+      );
+    }
     return (
       <View className="rounded-xl border-2 border-accent bg-accent/10 p-3">
         <Text className="mb-1 text-[10px] uppercase tracking-wider text-ink-mute">{label}</Text>
@@ -232,6 +385,59 @@ function SearchBox<T>({ label, selected, onChange, items, getKey, getLabel, getS
           <Pressable onPress={() => { onChange(null); setQuery(""); }} className="rounded-md px-2 py-1">
             <Text className="text-xs text-ink-mute">✕</Text>
           </Pressable>
+        </View>
+      </View>
+    );
+  }
+
+  if (isNative) {
+    // A dashed "+" circle echoes the medallion-slot metaphor from the
+    // reveal screens even before anything is picked — only for club-type
+    // calls (getMedallion is only ever passed for clubs, never countries),
+    // matching the design spec's "unselected slot ... dashed-outline '+'
+    // placeholder" requirement. The text input stays fully functional
+    // alongside it — the circle is decorative, not a replacement control.
+    return (
+      <View className="flex-row items-center gap-3">
+        {getMedallion && (
+          <View className="h-14 w-14 items-center justify-center rounded-full border-2 border-dashed border-arena-accent-2">
+            <Text className="text-lg text-arena-accent-2">+</Text>
+          </View>
+        )}
+        <View className="relative flex-1">
+          <Text className="mb-1 text-[10px] uppercase tracking-wider text-arena-text-soft">{label}</Text>
+          <TextInput
+            value={query}
+            onChangeText={setQuery}
+            onFocus={() => setOpen(true)}
+            placeholder={label}
+            placeholderTextColor="#8FE8C4"
+            className="rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-4 py-3 text-base text-arena-text"
+          />
+          {open && (
+            <View className="absolute top-16 z-20 max-h-72 w-full rounded-2xl border border-arena-accent-2 bg-arena-bg-soft">
+              {filtered.length === 0 ? (
+                <Text className="px-4 py-3 text-sm text-arena-text-soft">{emptyText}</Text>
+              ) : (
+                <ScrollView>
+                  {filtered.map((item) => (
+                    <Pressable
+                      key={getKey(item)}
+                      onPress={() => {
+                        onChange(item);
+                        setQuery("");
+                        setOpen(false);
+                      }}
+                      className="flex-row items-center justify-between px-4 py-2"
+                    >
+                      <Text className="flex-1 text-arena-text">{getLabel(item)}</Text>
+                      <Text className="text-xs text-arena-text-soft">{getSubtitle(item)}</Text>
+                    </Pressable>
+                  ))}
+                </ScrollView>
+              )}
+            </View>
+          )}
         </View>
       </View>
     );
