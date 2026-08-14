@@ -33,6 +33,7 @@ import {
 import { shareOrCopy } from "../lib/share";
 import { ArenaPressable } from "./ArenaPressable";
 import { CelebrationPulse } from "./CelebrationPulse";
+import { Countdown } from "./Countdown";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { LogoTile } from "./LogoTile";
 import { ScrollFadeBottom } from "./ScrollFadeBottom";
@@ -88,7 +89,7 @@ export function OnlineScreen() {
   const [round, setRound] = useState<RoundInfo | null>(null);
   const [roundLoadFailed, setRoundLoadFailed] = useState(false);
 
-  const [phase, setPhase] = useState<"matchup" | "playing" | "finished">("matchup");
+  const [phase, setPhase] = useState<"matchup" | "countdown" | "playing" | "finished">("matchup");
   const [questionIndex, setQuestionIndex] = useState(0);
   const [foundPlayers, setFoundPlayers] = useState<Player[]>([]);
   const [wrongPlayers, setWrongPlayers] = useState<Player[]>([]);
@@ -198,6 +199,10 @@ export function OnlineScreen() {
     setPhase("matchup");
     setResult(null);
     setUsernameError("expired");
+  }
+
+  function startCountdown() {
+    setPhase("countdown");
   }
 
   async function startRound() {
@@ -412,12 +417,14 @@ export function OnlineScreen() {
                   {t("instructions", { minutes: ROUND_DURATION_MS / 60000, questions: round.questions.length })}
                 </Text>
                 <ArenaPressable
-                  onPress={() => void startRound()}
+                  onPress={startCountdown}
                   className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-6"
                 >
                   <Text className="text-2xl font-bold text-[#2A1E00]">{t("start")}</Text>
                 </ArenaPressable>
               </View>
+            ) : phase === "countdown" ? (
+              <Countdown onDone={() => void startRound()} />
             ) : phase === "playing" && currentQuestion ? (
               <View className="gap-4">
                 <View className="flex-row items-center justify-between">
@@ -663,10 +670,12 @@ export function OnlineScreen() {
           <Text className="text-center text-xs text-ink-mute">
             {t("instructions", { minutes: ROUND_DURATION_MS / 60000, questions: round.questions.length })}
           </Text>
-          <Pressable onPress={() => void startRound()} className="items-center rounded-xl bg-accent py-4">
+          <Pressable onPress={startCountdown} className="items-center rounded-xl bg-accent py-4">
             <Text className="text-lg font-bold text-paper">{t("start")}</Text>
           </Pressable>
         </View>
+      ) : phase === "countdown" ? (
+        <Countdown onDone={() => void startRound()} />
       ) : phase === "playing" && currentQuestion ? (
         <View className="gap-4">
           <View className="flex-row items-center justify-between">
