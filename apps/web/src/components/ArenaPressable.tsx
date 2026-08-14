@@ -10,7 +10,7 @@ type ArenaPressableProps = PressableProps & { children: React.ReactNode };
  * and a light haptic tap on every press. The haptic is native-only and
  * respects the Settings screen's toggle; the scale animation runs on both
  * platforms (harmless, cheap) but web screens don't use this component. */
-export function ArenaPressable({ onPress, disabled, children, ...rest }: ArenaPressableProps) {
+export function ArenaPressable({ onPress, disabled, children, className, ...rest }: ArenaPressableProps) {
   const scale = useRef(new Animated.Value(1)).current;
   const { hapticsEnabled } = useGameSettings();
 
@@ -28,8 +28,8 @@ export function ArenaPressable({ onPress, disabled, children, ...rest }: ArenaPr
   }
 
   return (
-    <Animated.View className={rest.className as string | undefined} style={{ transform: [{ scale }] }}>
-      <Pressable onPressIn={pressIn} onPressOut={pressOut} onPress={handlePress} disabled={disabled} {...rest}>
+    <Animated.View style={{ transform: [{ scale }] }}>
+      <Pressable onPressIn={pressIn} onPressOut={pressOut} onPress={handlePress} disabled={disabled} className={className} {...rest}>
         {children}
       </Pressable>
     </Animated.View>
