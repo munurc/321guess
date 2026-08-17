@@ -273,7 +273,10 @@ async function fetchPlayers(
     players.set(pid, { ...prev, clubIds: clubsForPlayer });
   }
 
-  const metaBatchSize = 100;
+  // Smaller than phase 1's per-club queries: this batch joins nationality +
+  // two labels across every VALUES entry, which is heavier per-row under
+  // load. 100 was timing out/erroring far more than phase 1's queries did.
+  const metaBatchSize = 40;
   const allPids = newPids;
 
   for (let i = 0; i < allPids.length; i += metaBatchSize) {
@@ -297,7 +300,7 @@ async function fetchPlayers(
       data = await sparql<WdResponse>(query, label);
     } catch (e) {
       console.warn(`    ! ${label} skipped: ${(e as Error).message.slice(0, 60)}`);
-      await sleep(1000);
+      await sleep(2500);
       continue;
     }
     const seen = new Set<string>();
@@ -320,7 +323,7 @@ async function fetchPlayers(
     if ((i / metaBatchSize + 1) % 10 === 0 || i + metaBatchSize >= allPids.length) {
       console.log(`    → ${label}: resolved ${players.size}/${allPids.length}`);
     }
-    await sleep(400);
+    await sleep(700);
   }
   return [...players.values()];
 }

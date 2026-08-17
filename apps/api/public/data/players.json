@@ -14118,6 +14118,15 @@
     ]
   },
   {
+    "id": "Q62059870",
+    "name": "Akor Adams",
+    "nationalityCode": "NG",
+    "clubIds": [
+      "Q10329",
+      "Q501245"
+    ]
+  },
+  {
     "id": "Q250494",
     "name": "Ákos Buzsáky",
     "nationalityCode": "HU",
@@ -14939,6 +14948,14 @@
     "clubIds": [
       "Q364698",
       "Q967104"
+    ]
+  },
+  {
+    "id": "Q141104143",
+    "name": "Alamgir Smakov",
+    "nationalityCode": "KZ",
+    "clubIds": [
+      "Q172567"
     ]
   },
   {
@@ -24605,6 +24622,14 @@
     ]
   },
   {
+    "id": "Q135422413",
+    "name": "Alessandro Debenedetti",
+    "nationalityCode": "IT",
+    "clubIds": [
+      "Q2074"
+    ]
+  },
+  {
     "id": "Q20949250",
     "name": "Alessandro Deiola",
     "nationalityCode": "IT",
@@ -31014,6 +31039,16 @@
     ]
   },
   {
+    "id": "Q135395465",
+    "name": "Alexsandro Amorim de Freitas Filho",
+    "nationalityCode": "BR",
+    "clubIds": [
+      "Q1386850",
+      "Q188841",
+      "Q2074"
+    ]
+  },
+  {
     "id": "Q4721564",
     "name": "Alexsandro Carvalho Lopes",
     "nationalityCode": "BR",
@@ -31873,6 +31908,15 @@
     "clubIds": [
       "Q1103168",
       "Q459090"
+    ]
+  },
+  {
+    "id": "Q16594121",
+    "name": "Alfonso Espino",
+    "nationalityCode": "UY",
+    "clubIds": [
+      "Q10300",
+      "Q276533"
     ]
   },
   {
@@ -35035,7 +35079,8 @@
       "Q191264",
       "Q19453",
       "Q200321",
-      "Q318348"
+      "Q318348",
+      "Q370712"
     ]
   },
   {
@@ -95041,6 +95086,7 @@
     "clubIds": [
       "Q10286",
       "Q15789",
+      "Q2739",
       "Q8749"
     ]
   },
@@ -127207,7 +127253,8 @@
       "Q1422",
       "Q18741",
       "Q1886",
-      "Q2074"
+      "Q2074",
+      "Q8701"
     ]
   },
   {
@@ -133812,6 +133859,7 @@
     "nationalityCode": "ES",
     "clubIds": [
       "Q10333",
+      "Q12297",
       "Q8682",
       "Q8806"
     ]
@@ -145969,6 +146017,14 @@
     ]
   },
   {
+    "id": "Q118347581",
+    "name": "David Puczka",
+    "nationalityCode": "AT",
+    "clubIds": [
+      "Q2074"
+    ]
+  },
+  {
     "id": "Q17612772",
     "name": "David Querol Blanco",
     "nationalityCode": "ES",
@@ -147740,6 +147796,15 @@
       "Q2693",
       "Q2798",
       "Q631"
+    ]
+  },
+  {
+    "id": "Q55366763",
+    "name": "Davide Frattesi",
+    "nationalityCode": "IT",
+    "clubIds": [
+      "Q289482",
+      "Q8603"
     ]
   },
   {
@@ -160979,6 +161044,16 @@
     ]
   },
   {
+    "id": "Q27995699",
+    "name": "Djibril Sow",
+    "nationalityCode": "CH",
+    "clubIds": [
+      "Q10329",
+      "Q2074",
+      "Q38245"
+    ]
+  },
+  {
     "id": "Q15934221",
     "name": "Djibril Tamsir Paye",
     "nationalityCode": "GN",
@@ -166260,6 +166335,7 @@
     "nationalityCode": "RS",
     "clubIds": [
       "Q1422",
+      "Q172567",
       "Q2052"
     ]
   },
@@ -175287,6 +175363,14 @@
     "clubIds": [
       "Q1024338",
       "Q318307"
+    ]
+  },
+  {
+    "id": "Q105591986",
+    "name": "Elias Havel",
+    "nationalityCode": "AT",
+    "clubIds": [
+      "Q2074"
     ]
   },
   {
@@ -191326,6 +191410,14 @@
     ]
   },
   {
+    "id": "Q138328477",
+    "name": "Ethan Meichtry",
+    "nationalityCode": "CH",
+    "clubIds": [
+      "Q2074"
+    ]
+  },
+  {
     "id": "Q114027518",
     "name": "Ethan Nwaneri",
     "nationalityCode": "GB",
@@ -204060,6 +204152,14 @@
     ]
   },
   {
+    "id": "Q140472062",
+    "name": "Ferdinand Pohl",
+    "nationalityCode": "DE",
+    "clubIds": [
+      "Q24680"
+    ]
+  },
+  {
     "id": "Q1231354",
     "name": "Ferdinand Rohde",
     "nationalityCode": "DE",
@@ -207610,6 +207710,7 @@
     "nationalityCode": "ES",
     "clubIds": [
       "Q10333",
+      "Q483020",
       "Q50602",
       "Q7156"
     ]
@@ -210166,7 +210267,8 @@
       "Q22707",
       "Q51976",
       "Q75684",
-      "Q81888"
+      "Q81888",
+      "Q845043"
     ]
   },
   {
@@ -221835,6 +221937,7 @@
     "nationalityCode": "BR",
     "clubIds": [
       "Q18656",
+      "Q270995",
       "Q6601875",
       "Q80845"
     ]
@@ -225700,6 +225803,16 @@
     ]
   },
   {
+    "id": "Q100919546",
+    "name": "Gabriel Charpentier",
+    "nationalityCode": "FR",
+    "clubIds": [
+      "Q2074",
+      "Q2693",
+      "Q845043"
+    ]
+  },
+  {
     "id": "Q733037",
     "name": "Gabriel Cichero",
     "nationalityCode": "PL",
@@ -226935,6 +227048,15 @@
       "Q1120838",
       "Q1886",
       "Q289482"
+    ]
+  },
+  {
+    "id": "Q137598926",
+    "name": "Gabriele Calvani",
+    "nationalityCode": "IT",
+    "clubIds": [
+      "Q2074",
+      "Q845043"
     ]
   },
   {
@@ -238581,6 +238703,7 @@
       "Q12297",
       "Q132885",
       "Q214940",
+      "Q50602",
       "Q81888"
     ]
   },
@@ -263474,6 +263597,7 @@
     "name": "Hamed Junior Traoré",
     "nationalityCode": "CI",
     "clubIds": [
+      "Q132885",
       "Q19568"
     ]
   },
@@ -270612,6 +270736,15 @@
     "nationalityCode": "BE",
     "clubIds": [
       "Q18232"
+    ]
+  },
+  {
+    "id": "Q120014778",
+    "name": "Heine Gikling Bruseth",
+    "nationalityCode": "NO",
+    "clubIds": [
+      "Q118945347",
+      "Q15214308"
     ]
   },
   {
@@ -286244,7 +286377,8 @@
     "name": "Iker Benito",
     "nationalityCode": "ES",
     "clubIds": [
-      "Q10286"
+      "Q10286",
+      "Q606210"
     ]
   },
   {
@@ -287082,6 +287216,14 @@
     "nationalityCode": "BA",
     "clubIds": [
       "Q104770"
+    ]
+  },
+  {
+    "id": "Q141023860",
+    "name": "Iman Mustafa",
+    "nationalityCode": "US",
+    "clubIds": [
+      "Q5794"
     ]
   },
   {
@@ -342716,7 +342858,8 @@
     "nationalityCode": "CO",
     "clubIds": [
       "Q10329",
-      "Q15799"
+      "Q15799",
+      "Q17479"
     ]
   },
   {
@@ -365073,6 +365216,15 @@
     ]
   },
   {
+    "id": "Q110164175",
+    "name": "Juanlu Sánchez",
+    "nationalityCode": "ES",
+    "clubIds": [
+      "Q10329",
+      "Q19568"
+    ]
+  },
+  {
     "id": "Q6301619",
     "name": "Juanma Marrero",
     "nationalityCode": "ES",
@@ -378214,7 +378366,9 @@
     "clubIds": [
       "Q216032",
       "Q2641",
-      "Q51976"
+      "Q50602",
+      "Q51976",
+      "Q9616"
     ]
   },
   {
@@ -387006,6 +387160,14 @@
     "nationalityCode": "GH",
     "clubIds": [
       "Q329812"
+    ]
+  },
+  {
+    "id": "Q140697122",
+    "name": "Latif Ouedraogo",
+    "nationalityCode": "BF",
+    "clubIds": [
+      "Q2074"
     ]
   },
   {
@@ -402612,6 +402774,14 @@
     ]
   },
   {
+    "id": "Q140811986",
+    "name": "Luca Podlech",
+    "nationalityCode": "DE",
+    "clubIds": [
+      "Q32494"
+    ]
+  },
+  {
     "id": "Q16234922",
     "name": "Luca Pompilio",
     "nationalityCode": "IT",
@@ -413272,6 +413442,14 @@
     "nationalityCode": "BR",
     "clubIds": [
       "Q80958"
+    ]
+  },
+  {
+    "id": "Q114669182",
+    "name": "Luiz Carlos Tatu",
+    "nationalityCode": "BR",
+    "clubIds": [
+      "Q17479"
     ]
   },
   {
@@ -430520,6 +430698,8 @@
     "name": "Marcos Leonardo",
     "nationalityCode": "BR",
     "clubIds": [
+      "Q131499",
+      "Q73965",
       "Q80955"
     ]
   },
@@ -435181,6 +435361,15 @@
     "clubIds": [
       "Q13391",
       "Q631"
+    ]
+  },
+  {
+    "id": "Q100271093",
+    "name": "Mario Mitaj",
+    "nationalityCode": "GR",
+    "clubIds": [
+      "Q2074",
+      "Q309480"
     ]
   },
   {
@@ -445462,7 +445651,8 @@
     "nationalityCode": "BR",
     "clubIds": [
       "Q17479",
-      "Q188277"
+      "Q188277",
+      "Q80845"
     ]
   },
   {
@@ -449835,6 +450025,7 @@
     "name": "Matthias Verreth",
     "nationalityCode": "BE",
     "clubIds": [
+      "Q332664",
       "Q509170"
     ]
   },
@@ -452294,6 +452485,7 @@
     "name": "Mauro Arambarri",
     "nationalityCode": "UY",
     "clubIds": [
+      "Q15799",
       "Q8806"
     ]
   },
@@ -465966,7 +466158,9 @@
     "name": "Mika Godts",
     "nationalityCode": "BE",
     "clubIds": [
-      "Q216032"
+      "Q216032",
+      "Q483020",
+      "Q81888"
     ]
   },
   {
@@ -478527,6 +478721,7 @@
     "nationalityCode": "AR",
     "clubIds": [
       "Q1024338",
+      "Q2739",
       "Q2798",
       "Q318307",
       "Q8701"
@@ -490917,6 +491112,17 @@
     "nationalityCode": "GB",
     "clubIds": [
       "Q18656"
+    ]
+  },
+  {
+    "id": "Q116053269",
+    "name": "Nobel Mendy",
+    "nationalityCode": "FR",
+    "clubIds": [
+      "Q10300",
+      "Q1051013",
+      "Q19477",
+      "Q8723"
     ]
   },
   {
@@ -511344,7 +511550,8 @@
     "name": "Patrizio Masini",
     "nationalityCode": "IT",
     "clubIds": [
-      "Q2074"
+      "Q2074",
+      "Q845043"
     ]
   },
   {
@@ -511835,6 +512042,16 @@
     "nationalityCode": "FR",
     "clubIds": [
       "Q501693"
+    ]
+  },
+  {
+    "id": "Q141100285",
+    "name": "Paul Bersoullé",
+    "nationalityCode": "FR",
+    "clubIds": [
+      "Q185163",
+      "Q328658",
+      "Q845137"
     ]
   },
   {
@@ -525441,7 +525658,8 @@
     "nationalityCode": "DE",
     "clubIds": [
       "Q11938",
-      "Q32494"
+      "Q32494",
+      "Q38245"
     ]
   },
   {
@@ -543082,6 +543300,7 @@
     "clubIds": [
       "Q132885",
       "Q19490",
+      "Q270995",
       "Q506832",
       "Q73965",
       "Q8701"
@@ -564990,6 +565209,7 @@
       "Q2739",
       "Q5794",
       "Q631",
+      "Q6601875",
       "Q9616"
     ]
   },
@@ -579209,6 +579429,14 @@
     ]
   },
   {
+    "id": "Q139244033",
+    "name": "Samuel Wiafe",
+    "nationalityCode": "IT",
+    "clubIds": [
+      "Q2074"
+    ]
+  },
+  {
     "id": "Q3471263",
     "name": "Samuel Wiart",
     "nationalityCode": "FR",
@@ -586024,6 +586252,15 @@
   },
   {
     "id": "Q9334817",
+    "name": "Sebastião Sant'Anna",
+    "nationalityCode": "BR",
+    "clubIds": [
+      "Q17479",
+      "Q5014111"
+    ]
+  },
+  {
+    "id": "Q133838346",
     "name": "Sebastião Sant'Anna",
     "nationalityCode": "BR",
     "clubIds": [
@@ -611276,6 +611513,14 @@
     ]
   },
   {
+    "id": "Q87867499",
+    "name": "Takahiro Akimoto",
+    "nationalityCode": "JP",
+    "clubIds": [
+      "Q916199"
+    ]
+  },
+  {
     "id": "Q523211",
     "name": "Takahiro Kawamura",
     "nationalityCode": "JP",
@@ -611923,6 +612168,9 @@
     "name": "Tanguy Nianzou",
     "nationalityCode": "FR",
     "clubIds": [
+      "Q10329",
+      "Q15789",
+      "Q19516",
       "Q483020"
     ]
   },
@@ -625350,6 +625598,15 @@
     "nationalityCode": "IT",
     "clubIds": [
       "Q1120838"
+    ]
+  },
+  {
+    "id": "Q108188237",
+    "name": "Tommaso Baldanzi",
+    "nationalityCode": "IT",
+    "clubIds": [
+      "Q2074",
+      "Q2739"
     ]
   },
   {
@@ -660775,6 +661032,14 @@
     "nationalityCode": "TR",
     "clubIds": [
       "Q104761"
+    ]
+  },
+  {
+    "id": "Q17160487",
+    "name": "Yohei Takaoka",
+    "nationalityCode": "JP",
+    "clubIds": [
+      "Q196107"
     ]
   },
   {
