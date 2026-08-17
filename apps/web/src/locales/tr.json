@@ -112,6 +112,7 @@
     "language": "Dil",
     "sound": "Ses efektleri",
     "haptics": "Titreşim",
+    "privacyLink": "Gizlilik Politikası",
     "back": "Ana ekran"
   },
   "manual": {
@@ -194,6 +195,7 @@
   },
   "privacy": {
     "title": "Gizlilik Politikası",
+    "back": "Ana sayfa",
     "updated": "Son güncelleme: {date}",
     "intro": "321guess, ücretsiz bir futbolcu tahmin oyunudur. Bu sayfa, web sitesinin ve mobil uygulamanın topladığı az sayıda veriyi ve nedenini açıklar.",
     "sections": [
@@ -210,16 +212,16 @@
         "body": "321guess mobil uygulaması push bildirimi gönderme izni isteyebilir. İzin verirsen, cihazın sunucumuza bir push token'ı kaydeder; bu token yalnızca yeni bir Günlük Meydan Okuma hazır olduğunda gönderilen tek bir günlük bildirim için kullanılır. Push token'larını başka hiçbir amaçla kullanmayız ve bildirimleri istediğin an cihazının sistem ayarlarından kapatabilirsin."
       },
       {
-        "heading": "Analitik",
-        "body": "Genel trafiği anlamak için (hangi sayfaların ziyaret edildiği, yaklaşık kaç kişinin oynadığı gibi) Google Analytics ve Vercel Analytics kullanıyoruz. Bu araçlar Günlük Meydan Okuma kullanıcı adını ya da push token'ını almaz."
+        "heading": "Veri saklama ve silme",
+        "body": "Günlük Meydan Okuma skorların ve serin, liderlik tablosunu çalıştırmak için saklanır. Online modu oynamayı istediğin an bırakabilirsin. Kullanıcı adını ve ona bağlı tüm verilerin silinmesini istersen aşağıdaki e-postadan bize ulaş, kullanıcı adını belirt — verilerini kalıcı olarak sileriz. Yerel (çevrimdışı) oyunla ilgili hiçbir şey hiçbir zaman saklanmaz."
       },
       {
-        "heading": "Veri saklama",
-        "body": "Günlük Meydan Okuma skorları ve serileri liderlik tablosunu çalıştırmak için saklanır. Online modu oynamayı istediğin an bırakabilirsin; yerel oyunla ilgili hiçbir şey hiçbir zaman saklanmaz."
+        "heading": "Çocukların gizliliği",
+        "body": "321guess, 13 yaşın altındaki çocuklardan bilerek veri toplamaz."
       },
       {
         "heading": "İletişim",
-        "body": "Bu politikayla ilgili sorularını site altbilgisindeki Instagram bağlantısı üzerinden gönderebilirsin."
+        "body": "Bu politikayla ilgili sorularını ya da veri silme taleplerini munurcoskun@gmail.com adresine gönderebilirsin."
       }
     ]
   }

@@ -53,6 +53,10 @@ export function SettingsScreen() {
           <Toggle value={hapticsEnabled} onChange={setHapticsEnabled} />
         </SettingsRow>
       </View>
+
+      <ArenaPressable onPress={() => router.push('/privacy')} className="mt-6 items-start">
+        <Text className="text-sm text-arena-text-soft underline">{t('privacyLink')}</Text>
+      </ArenaPressable>
     </View>
   );
 }

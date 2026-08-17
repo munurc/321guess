@@ -112,6 +112,7 @@
     "language": "Language",
     "sound": "Sound effects",
     "haptics": "Haptics",
+    "privacyLink": "Privacy Policy",
     "back": "Home"
   },
   "manual": {
@@ -194,6 +195,7 @@
   },
   "privacy": {
     "title": "Privacy Policy",
+    "back": "Home",
     "updated": "Last updated: {date}",
     "intro": "321guess is a free football player guessing game. This page explains what little data the website and mobile app collect and why.",
     "sections": [
@@ -210,16 +212,16 @@
         "body": "The 321guess mobile app can ask permission to send push notifications. If you allow it, your device registers a push token with our server, used only to send one daily notification announcing that a new Daily Challenge is ready. We don't use push tokens for anything else, and you can disable notifications at any time in your device's system settings."
       },
       {
-        "heading": "Analytics",
-        "body": "We use Google Analytics and Vercel Analytics to understand overall traffic (e.g. which pages are visited, roughly how many people play). These tools do not receive your Daily Challenge username or push token."
+        "heading": "Data retention and deletion",
+        "body": "Daily Challenge scores and streaks are kept to power the leaderboard. You can stop playing online mode at any time. To have your username and all associated data deleted, email us at the address below with your username — we'll delete it permanently. Nothing about local play is ever stored."
       },
       {
-        "heading": "Data retention",
-        "body": "Daily Challenge scores and streaks are kept to power the leaderboard. You can stop playing online mode at any time; nothing about local play is ever stored."
+        "heading": "Children's privacy",
+        "body": "321guess does not knowingly collect data from children under 13."
       },
       {
         "heading": "Contact",
-        "body": "Questions about this policy can be sent via the Instagram link in the site footer."
+        "body": "Questions about this policy, or data-deletion requests, can be sent to munurcoskun@gmail.com."
       }
     ]
   }
