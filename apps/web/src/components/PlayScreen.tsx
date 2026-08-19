@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocale, useTranslations } from "use-intl";
 import { localeUpper } from "../lib/locale-upper";
+import { localizedPath } from "../lib/localized-path";
 import type { Dataset, Round } from "@321guess/core";
 import { buildPool, pickRound } from "@321guess/core";
 import { loadDataset } from "../lib/dataset";
@@ -89,7 +90,7 @@ export function PlayScreen() {
   return (
     <View className="flex-1 bg-paper">
       <View className="flex-row items-center justify-between px-4 py-4">
-        <Pressable onPress={() => router.push("/")}>
+        <Pressable onPress={() => router.push(localizedPath("/", locale) as never)}>
           <Text className="text-xs uppercase tracking-wider text-ink-mute">← {t("backToSetup")}</Text>
         </Pressable>
         <View className="flex-row items-center gap-2">
