@@ -9,6 +9,7 @@ import { validateUsername } from "@321guess/core";
 import { loadDataset } from "../lib/dataset";
 import { hapticError, hapticSuccess } from "../lib/haptics";
 import { localeUpper } from "../lib/locale-upper";
+import { localizedPath } from "../lib/localized-path";
 import { playSound } from "../lib/sound";
 import { useGameSettings } from "../lib/game-settings-context";
 import {
@@ -323,7 +324,7 @@ export function OnlineScreen() {
       total: result.totalPossible,
       bar: scoreBar(result.correctCount),
       streak: result.currentStreak,
-      url: `https://www.321guess.com/${locale}/online`,
+      url: `https://www.321guess.com/online`,
     });
   }
 
@@ -399,20 +400,6 @@ export function OnlineScreen() {
             ) : phase === "matchup" ? (
               <View className="gap-6">
                 <Text className="text-base text-arena-text-soft">{t("welcomeBack", { username: identity.username })}</Text>
-                <View className="gap-3">
-                  <Text className="text-center text-sm font-semibold tracking-wider text-arena-text-soft">
-                    {localeUpper(t("todaysMatchupsLabel"), locale)}
-                  </Text>
-                  <View className="flex-row flex-wrap justify-center gap-2">
-                    {round.questions.map((q) => (
-                      <View key={q.index} className="flex-row items-center gap-1.5 rounded-2xl bg-arena-bg-soft p-2">
-                        <LogoTile size="sm" src={q.clubA.logoUrl} alt={q.clubA.name} caption="" color={q.clubA.color} />
-                        <Text className="text-xs font-bold text-arena-text-soft">×</Text>
-                        <LogoTile size="sm" src={q.clubB.logoUrl} alt={q.clubB.name} caption="" color={q.clubB.color} />
-                      </View>
-                    ))}
-                  </View>
-                </View>
                 <Text className="text-center text-sm text-arena-text-soft">
                   {t("instructions", { minutes: ROUND_DURATION_MS / 60000, questions: round.questions.length })}
                 </Text>
@@ -600,7 +587,7 @@ export function OnlineScreen() {
   return (
     <ScrollView className="flex-1 bg-paper px-4 py-8">
       <View className="mb-8 flex-row items-center justify-between">
-        <Pressable onPress={() => router.push("/")}>
+        <Pressable onPress={() => router.push(localizedPath("/", locale) as never)}>
           <Text className="text-xs uppercase tracking-wider text-ink-mute">← {t("backHome")}</Text>
         </Pressable>
         <View className="flex-row items-center gap-2">
@@ -653,20 +640,6 @@ export function OnlineScreen() {
       ) : phase === "matchup" ? (
         <View className="gap-6">
           <Text className="text-sm text-ink-mute">{t("welcomeBack", { username: identity.username })}</Text>
-          <View className="gap-3">
-            <Text className="text-center text-xs font-semibold uppercase tracking-wider text-ink-mute">
-              {t("todaysMatchupsLabel")}
-            </Text>
-            <View className="flex-row flex-wrap justify-center gap-2">
-              {round.questions.map((q) => (
-                <View key={q.index} className="flex-row items-center gap-1.5 rounded-xl border border-rule bg-ink/5 p-2">
-                  <LogoTile size="sm" src={q.clubA.logoUrl} alt={q.clubA.name} caption="" />
-                  <Text className="text-[10px] font-bold text-ink-mute">×</Text>
-                  <LogoTile size="sm" src={q.clubB.logoUrl} alt={q.clubB.name} caption="" />
-                </View>
-              ))}
-            </View>
-          </View>
           <Text className="text-center text-xs text-ink-mute">
             {t("instructions", { minutes: ROUND_DURATION_MS / 60000, questions: round.questions.length })}
           </Text>
@@ -696,6 +669,18 @@ export function OnlineScreen() {
               <Text className="text-xs font-black text-ink-mute">{t("vs")}</Text>
               <LogoTile size="sm" src={currentQuestion.clubB.logoUrl} alt={currentQuestion.clubB.name} caption={currentQuestion.clubB.name} />
             </View>
+
+            <View className="mt-3 items-center gap-1.5">
+              <Text className="text-[11px] text-ink-mute">{t("possibleCount", { count: currentQuestion.totalPossible })}</Text>
+              <View className="flex-row flex-wrap justify-center gap-1.5">
+                {Array.from({ length: currentQuestion.totalPossible }).map((_, i) => (
+                  <View
+                    key={i}
+                    className={`h-2.5 w-2.5 rounded-full border border-accent ${i < foundPlayers.length ? "bg-accent" : ""}`}
+                  />
+                ))}
+              </View>
+            </View>
           </View>
 
           <GuessInput
@@ -722,7 +707,7 @@ export function OnlineScreen() {
             <View className="flex-row flex-wrap gap-2">
               {foundPlayers.map((p) => (
                 <View key={p.id} className="rounded-full border border-accent/30 bg-accent/10 px-3 py-1">
-                  <Text className="text-xs font-medium">{p.name}</Text>
+                  <Text className="text-xs font-medium text-ink">{p.name}</Text>
                 </View>
               ))}
               {wrongPlayers.map((p) => (
@@ -743,7 +728,7 @@ export function OnlineScreen() {
       ) : result ? (
         <View className="gap-6">
           <View className="items-center rounded-xl border-2 border-accent bg-accent/10 p-6">
-            <Text className="text-3xl font-black">
+            <Text className="text-3xl font-black text-ink">
               {result.correctCount} / {result.totalPossible}
             </Text>
             <Text className="mt-1 text-sm text-ink-mute">{t("resultLabel")}</Text>
@@ -758,7 +743,7 @@ export function OnlineScreen() {
             <View className="flex-row flex-wrap justify-center gap-2">
               {badges.map((badge) => (
                 <View key={badge} className="rounded-full border border-rule bg-ink/5 px-3 py-1">
-                  <Text className="text-xs font-semibold">{t(`badges.${badge}`)}</Text>
+                  <Text className="text-xs font-semibold text-ink">{t(`badges.${badge}`)}</Text>
                 </View>
               ))}
             </View>
@@ -866,7 +851,12 @@ function GuessInput({
   }
 
   return (
-    <View className="relative">
+    // See the matching comment in ManualScreen's SearchBox: react-native-web
+    // gives every View an implicit z-index:0 stacking context, so the
+    // dropdown's z-20 can't rise above sibling elements (feedback chip,
+    // found/wrong chips, Pas/Bitir buttons) unless this wrapper itself is
+    // raised while the dropdown is open.
+    <View className={`relative ${open && query.trim().length >= 2 ? "z-30" : ""}`}>
       <TextInput
         value={query}
         onChangeText={(v) => {
@@ -885,7 +875,7 @@ function GuessInput({
             <ScrollView>
               {filtered.map((p) => (
                 <Pressable key={p.id} onPress={() => pick(p)} className="px-4 py-2">
-                  <Text className="text-sm">{p.name}</Text>
+                  <Text className="text-sm text-ink">{p.name}</Text>
                 </Pressable>
               ))}
             </ScrollView>
@@ -966,7 +956,7 @@ function Leaderboard({
           >
             <View className="flex-row items-center gap-2">
               <Text className="w-5 text-right text-ink-mute">{idx + 1}</Text>
-              <Text className={isMe ? "font-semibold" : undefined}>{row.username}</Text>
+              <Text className={isMe ? "font-semibold text-ink" : "text-ink"}>{row.username}</Text>
             </View>
             <Text className="text-ink-soft">{row.value}</Text>
           </View>

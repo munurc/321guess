@@ -86,7 +86,7 @@ export function RoundView({ round, onNext }: { round: Round; onNext: () => void 
 
   return (
     <View className="items-center gap-8 px-4 py-8">
-      <View className="flex-row items-center gap-6">
+      <View className="flex-row items-center justify-center gap-3 sm:gap-6">
         {round.kind === "clubClub" ? (
           <>
             <LogoTile src={round.clubA.logoUrl} alt={round.clubA.name} caption={round.clubA.name} />
@@ -125,7 +125,7 @@ export function RoundView({ round, onNext }: { round: Round; onNext: () => void 
                   {round.correctPlayers.map((p) => (
                     <View key={p.id} className="flex-row items-center gap-2 rounded-md bg-paper px-3 py-2">
                       <Text>{codeToFlag(p.nationalityCode)}</Text>
-                      <Text className="flex-1 text-sm">{p.name}</Text>
+                      <Text className="flex-1 text-sm text-ink">{p.name}</Text>
                       <Text className="text-[10px] font-medium uppercase text-ink-mute">
                         {p.nationalityCode}
                       </Text>

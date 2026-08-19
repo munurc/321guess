@@ -60,7 +60,9 @@ export function LogoTile({ src, alt, caption, variant = "logo", size = "lg", col
       <View
         className={`aspect-square items-center justify-center rounded-2xl border ${
           Platform.OS === "web" ? "border-rule bg-paper-2" : "border-arena-accent-2 bg-arena-card"
-        } ${isSmall ? "w-14 p-2" : "w-40 p-6"} ${variant === "flag" ? "overflow-hidden p-0" : ""}`}
+        } ${
+          isSmall ? "w-14 p-2" : Platform.OS === "web" ? "w-28 p-4 sm:w-40 sm:p-6" : "w-40 p-6"
+        } ${variant === "flag" ? "overflow-hidden p-0" : ""}`}
       >
         <Image
           source={{ uri: `${src}?width=400` }}

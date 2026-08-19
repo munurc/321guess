@@ -7,6 +7,7 @@ import type { Club, Country, Dataset, GameMode, Round } from "@321guess/core";
 import { loadDataset } from "../lib/dataset";
 import { fetchLiveRoundPlayers } from "../lib/live-players";
 import { localeUpper } from "../lib/locale-upper";
+import { localizedPath } from "../lib/localized-path";
 import { ArenaPressable } from "./ArenaPressable";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { LogoTile } from "./LogoTile";
@@ -225,8 +226,13 @@ export function ManualScreen() {
   return (
     <ScrollView className="flex-1 bg-paper px-4 py-8">
       <View className="mb-8 flex-row items-center justify-between">
-        <ThemeToggle />
-        <LanguageSwitcher />
+        <Pressable onPress={() => router.push(localizedPath("/", locale) as never)}>
+          <Text className="text-xs uppercase tracking-wider text-ink-mute">← {t("backHome")}</Text>
+        </Pressable>
+        <View className="flex-row items-center gap-2">
+          <ThemeToggle />
+          <LanguageSwitcher />
+        </View>
       </View>
 
       {!round ? (
@@ -253,7 +259,10 @@ export function ManualScreen() {
               <Text className="text-ink-mute">…</Text>
             </View>
           ) : mode === "clubClub" ? (
-            <View className="gap-4">
+            // relative + z-10 (not just relative): an open SearchBox's
+            // dropdown otherwise sits below the hint text/buttons that
+            // follow — see the stacking-context comment inside SearchBox.
+            <View className="relative z-10 gap-4">
               <SearchBox
                 label={t("search.clubA")}
                 selected={clubA}
@@ -276,7 +285,7 @@ export function ManualScreen() {
               />
             </View>
           ) : (
-            <View className="gap-4">
+            <View className="relative z-10 gap-4">
               <SearchBox
                 label={t("search.country")}
                 selected={country}
@@ -398,7 +407,7 @@ function SearchBox<T>({
         <Text className="mb-1 text-[10px] uppercase tracking-wider text-ink-mute">{label}</Text>
         <View className="flex-row items-center justify-between">
           <View className="flex-1">
-            <Text className="text-base font-semibold">{getLabel(selected)}</Text>
+            <Text className="text-base font-semibold text-ink">{getLabel(selected)}</Text>
             <Text className="text-xs text-ink-mute">{getSubtitle(selected)}</Text>
           </View>
           <Pressable onPress={() => { onChange(null); setQuery(""); }} className="rounded-md px-2 py-1">
@@ -463,7 +472,13 @@ function SearchBox<T>({
   }
 
   return (
-    <View className="relative">
+    // react-native-web sets `z-index: 0` (not `auto`) on every View by
+    // default, so each View becomes its own stacking context — the
+    // dropdown's z-20 below is scoped to *this* box and can never rise
+    // above a later sibling SearchBox, no matter how high its own z-index
+    // goes. Raising this wrapper's z-index while open lets its whole
+    // subtree (dropdown included) win against sibling SearchBoxes.
+    <View className={`relative ${open ? "z-30" : ""}`}>
       <Text className="mb-1 text-[10px] uppercase tracking-wider text-ink-mute">{label}</Text>
       <TextInput
         value={query}
@@ -484,7 +499,7 @@ function SearchBox<T>({
                   onPress={() => { onChange(item); setQuery(""); setOpen(false); }}
                   className="flex-row items-center justify-between px-4 py-2"
                 >
-                  <Text className="flex-1">{getLabel(item)}</Text>
+                  <Text className="flex-1 text-ink">{getLabel(item)}</Text>
                   <Text className="text-xs text-ink-mute">{getSubtitle(item)}</Text>
                 </Pressable>
               ))}

@@ -40,12 +40,13 @@ export function Countdown({ onDone }: { onDone: () => void }) {
       >
         {isNative ? localeUpper(t("getReady"), locale) : t("getReady")}
       </Text>
-      <Animated.Text
-        style={{ transform: [{ scale }], opacity }}
-        className={`font-bold ${isNative ? "text-arena-accent" : "text-accent"} ${isGo ? "text-7xl" : "text-[8rem]"}`}
-      >
-        {isGo ? t("go") : n}
-      </Animated.Text>
+      <Animated.View style={{ transform: [{ scale }], opacity }}>
+        <Text
+          className={`font-bold ${isNative ? "text-arena-accent" : "text-accent"} ${isGo ? "text-7xl" : "text-[8rem]"}`}
+        >
+          {isGo ? t("go") : n}
+        </Text>
+      </Animated.View>
     </View>
   );
 }
