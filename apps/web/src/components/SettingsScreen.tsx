@@ -54,9 +54,14 @@ export function SettingsScreen() {
         </SettingsRow>
       </View>
 
-      <ArenaPressable onPress={() => router.push('/privacy')} className="mt-6 items-start">
-        <Text className="text-sm text-arena-text-soft underline">{t('privacyLink')}</Text>
-      </ArenaPressable>
+      <View className="mt-6 gap-3">
+        <ArenaPressable onPress={() => router.push('/privacy')} className="items-start">
+          <Text className="text-sm text-arena-text-soft underline">{t('privacyLink')}</Text>
+        </ArenaPressable>
+        <ArenaPressable onPress={() => router.push('/terms')} className="items-start">
+          <Text className="text-sm text-arena-text-soft underline">{t('termsLink')}</Text>
+        </ArenaPressable>
+      </View>
     </View>
   );
 }

@@ -2,6 +2,7 @@ import { Pressable, ScrollView, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocale, useTranslations } from "use-intl";
+import { localizedPath } from "../lib/localized-path";
 
 type Section = { heading: string; body: string };
 
@@ -12,6 +13,7 @@ type Section = { heading: string; body: string };
  * native-only arena identity. */
 export function PrivacyScreen() {
   const t = useTranslations("privacy");
+  const tTerms = useTranslations("terms");
   const locale = useLocale();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -25,7 +27,7 @@ export function PrivacyScreen() {
       contentContainerStyle={{ paddingTop: insets.top + 24 }}
     >
       <View>
-        <Pressable onPress={() => router.push("/")}>
+        <Pressable onPress={() => router.push(localizedPath("/", locale) as never)}>
           <Text className="text-sm uppercase tracking-wider text-ink-mute">← {t("back")}</Text>
         </Pressable>
         <Text className="mt-4 text-3xl font-black text-accent">{t("title")}</Text>
@@ -41,6 +43,10 @@ export function PrivacyScreen() {
           </View>
         ))}
       </View>
+
+      <Pressable onPress={() => router.push(localizedPath("/terms", locale) as never)}>
+        <Text className="text-sm text-accent underline">{tTerms("title")}</Text>
+      </Pressable>
     </ScrollView>
   );
 }

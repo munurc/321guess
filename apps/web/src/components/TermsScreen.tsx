@@ -1,0 +1,50 @@
+import { Pressable, ScrollView, Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useLocale, useTranslations } from "use-intl";
+import { localizedPath } from "../lib/localized-path";
+
+type Section = { heading: string; body: string };
+
+/** Plain, cross-platform legal page — same treatment as PrivacyScreen (see
+ * that file's comment): stable public URL, paper/ink theme on every
+ * platform rather than the native-only arena identity. */
+export function TermsScreen() {
+  const t = useTranslations("terms");
+  const tPrivacy = useTranslations("privacy");
+  const locale = useLocale();
+  const router = useRouter();
+  const insets = useSafeAreaInsets();
+  const sections = t.raw("sections") as Section[];
+  const updatedDate = new Date().toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" });
+
+  return (
+    <ScrollView
+      className="flex-1 bg-paper px-4"
+      contentContainerClassName="gap-6 pb-16"
+      contentContainerStyle={{ paddingTop: insets.top + 24 }}
+    >
+      <View>
+        <Pressable onPress={() => router.push(localizedPath("/", locale) as never)}>
+          <Text className="text-sm uppercase tracking-wider text-ink-mute">← {t("back")}</Text>
+        </Pressable>
+        <Text className="mt-4 text-3xl font-black text-accent">{t("title")}</Text>
+        <Text className="mt-1 text-xs text-ink-mute">{t("updated", { date: updatedDate })}</Text>
+        <Text className="mt-4 text-base leading-6 text-ink-soft">{t("intro")}</Text>
+      </View>
+
+      <View className="gap-5">
+        {sections.map((section) => (
+          <View key={section.heading}>
+            <Text className="text-lg font-bold text-ink">{section.heading}</Text>
+            <Text className="mt-1 text-base leading-6 text-ink-soft">{section.body}</Text>
+          </View>
+        ))}
+      </View>
+
+      <Pressable onPress={() => router.push(localizedPath("/privacy", locale) as never)}>
+        <Text className="text-sm text-accent underline">{tPrivacy("title")}</Text>
+      </Pressable>
+    </ScrollView>
+  );
+}

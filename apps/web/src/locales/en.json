@@ -3,6 +3,12 @@
     "title": "Football Player Guessing Game — 321guess",
     "description": "Free football player guessing game. Two club badges or a flag + a badge appear — name a player who played for both. Play with a friend, no login, no download."
   },
+  "cookieConsent": {
+    "text": "We use Google Analytics to understand site visits. See the privacy policy for details.",
+    "privacyLink": "Privacy policy",
+    "accept": "Accept",
+    "decline": "Decline"
+  },
   "home": {
     "h1": "Football Player Guessing Game",
     "tagline": "Name a player who played for both teams — local co-op, browser-based, no signup.",
@@ -113,6 +119,7 @@
     "sound": "Sound effects",
     "haptics": "Haptics",
     "privacyLink": "Privacy Policy",
+    "termsLink": "Terms of Use",
     "back": "Home"
   },
   "manual": {
@@ -149,7 +156,6 @@
     "roundError": "Couldn't load today's puzzle. Try again shortly.",
     "welcomeBack": "Welcome back, {username}!",
     "vs": "vs",
-    "todaysMatchupsLabel": "Today's matchups",
     "instructions": "You have {minutes, plural, one {# minute} other {# minutes}} for {questions} questions — name players who played for both teams. Move on to the next question whenever you want.",
     "questionProgress": "Question {current} / {total}",
     "start": "Start",
@@ -212,8 +218,12 @@
         "body": "The 321guess mobile app can ask permission to send push notifications. If you allow it, your device registers a push token with our server, used only to send one daily notification announcing that a new Daily Challenge is ready. We don't use push tokens for anything else, and you can disable notifications at any time in your device's system settings."
       },
       {
+        "heading": "Analytics",
+        "body": "We use Google Analytics to understand overall traffic (e.g. which pages are visited, roughly how many people play). This tool does not receive your username, push token, or which players you guessed."
+      },
+      {
         "heading": "Data retention and deletion",
-        "body": "Daily Challenge scores and streaks are kept to power the leaderboard. You can stop playing online mode at any time. To have your username and all associated data deleted, email us at the address below with your username — we'll delete it permanently. Nothing about local play is ever stored."
+        "body": "Daily Challenge scores and streaks are kept to power the leaderboard. You can stop playing online mode at any time. To have your username and all associated data deleted, email us at the address below with your username — we'll delete it permanently."
       },
       {
         "heading": "Children's privacy",
@@ -222,6 +232,46 @@
       {
         "heading": "Contact",
         "body": "Questions about this policy, or data-deletion requests, can be sent to munurcoskun@gmail.com."
+      }
+    ]
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "back": "Home",
+    "updated": "Last updated: {date}",
+    "intro": "By using 321guess, you agree to the terms below. We've tried to keep them short and readable — reach out via the contact section if you have questions.",
+    "sections": [
+      {
+        "heading": "What the service is",
+        "body": "321guess is a free football player guessing game. No account is required and there are no in-app purchases. The Daily Challenge (online mode) is optional and requires picking a username."
+      },
+      {
+        "heading": "Usernames and conduct",
+        "body": "The username you pick for the Daily Challenge passes through a profanity filter and appears on a public leaderboard. We may change or remove usernames that are inappropriate, harassing, or impersonate someone else, without prior notice."
+      },
+      {
+        "heading": "Intellectual property",
+        "body": "Club names, logos, and flags shown in the game belong to their respective clubs/federations and are shown only for identification/informational purposes under fair use. 321guess is not affiliated with or endorsed by these clubs."
+      },
+      {
+        "heading": "Disclaimer",
+        "body": "321guess is provided \"as is\". We don't guarantee the underlying data (e.g. player-club history) is always 100% accurate or current, and we don't guarantee uninterrupted availability."
+      },
+      {
+        "heading": "Limitation of liability",
+        "body": "To the extent permitted by law, we are not liable for any indirect or incidental damages arising from your use of 321guess."
+      },
+      {
+        "heading": "Changes",
+        "body": "We may update these terms from time to time. Meaningful changes will update the \"last updated\" date on this page."
+      },
+      {
+        "heading": "Governing law",
+        "body": "These terms are governed by the laws of the Republic of Turkey."
+      },
+      {
+        "heading": "Contact",
+        "body": "Questions about these terms can be sent to munurcoskun@gmail.com."
       }
     ]
   }

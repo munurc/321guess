@@ -3,6 +3,12 @@
     "title": "Futbolcu Tahmin Oyunu — 321guess",
     "description": "Ücretsiz futbolcu tahmin oyunu. İki kulüp logosu veya bir bayrak + bir logo gösterilir, iki takımda da oynamış futbolcuyu bul. Arkadaşınla ekran başında oyna."
   },
+  "cookieConsent": {
+    "text": "Ziyaretleri anlamak için Google Analytics kullanıyoruz. Detaylar için gizlilik politikasına bakabilirsin.",
+    "privacyLink": "Gizlilik politikası",
+    "accept": "Kabul et",
+    "decline": "Reddet"
+  },
   "home": {
     "h1": "Futbolcu Tahmin Oyunu",
     "tagline": "İki takımda da forma giymiş futbolcuyu bulmaya çalış — arkadaşınla, tarayıcıda, kayıt olmadan.",
@@ -113,6 +119,7 @@
     "sound": "Ses efektleri",
     "haptics": "Titreşim",
     "privacyLink": "Gizlilik Politikası",
+    "termsLink": "Kullanım Şartları",
     "back": "Ana ekran"
   },
   "manual": {
@@ -149,7 +156,6 @@
     "roundError": "Günün bilmecesi yüklenemedi. Az sonra tekrar dene.",
     "welcomeBack": "Tekrar hoş geldin, {username}!",
     "vs": "vs",
-    "todaysMatchupsLabel": "Bugünün eşleşmeleri",
     "instructions": "{minutes} dakikan var — {questions} soruda iki takımda da oynamış futbolcuların isimlerini yaz. İstediğin an sonraki soruya geçebilirsin.",
     "questionProgress": "Soru {current} / {total}",
     "start": "Başla",
@@ -212,8 +218,12 @@
         "body": "321guess mobil uygulaması push bildirimi gönderme izni isteyebilir. İzin verirsen, cihazın sunucumuza bir push token'ı kaydeder; bu token yalnızca yeni bir Günlük Meydan Okuma hazır olduğunda gönderilen tek bir günlük bildirim için kullanılır. Push token'larını başka hiçbir amaçla kullanmayız ve bildirimleri istediğin an cihazının sistem ayarlarından kapatabilirsin."
       },
       {
+        "heading": "Analitik",
+        "body": "Genel trafiği anlamak için (hangi sayfaların ziyaret edildiği, yaklaşık kaç kişinin oynadığı gibi) Google Analytics kullanıyoruz. Bu araç kullanıcı adını, push token'ını ya da hangi futbolcuyu tahmin ettiğini almaz."
+      },
+      {
         "heading": "Veri saklama ve silme",
-        "body": "Günlük Meydan Okuma skorların ve serin, liderlik tablosunu çalıştırmak için saklanır. Online modu oynamayı istediğin an bırakabilirsin. Kullanıcı adını ve ona bağlı tüm verilerin silinmesini istersen aşağıdaki e-postadan bize ulaş, kullanıcı adını belirt — verilerini kalıcı olarak sileriz. Yerel (çevrimdışı) oyunla ilgili hiçbir şey hiçbir zaman saklanmaz."
+        "body": "Günlük Meydan Okuma skorların ve serin, liderlik tablosunu çalıştırmak için saklanır. Online modu oynamayı istediğin an bırakabilirsin. Kullanıcı adını ve ona bağlı tüm verilerin silinmesini istersen aşağıdaki e-postadan bize ulaş, kullanıcı adını belirt — verilerini kalıcı olarak sileriz."
       },
       {
         "heading": "Çocukların gizliliği",
@@ -222,6 +232,46 @@
       {
         "heading": "İletişim",
         "body": "Bu politikayla ilgili sorularını ya da veri silme taleplerini munurcoskun@gmail.com adresine gönderebilirsin."
+      }
+    ]
+  },
+  "terms": {
+    "title": "Kullanım Şartları",
+    "back": "Ana sayfa",
+    "updated": "Son güncelleme: {date}",
+    "intro": "321guess'i kullanarak aşağıdaki şartları kabul etmiş olursun. Bu şartlar basit ve okunaklı tutulmaya çalışıldı — sorunun olursa iletişim bölümünden bize ulaşabilirsin.",
+    "sections": [
+      {
+        "heading": "Hizmetin tanımı",
+        "body": "321guess, futbolcu tahmin etmeye dayalı ücretsiz bir oyundur. Hesap oluşturmaya gerek yoktur; uygulama içi satın alma yoktur. Günlük Meydan Okuma (online mod) isteğe bağlıdır ve bir kullanıcı adı seçmeni gerektirir."
+      },
+      {
+        "heading": "Kullanıcı adları ve davranış",
+        "body": "Günlük Meydan Okuma'da seçtiğin kullanıcı adı, küfür/argo filtresinden geçer ve herkese açık liderlik tablosunda görünür. Uygunsuz, taciz edici ya da başkasını taklit eden kullanıcı adlarını önceden haber vermeden değiştirebilir ya da kaldırabiliriz."
+      },
+      {
+        "heading": "Fikri mülkiyet",
+        "body": "Oyunda görünen kulüp isimleri, logolar ve bayraklar ilgili kulüplere/federasyonlara aittir ve yalnızca tanımlama/bilgilendirme amacıyla, adil kullanım kapsamında gösterilir. 321guess bu kulüplerle bağlantılı ya da onlar tarafından onaylanmış değildir."
+      },
+      {
+        "heading": "Sorumluluk reddi",
+        "body": "321guess \"olduğu gibi\" sunulur. Verilerin (oyuncu-kulüp geçmişi gibi) her zaman %100 doğru veya güncel olacağını garanti etmeyiz. Hizmetin kesintisiz çalışacağını taahhüt etmeyiz."
+      },
+      {
+        "heading": "Sorumluluğun sınırlandırılması",
+        "body": "Yasaların izin verdiği ölçüde, 321guess'in kullanımından doğabilecek dolaylı ya da arızi zararlardan sorumlu tutulamayız."
+      },
+      {
+        "heading": "Değişiklikler",
+        "body": "Bu şartları zaman zaman güncelleyebiliriz. Önemli değişikliklerde bu sayfadaki \"son güncelleme\" tarihini değiştiririz."
+      },
+      {
+        "heading": "Geçerli hukuk",
+        "body": "Bu şartlar Türkiye Cumhuriyeti yasalarına tabidir."
+      },
+      {
+        "heading": "İletişim",
+        "body": "Bu şartlarla ilgili sorularını munurcoskun@gmail.com adresine gönderebilirsin."
       }
     ]
   }
