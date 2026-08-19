@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /_sitemap
+
+Sitemap: https://www.321guess.com/sitemap.xml
