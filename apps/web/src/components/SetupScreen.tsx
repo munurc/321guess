@@ -8,7 +8,9 @@ import { loadDataset } from "../lib/dataset";
 import { useGameSettings } from "../lib/game-settings-context";
 import { hapticTap } from "../lib/haptics";
 import { localeUpper } from "../lib/locale-upper";
+import { localizedPath } from "../lib/localized-path";
 import { ArenaPressable } from "./ArenaPressable";
+import { HomeHeading, HomeSeoSections } from "./HomeSeoContent";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ScrollFadeBottom } from "./ScrollFadeBottom";
 import { ThemeToggle } from "./ThemeToggle";
@@ -96,7 +98,7 @@ export function SetupScreen() {
       includedLeagues: [...includedLeagues],
       excludedCountries: [...excludedCountries],
     });
-    router.push("/play");
+    router.push(localizedPath("/play", locale) as never);
   }
 
   if (Platform.OS !== "web") {
@@ -267,9 +269,10 @@ export function SetupScreen() {
   }
 
   return (
-    <ScrollView className="flex-1 bg-paper px-4 py-8">
+    <View className="flex-1 bg-paper">
+      <ScrollView className="flex-1 px-4 pt-8" contentContainerClassName="pb-8">
       <View className="mb-8 flex-row items-center justify-between">
-        <Text className="text-3xl font-black">
+        <Text className="text-3xl font-black text-ink">
           <Text className="text-accent">3·2·1</Text>guess
         </Text>
         <View className="flex-row items-center gap-2">
@@ -277,6 +280,8 @@ export function SetupScreen() {
           <LanguageSwitcher />
         </View>
       </View>
+
+      <HomeHeading />
 
       {!dataset ? (
         <View className="items-center rounded-lg border border-rule bg-ink/5 p-8">
@@ -290,7 +295,7 @@ export function SetupScreen() {
             </Text>
             <View className="gap-3">
               <Pressable
-                onPress={() => router.push("/online")}
+                onPress={() => router.push(localizedPath("/online", locale) as never)}
                 className="flex-row items-center gap-4 rounded-xl bg-accent p-4"
               >
                 <Text className="text-2xl">🏆</Text>
@@ -318,12 +323,12 @@ export function SetupScreen() {
                 icon="🚩"
               />
               <Pressable
-                onPress={() => router.push("/manual")}
+                onPress={() => router.push(localizedPath("/manual", locale) as never)}
                 className="flex-row items-center gap-4 rounded-xl border-2 border-dashed border-ink/20 p-4"
               >
                 <Text className="text-2xl">🔍</Text>
                 <View className="flex-1">
-                  <Text className="font-semibold">{tManual("title")}</Text>
+                  <Text className="font-semibold text-ink">{tManual("title")}</Text>
                   <Text className="mt-1 text-xs text-ink-mute">{tManual("description")}</Text>
                 </View>
               </Pressable>
@@ -343,7 +348,7 @@ export function SetupScreen() {
                     difficulty === d ? "border-accent bg-accent/10" : "border-rule bg-ink/5"
                   }`}
                 >
-                  <Text className="text-sm font-semibold">{t(`difficulty.${d}.title`)}</Text>
+                  <Text className="text-sm font-semibold text-ink">{t(`difficulty.${d}.title`)}</Text>
                   <Text className="mt-1 text-center text-[10px] text-ink-mute">
                     {t(`difficulty.${d}.description`)}
                   </Text>
@@ -397,7 +402,13 @@ export function SetupScreen() {
               </View>
             </View>
           )}
+        </View>
+      )}
 
+      <HomeSeoSections />
+      </ScrollView>
+      {dataset && (
+        <View className="border-t border-rule bg-paper px-4 pb-6 pt-4">
           <Pressable
             onPress={start}
             disabled={!canStart}
@@ -409,7 +420,7 @@ export function SetupScreen() {
           </Pressable>
         </View>
       )}
-    </ScrollView>
+    </View>
   );
 }
 
@@ -490,7 +501,7 @@ function ModeCard({
     >
       <Text className="text-2xl">{icon}</Text>
       <View className="flex-1">
-        <Text className="font-semibold">{title}</Text>
+        <Text className="font-semibold text-ink">{title}</Text>
         <Text className="mt-1 text-xs text-ink-mute">{description}</Text>
       </View>
     </Pressable>
