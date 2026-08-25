@@ -73,10 +73,16 @@ Given the multi-category roadmap, prefer a **category-agnostic** concept: **E ("
 
 ## Decision
 
-_Not yet chosen — fill in once decided:_
+**Chosen concept:** "321 Ring" — a countdown ring (mint + amber arcs, matching segments) with "321" as a single horizontal wordmark inside it, glossy/3D-shaded style. Approved by the user 2026-08-25. Final master: `chosen-final.png` in this folder (also `apps/web/assets/images/icon.png`).
 
-- **Chosen concept:** —
-- **Any requested tweaks:** —
+This superseded concepts A–G above — none of those were carried forward. The user provided the source art directly (generated externally, not by Claude) as a transparent PNG; earlier in the same session a stacked-vertical "3 / 2 / 1" arrangement of the same ring concept was tried first and rejected for legibility (see below), before the user supplied the horizontal version that was approved.
+
+**Why horizontal over stacked:** the numerals need to read as "321" at a 32px favicon size. A vertical stack (3 above 2 above 1) loses individual digit legibility once the whole mark is shrunk that small — three digits' worth of height gets compressed into 32px, blurring together. Laid out horizontally, "321" reads clearly even at 32px because it uses the canvas's full width instead of dividing height three ways.
+
+**Implementation notes for next time a master needs regenerating:**
+- Source was landscape (1536×1024), transparent background, hard-edged alpha (not a soft gradient — confirmed by sampling the alpha channel directly, despite the source *looking* like it had a soft radial glow behind it in preview; that "glow" was baked into the opaque glyph's own coloring, not a transparency gradient, so a direct composite onto `arena-bg` came out clean with no halo artifact).
+- Generation script (`sharp`-based, composites the source onto `arena-bg` for the opaque master, and separately onto nothing for the transparent Android foreground layer) produced: `icon.png` (1024×1024 opaque), `android-icon-foreground.png` (transparent, content confined to ~64% safe zone), `android-icon-background.png` (flat `arena-bg` fill), `android-icon-monochrome.png` (white silhouette via `sharp().tint()`), `splash-icon.png`, the full web favicon set, and `og-image.png` (mark + "guess" wordmark + tagline, composed via SVG).
+- `apps/web/assets/expo.icon/` (the iOS 18+ Icon Composer bundle) was **not** rebuilt — that format needs Xcode's Icon Composer app, which isn't scriptable. `app.json`'s `ios.icon` was pointed at the plain `icon.png` instead, dropping that bundle entirely rather than shipping it stale/mismatched.
 
 ## Implementation checklist (once a concept is chosen)
 
