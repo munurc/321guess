@@ -10,7 +10,8 @@ export async function OPTIONS() {
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const token = new URL(req.url).searchParams.get("token");
+  const auth = req.headers.get("authorization");
+  const token = auth?.startsWith("Bearer ") ? auth.slice(7) : null;
   if (!token || !UUID_RE.test(token)) {
     return NextResponse.json({ error: "invalid_body" }, { status: 400 });
   }

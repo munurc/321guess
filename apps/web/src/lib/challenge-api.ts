@@ -34,9 +34,11 @@ async function post<T>(path: string, body: unknown): Promise<ApiResult<T>> {
   }
 }
 
-async function get<T>(path: string): Promise<ApiResult<T>> {
+async function get<T>(path: string, token?: string): Promise<ApiResult<T>> {
   try {
-    const res = await fetch(`${apiBaseUrl()}${path}`);
+    const res = await fetch(`${apiBaseUrl()}${path}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+    });
     if (res.status === 401) return { status: "expired" };
     if (!res.ok) return { status: "failed" };
     return { status: "ok", data: (await res.json()) as T };
@@ -67,7 +69,7 @@ export function sendChallenge(
 }
 
 export function fetchChallenge(token: string, challengeId: string): Promise<ApiResult<ChallengeRow>> {
-  return get(`/api/challenges/${challengeId}?token=${token}`);
+  return get(`/api/challenges/${challengeId}`, token);
 }
 
 export function matchRandomChallenge(token: string): Promise<ApiResult<ChallengeRow & { role: "creator" | "opponent" }>> {
@@ -106,7 +108,7 @@ export type RivalryChallenge = ChallengeRow & { rivalry: { playerAWins: number; 
 export type ChallengeList = { incoming: ChallengeRow[]; outgoing: ChallengeRow[]; completed: RivalryChallenge[] };
 
 export function listChallenges(token: string): Promise<ApiResult<ChallengeList>> {
-  return get(`/api/challenges/list?token=${token}`);
+  return get(`/api/challenges/list`, token);
 }
 
 export async function searchUsernames(query: string): Promise<string[]> {
