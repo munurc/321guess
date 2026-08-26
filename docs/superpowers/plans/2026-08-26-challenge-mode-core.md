@@ -947,9 +947,16 @@ export async function listChallengesForPlayer(playerToken: string) {
         .eq("player_a_token", playerAToken)
         .eq("player_b_token", playerBToken)
         .maybeSingle();
-      const rivalry: RivalryTotals = rivalryRow
+      const totals: RivalryTotals = rivalryRow
         ? { playerAWins: rivalryRow.player_a_wins, playerBWins: rivalryRow.player_b_wins, ties: rivalryRow.ties }
         : { playerAWins: 0, playerBWins: 0, ties: 0 };
+      // canonicalPair sorts by token value, unrelated to "me" vs "opponent" —
+      // reorient to the requesting player's perspective before returning,
+      // so the client never has to know which side of the pair it's on.
+      const rivalry =
+        playerToken === playerAToken
+          ? { myWins: totals.playerAWins, opponentWins: totals.playerBWins, ties: totals.ties }
+          : { myWins: totals.playerBWins, opponentWins: totals.playerAWins, ties: totals.ties };
       const { data: opponentPlayer } = await supabase
         .from("online_players")
         .select("username")
@@ -1861,7 +1868,7 @@ export function finishChallenge(token: string, challengeId: string): Promise<Api
   return post(`/api/challenges/${challengeId}/finish`, { token });
 }
 
-export type RivalryChallenge = ChallengeRow & { rivalry: { playerAWins: number; playerBWins: number; ties: number }; opponentUsername: string };
+export type RivalryChallenge = ChallengeRow & { rivalry: { myWins: number; opponentWins: number; ties: number }; opponentUsername: string };
 export type ChallengeList = { incoming: ChallengeRow[]; outgoing: ChallengeRow[]; completed: RivalryChallenge[] };
 
 export function listChallenges(token: string): Promise<ApiResult<ChallengeList>> {
@@ -2849,7 +2856,7 @@ export function ChallengeScreen() {
                 <View key={c.id} className="flex-row items-center justify-between rounded-2xl bg-arena-bg-soft p-4">
                   <Text className="text-base font-semibold text-arena-text">{c.opponentUsername}</Text>
                   <Text className="font-bold text-arena-accent-2">
-                    {t("rivalryScore", { wins: c.rivalry.playerAWins, losses: c.rivalry.playerBWins })}
+                    {t("rivalryScore", { wins: c.rivalry.myWins, losses: c.rivalry.opponentWins })}
                   </Text>
                 </View>
               ))
