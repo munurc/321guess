@@ -35,3 +35,10 @@ export async function deletePushTokens(deviceTokens: string[]): Promise<void> {
   const { error } = await supabase.from("push_tokens").delete().in("device_token", deviceTokens);
   if (error) throw error;
 }
+
+export async function getPushTokensForPlayer(playerToken: string): Promise<string[]> {
+  const supabase = getSupabaseServerClient();
+  const { data, error } = await supabase.from("push_tokens").select("device_token").eq("player_token", playerToken);
+  if (error) throw error;
+  return (data ?? []).map((row) => row.device_token);
+}
