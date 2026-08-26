@@ -57,6 +57,11 @@
   },
   "setup": {
     "title": "321guess",
+    "modeGroups": {
+      "daily": { "title": "Daily Challenge", "subtitle": "Race the world" },
+      "challenge": { "title": "Challenge a Friend", "subtitle": "Invite them, beat your score" },
+      "offline": { "title": "Play on One Device", "subtitle": "Same screen as your friend" }
+    },
     "mode": {
       "heading": "Game mode",
       "clubClub": {

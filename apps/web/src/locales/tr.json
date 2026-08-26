@@ -57,6 +57,11 @@
   },
   "setup": {
     "title": "321guess",
+    "modeGroups": {
+      "daily": { "title": "Günlük Meydan Okuma", "subtitle": "Dünyayla yarış" },
+      "challenge": { "title": "Arkadaşına Meydan Oku", "subtitle": "Davet et, skorunu geç" },
+      "offline": { "title": "Tek Cihazdan Oyna", "subtitle": "Arkadaşınla aynı ekranda" }
+    },
     "mode": {
       "heading": "Oyun modu",
       "clubClub": {
