@@ -417,10 +417,6 @@ export function OnlineScreen() {
                   </Text>
                 </View>
 
-                <Text className="self-end rounded-full bg-arena-accent/20 px-4 py-1.5 text-base font-bold text-arena-accent">
-                  {formatTime(timeLeftMs)}
-                </Text>
-
                 <RoundPlayView
                   question={currentQuestion}
                   foundPlayers={foundPlayers}
@@ -433,6 +429,7 @@ export function OnlineScreen() {
                   possibleCountLabel={t("possibleCount", { count: currentQuestion.totalPossible })}
                   guessPlaceholder={t("guessPlaceholder")}
                   guessEmptyText={t("guessEmpty")}
+                  timerLabel={formatTime(timeLeftMs)}
                 />
 
                 <ArenaPressable

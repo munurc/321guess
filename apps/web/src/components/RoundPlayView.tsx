@@ -133,6 +133,7 @@ export function RoundPlayView({
   possibleCountLabel,
   guessPlaceholder,
   guessEmptyText,
+  timerLabel,
 }: {
   question: PlayQuestion;
   foundPlayers: Player[];
@@ -145,10 +146,19 @@ export function RoundPlayView({
   possibleCountLabel: string;
   guessPlaceholder: string;
   guessEmptyText: string;
+  /** Daily Challenge's countdown text, rendered inside the question card
+   * top-right exactly as before this component was extracted. Omitted by
+   * Challenge Mode, which has no time limit. */
+  timerLabel?: string;
 }) {
   return (
     <View className="gap-4">
-      <View className="rounded-2xl bg-arena-bg-soft px-4 pb-5 pt-5">
+      <View className="rounded-2xl bg-arena-bg-soft px-4 pb-5 pt-3">
+        {timerLabel && (
+          <Text className="mb-3 self-end rounded-full bg-arena-accent/20 px-4 py-1.5 text-base font-bold text-arena-accent">
+            {timerLabel}
+          </Text>
+        )}
         <CelebrationPulse trigger={celebrationTick}>
           <View className="flex-row items-center justify-center gap-4">
             <LogoTile size="sm" src={question.clubA.logoUrl} alt={question.clubA.name} caption={question.clubA.name} color={question.clubA.color} />
