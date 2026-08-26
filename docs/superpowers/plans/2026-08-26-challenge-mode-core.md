@@ -3265,7 +3265,7 @@ git commit -m "Add Challenge Mode creation flow (settings, play, send)"
 
 **Interfaces:**
 - Consumes: `matchRandomChallenge`, `fetchChallenge` from `../lib/challenge-api` (Task 16).
-- Produces: extends `Screen` with `{ kind: "opponent-playing"; challenge: ChallengeRow; role: "creator" | "opponent" } | { kind: "result"; challenge: ChallengeRow; result: FinishChallengeResult }`; wires the hub's "Rastgele Rakip" button and each incoming-challenge row to actually open/play a challenge; adds a **Rovanş** button to the result screen.
+- Produces: extends `Screen` with `{ kind: "opponent-playing"; challenge: ChallengeRow } | { kind: "result"; challenge: ChallengeRow; myResult: FinishChallengeResult; opponentUsername: string | null }` (field names as actually used in Step 2's code below — `myResult`/`opponentUsername`, not a bare `result`); wires the hub's "Rastgele Rakip" button and each incoming-challenge row to actually open/play a challenge; adds a **Rovanş** button to the result screen.
 
 - [ ] **Step 1: Add i18n keys**
 
