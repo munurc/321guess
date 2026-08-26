@@ -33,22 +33,16 @@ import {
 } from "../lib/online-api";
 import { shareOrCopy } from "../lib/share";
 import { ArenaPressable } from "./ArenaPressable";
-import { CelebrationPulse } from "./CelebrationPulse";
 import { Countdown } from "./Countdown";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { LogoTile } from "./LogoTile";
+import { GuessInput, RoundPlayView } from "./RoundPlayView";
 import { ScrollFadeBottom } from "./ScrollFadeBottom";
 import { ThemeToggle } from "./ThemeToggle";
 
 const ROUND_DURATION_MS = 1 * 60 * 1000;
 const LAUNCH_DATE = "2026-08-05";
 
-function stripDiacritics(s: string): string {
-  return s.normalize("NFD").replace(/[̀-ͯ]/g, "");
-}
-function normalize(s: string): string {
-  return stripDiacritics(s).toLowerCase();
-}
 function dayNumber(roundDate: string): number {
   const start = new Date(`${LAUNCH_DATE}T00:00:00Z`).getTime();
   const current = new Date(`${roundDate}T00:00:00Z`).getTime();
@@ -423,83 +417,23 @@ export function OnlineScreen() {
                   </Text>
                 </View>
 
-                <View className="rounded-2xl bg-arena-bg-soft px-4 pb-5 pt-3">
-                  <Text className="mb-3 self-end rounded-full bg-arena-accent/20 px-4 py-1.5 text-base font-bold text-arena-accent">
-                    {formatTime(timeLeftMs)}
-                  </Text>
-                  <CelebrationPulse trigger={celebrationTick}>
-                    <View className="flex-row items-center justify-center gap-4">
-                      <LogoTile
-                        size="sm"
-                        src={currentQuestion.clubA.logoUrl}
-                        alt={currentQuestion.clubA.name}
-                        caption={currentQuestion.clubA.name}
-                        color={currentQuestion.clubA.color}
-                      />
-                      <Text className="text-sm font-black text-arena-text-soft">{t("vs")}</Text>
-                      <LogoTile
-                        size="sm"
-                        src={currentQuestion.clubB.logoUrl}
-                        alt={currentQuestion.clubB.name}
-                        caption={currentQuestion.clubB.name}
-                        color={currentQuestion.clubB.color}
-                      />
-                    </View>
-                  </CelebrationPulse>
+                <Text className="self-end rounded-full bg-arena-accent/20 px-4 py-1.5 text-base font-bold text-arena-accent">
+                  {formatTime(timeLeftMs)}
+                </Text>
 
-                  <View className="mt-4 items-center gap-2">
-                    <Text className="text-xs text-arena-text-soft">
-                      {t("possibleCount", { count: currentQuestion.totalPossible })}
-                    </Text>
-                    <View className="flex-row gap-2">
-                      {Array.from({ length: currentQuestion.totalPossible }).map((_, i) => (
-                        <View
-                          key={i}
-                          className={`h-3 w-3 rounded-full border border-arena-accent-2 ${
-                            i < foundPlayers.length ? "bg-arena-accent-2" : ""
-                          }`}
-                        />
-                      ))}
-                    </View>
-                  </View>
-                </View>
-
-                <GuessInput
+                <RoundPlayView
+                  question={currentQuestion}
+                  foundPlayers={foundPlayers}
+                  wrongPlayers={wrongPlayers}
                   players={dataset.players}
-                  excludedIds={new Set([...foundPlayers, ...wrongPlayers].map((p) => p.id))}
+                  celebrationTick={celebrationTick}
+                  guessFeedback={guessFeedback}
                   onGuess={submitGuess}
-                  placeholder={t("guessPlaceholder")}
-                  emptyText={t("guessEmpty")}
+                  vsLabel={t("vs")}
+                  possibleCountLabel={t("possibleCount", { count: currentQuestion.totalPossible })}
+                  guessPlaceholder={t("guessPlaceholder")}
+                  guessEmptyText={t("guessEmpty")}
                 />
-
-                {guessFeedback && (
-                  <View
-                    className={`flex-row items-center gap-2 rounded-lg px-4 py-2.5 ${
-                      guessFeedback.status === "correct" ? "bg-arena-accent-2/20" : "bg-red-500/15"
-                    }`}
-                  >
-                    <Text
-                      className={`text-base ${guessFeedback.status === "correct" ? "text-arena-accent-2" : "text-red-300"}`}
-                    >
-                      {guessFeedback.status === "correct" ? "✓" : "✗"} {guessFeedback.label}
-                    </Text>
-                  </View>
-                )}
-
-                {(foundPlayers.length > 0 || wrongPlayers.length > 0) && (
-                  <View className="flex-row flex-wrap gap-2">
-                    {foundPlayers.map((p) => (
-                      <View key={p.id} className="rounded-full bg-arena-accent-2/20 px-4 py-2">
-                        <Text className="text-sm font-medium text-arena-text">{p.name}</Text>
-                      </View>
-                    ))}
-                    {wrongPlayers.map((p) => (
-                      <View key={p.id} className="rounded-full bg-red-500/15 px-4 py-2">
-                        <Text className="text-sm font-medium text-red-300">✕ {p.name}</Text>
-                      </View>
-                    ))}
-                  </View>
-                )}
 
                 <ArenaPressable
                   onPress={() => void goToNextQuestion()}
@@ -784,104 +718,6 @@ function LoadingBox({ text }: { text: string }) {
   return (
     <View className={`items-center p-8 ${isNative ? "rounded-2xl bg-arena-bg-soft" : "rounded-lg border border-rule bg-ink/5"}`}>
       <Text className={isNative ? "text-lg text-arena-text-soft" : "text-ink-mute"}>{text}</Text>
-    </View>
-  );
-}
-
-function GuessInput({
-  players,
-  excludedIds,
-  onGuess,
-  placeholder,
-  emptyText,
-}: {
-  players: Player[];
-  excludedIds: Set<string>;
-  onGuess: (player: Player) => void;
-  placeholder: string;
-  emptyText: string;
-}) {
-  const [query, setQuery] = useState("");
-  const [open, setOpen] = useState(false);
-  const isNative = Platform.OS !== "web";
-
-  const filtered = useMemo(() => {
-    const q = normalize(query.trim());
-    if (q.length < 2) return [];
-    return players.filter((p) => !excludedIds.has(p.id) && normalize(p.name).includes(q)).slice(0, 8);
-  }, [query, players, excludedIds]);
-
-  function pick(player: Player) {
-    onGuess(player);
-    setQuery("");
-    setOpen(false);
-  }
-
-  if (isNative) {
-    return (
-      <View className="relative">
-        <TextInput
-          value={query}
-          onChangeText={(v) => {
-            setQuery(v);
-            setOpen(true);
-          }}
-          onFocus={() => setOpen(true)}
-          placeholder={placeholder}
-          placeholderTextColor="#8FE8C4"
-          className="rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-4 py-4 text-lg text-arena-text"
-        />
-        {open && query.trim().length >= 2 && (
-          <View className="absolute top-[70px] z-20 max-h-72 w-full rounded-2xl border border-arena-accent-2 bg-arena-bg-soft">
-            {filtered.length === 0 ? (
-              <Text className="px-4 py-3 text-base text-arena-text-soft">{emptyText}</Text>
-            ) : (
-              <ScrollView>
-                {filtered.map((p) => (
-                  <Pressable key={p.id} onPress={() => pick(p)} className="px-4 py-3">
-                    <Text className="text-lg text-arena-text">{p.name}</Text>
-                  </Pressable>
-                ))}
-              </ScrollView>
-            )}
-          </View>
-        )}
-      </View>
-    );
-  }
-
-  return (
-    // See the matching comment in ManualScreen's SearchBox: react-native-web
-    // gives every View an implicit z-index:0 stacking context, so the
-    // dropdown's z-20 can't rise above sibling elements (feedback chip,
-    // found/wrong chips, Pas/Bitir buttons) unless this wrapper itself is
-    // raised while the dropdown is open.
-    <View className={`relative ${open && query.trim().length >= 2 ? "z-30" : ""}`}>
-      <TextInput
-        value={query}
-        onChangeText={(v) => {
-          setQuery(v);
-          setOpen(true);
-        }}
-        onFocus={() => setOpen(true)}
-        placeholder={placeholder}
-        className="rounded-xl border border-rule bg-paper-2 px-4 py-3 text-base text-ink"
-      />
-      {open && query.trim().length >= 2 && (
-        <View className="absolute top-16 z-20 max-h-72 w-full rounded-xl border border-rule bg-paper">
-          {filtered.length === 0 ? (
-            <Text className="px-4 py-3 text-sm text-ink-mute">{emptyText}</Text>
-          ) : (
-            <ScrollView>
-              {filtered.map((p) => (
-                <Pressable key={p.id} onPress={() => pick(p)} className="px-4 py-2">
-                  <Text className="text-sm text-ink">{p.name}</Text>
-                </Pressable>
-              ))}
-            </ScrollView>
-          )}
-        </View>
-      )}
     </View>
   );
 }
