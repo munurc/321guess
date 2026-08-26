@@ -480,3 +480,14 @@ export async function searchPlayers(query: string, limit: number): Promise<{ use
   if (error) throw error;
   return data ?? [];
 }
+
+export async function getPlayerTokenByUsername(username: string): Promise<string | null> {
+  const supabase = getSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("online_players")
+    .select("player_token")
+    .eq("username_lower", username.toLowerCase())
+    .maybeSingle();
+  if (error) throw error;
+  return data?.player_token ?? null;
+}
