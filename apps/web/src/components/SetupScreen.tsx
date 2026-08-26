@@ -177,30 +177,6 @@ export function SetupScreen() {
                     </Pressable>
                     <View className="gap-4">
                       <ArenaPressable
-                        onPress={() => setMode("clubClub")}
-                        className={`flex-row items-center gap-4 rounded-2xl border-[3px] p-6 ${
-                          mode === "clubClub" ? "border-arena-accent-2 bg-arena-accent-2/15" : "border-arena-bg-soft bg-arena-bg-soft"
-                        }`}
-                      >
-                        <Text className="text-4xl">🛡️</Text>
-                        <View className="flex-1">
-                          <Text className="text-lg font-bold text-arena-text">{t("mode.clubClub.title")}</Text>
-                          <Text className="mt-1 text-base text-arena-text-soft">{t("mode.clubClub.description")}</Text>
-                        </View>
-                      </ArenaPressable>
-                      <ArenaPressable
-                        onPress={() => setMode("countryClub")}
-                        className={`flex-row items-center gap-4 rounded-2xl border-[3px] p-6 ${
-                          mode === "countryClub" ? "border-arena-accent-2 bg-arena-accent-2/15" : "border-arena-bg-soft bg-arena-bg-soft"
-                        }`}
-                      >
-                        <Text className="text-4xl">🚩</Text>
-                        <View className="flex-1">
-                          <Text className="text-lg font-bold text-arena-text">{t("mode.countryClub.title")}</Text>
-                          <Text className="mt-1 text-base text-arena-text-soft">{t("mode.countryClub.description")}</Text>
-                        </View>
-                      </ArenaPressable>
-                      <ArenaPressable
                         onPress={() => router.push("/manual")}
                         className="flex-row items-center gap-4 rounded-2xl border-[3px] border-dashed border-arena-bg-soft p-6"
                       >
