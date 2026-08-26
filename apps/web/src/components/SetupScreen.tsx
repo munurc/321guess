@@ -6,7 +6,6 @@ import { useLocale, useTranslations } from "use-intl";
 import type { Dataset, Difficulty, GameMode } from "@321guess/core";
 import { loadDataset } from "../lib/dataset";
 import { useGameSettings } from "../lib/game-settings-context";
-import { hapticTap } from "../lib/haptics";
 import { localeUpper } from "../lib/locale-upper";
 import { localizedPath } from "../lib/localized-path";
 import { ArenaChip } from "./ArenaChip";
