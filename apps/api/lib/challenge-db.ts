@@ -435,9 +435,16 @@ export async function listChallengesForPlayer(playerToken: string) {
         .eq("player_a_token", playerAToken)
         .eq("player_b_token", playerBToken)
         .maybeSingle();
-      const rivalry: RivalryTotals = rivalryRow
+      const totals: RivalryTotals = rivalryRow
         ? { playerAWins: rivalryRow.player_a_wins, playerBWins: rivalryRow.player_b_wins, ties: rivalryRow.ties }
         : { playerAWins: 0, playerBWins: 0, ties: 0 };
+      // canonicalPair sorts by token value, unrelated to "me" vs "opponent" —
+      // reorient to the requesting player's perspective before returning,
+      // so the client never has to know which side of the pair it's on.
+      const rivalry =
+        playerToken === playerAToken
+          ? { myWins: totals.playerAWins, opponentWins: totals.playerBWins, ties: totals.ties }
+          : { myWins: totals.playerBWins, opponentWins: totals.playerAWins, ties: totals.ties };
       const { data: opponentPlayer } = await supabase
         .from("online_players")
         .select("username")

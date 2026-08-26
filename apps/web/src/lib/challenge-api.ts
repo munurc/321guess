@@ -104,7 +104,7 @@ export function finishChallenge(token: string, challengeId: string): Promise<Api
   return post(`/api/challenges/${challengeId}/finish`, { token });
 }
 
-export type RivalryChallenge = ChallengeRow & { rivalry: { playerAWins: number; playerBWins: number; ties: number }; opponentUsername: string };
+export type RivalryChallenge = ChallengeRow & { rivalry: { myWins: number; opponentWins: number; ties: number }; opponentUsername: string };
 export type ChallengeList = { incoming: ChallengeRow[]; outgoing: ChallengeRow[]; completed: RivalryChallenge[] };
 
 export function listChallenges(token: string): Promise<ApiResult<ChallengeList>> {
