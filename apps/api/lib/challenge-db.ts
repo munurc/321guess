@@ -173,6 +173,7 @@ export async function matchOrCreateRandomChallenge(
   requesterToken: string,
 ): Promise<{ challenge: ChallengeRow; role: "creator" | "opponent" }> {
   const supabase = getSupabaseServerClient();
+  const now = new Date();
   const { data: candidates, error } = await supabase
     .from("challenges")
     .select("*")
@@ -180,11 +181,10 @@ export async function matchOrCreateRandomChallenge(
     .eq("status", "waiting")
     .is("opponent_token", null)
     .neq("creator_token", requesterToken)
+    .gt("expires_at", now.toISOString())
     .order("created_at", { ascending: true })
     .limit(5);
   if (error) throw error;
-
-  const now = new Date();
   for (const candidate of candidates ?? []) {
     const matchable = isMatchableRandomChallenge(
       {
@@ -329,19 +329,20 @@ export async function finishChallenge(
     return { correctCount, totalPossible, completed: false, opponentToken: otherToken, opponentResult: null };
   }
 
-  // Both sides have now finished — this call is the second one. Mark
-  // completed and update the rivalry (idempotent via the challenges.status
-  // check: a retried finishRound call after completion just returns the
-  // same result without re-applying the rivalry update).
-  const { data: alreadyCompleted } = await supabase
+  // Both sides have now finished — this call MIGHT be the second one, but
+  // only proceed with the rivalry update if THIS call is the one that wins
+  // the race to transition status. A plain SELECT-then-UPDATE here would
+  // let two near-simultaneous finishChallenge calls both see "not
+  // completed" and both apply the rivalry update, double-counting it.
+  const { data: completedRows, error: completeError } = await supabase
     .from("challenges")
-    .select("status")
+    .update({ status: "completed" })
     .eq("id", challengeId)
-    .single();
+    .neq("status", "completed")
+    .select();
+  if (completeError) throw completeError;
 
-  if (alreadyCompleted?.status !== "completed") {
-    await supabase.from("challenges").update({ status: "completed" }).eq("id", challengeId);
-
+  if (completedRows && completedRows.length > 0) {
     const winnerToken =
       correctCount === otherScore.correct_count
         ? null
