@@ -25,13 +25,26 @@ export async function verifyAccessToken(accessToken: string): Promise<VerifiedUs
   return { id: data.user.id };
 }
 
-export async function linkAccount(playerToken: string, authUserId: string): Promise<void> {
+/** Postgres's unique_violation code — thrown by the partial unique index on
+ * auth_user_id (see challenges.sql) when this Supabase account is already
+ * linked to a DIFFERENT player_token. Without that index and this check,
+ * two local identities could both end up pointing at the same auth_user_id,
+ * and getPlayerByAuthUserId's .maybeSingle() would then throw on every
+ * future recovery attempt for that account — permanently, since nothing
+ * about that state fixes itself. */
+const UNIQUE_VIOLATION = "23505";
+
+export async function linkAccount(playerToken: string, authUserId: string): Promise<"ok" | "already_linked"> {
   const supabase = getSupabaseServerClient();
   const { error } = await supabase
     .from("online_players")
     .update({ auth_user_id: authUserId })
     .eq("player_token", playerToken);
-  if (error) throw error;
+  if (error) {
+    if (error.code === UNIQUE_VIOLATION) return "already_linked";
+    throw error;
+  }
+  return "ok";
 }
 
 export async function getPlayerByAuthUserId(authUserId: string): Promise<{ playerToken: string; username: string } | null> {

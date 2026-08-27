@@ -30,7 +30,10 @@ export async function POST(req: Request) {
     const verified = await verifyAccessToken(accessToken);
     if (!verified) return NextResponse.json({ error: "invalid_access_token" }, { status: 401 });
 
-    await linkAccount(playerToken, verified.id);
+    const result = await linkAccount(playerToken, verified.id);
+    if (result === "already_linked") {
+      return NextResponse.json({ error: "already_linked" }, { status: 409 });
+    }
     return NextResponse.json({ ok: true });
   } catch (e) {
     return NextResponse.json({ error: "server_error", message: (e as Error).message }, { status: 500 });

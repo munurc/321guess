@@ -74,6 +74,14 @@ create table if not exists rivalries (
 
 alter table online_players add column if not exists auth_user_id uuid references auth.users(id);
 
+-- One Supabase Auth account can link to at most one player_token. Without
+-- this, two local identities could both end up linked to the same account,
+-- and looking a player up by auth_user_id (account recovery) would then
+-- match more than one row every time, permanently.
+create unique index if not exists online_players_auth_user_id_idx
+  on online_players (auth_user_id)
+  where auth_user_id is not null;
+
 alter table challenges enable row level security;
 alter table challenge_questions enable row level security;
 alter table challenge_guesses enable row level security;
