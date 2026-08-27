@@ -538,10 +538,14 @@ export async function listChallengesForPlayer(playerToken: string) {
  * column), same case-insensitivity the uniqueness constraint already uses. */
 export async function searchPlayers(query: string, limit: number): Promise<{ username: string }[]> {
   const supabase = getSupabaseServerClient();
-  // Escape LIKE metacharacters before interpolating — otherwise a query
-  // containing `%` or `_` is a wildcard, so e.g. "%" alone would enumerate
-  // every registered username instead of prefix-matching a literal one.
-  const escaped = query.replace(/[\\%_]/g, (c) => `\\${c}`);
+  // Strip anything that isn't a letter/digit/underscore before interpolating
+  // — PostgREST's ilike also treats `*` as an alias for `%` (in addition to
+  // literal `%`/`_`/`\`), so a plain backslash-escape of those three still
+  // leaves `*` as a wildcard. Usernames only ever contain letters, digits,
+  // and underscore (packages/core's registration regex), so dropping every
+  // other character can't reject a legitimate prefix — only escape `_`,
+  // since it's the one metacharacter that's also a valid username character.
+  const escaped = query.replace(/[^\p{L}\p{N}_]/gu, "").replace(/_/g, "\\_");
   const { data, error } = await supabase
     .from("online_players")
     .select("username")
