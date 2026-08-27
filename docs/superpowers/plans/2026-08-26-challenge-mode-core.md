@@ -2906,6 +2906,7 @@ Add to `apps/web/src/locales/tr.json`'s `"challenge"` namespace:
 ```json
 "newSettingsHeading": "Ayarları Seç",
 "startPlaying": "Oyna",
+"vs": "vs",
 "sendHeading": "Sonucun Belirlendi!",
 "sendScoreLabel": "{correct} / {total} doğru",
 "searchPlaceholder": "Kullanıcı adı ara…",
@@ -2922,6 +2923,7 @@ Mirror to `en.json`:
 ```json
 "newSettingsHeading": "Choose Settings",
 "startPlaying": "Play",
+"vs": "vs",
 "sendHeading": "Your Score Is In!",
 "sendScoreLabel": "{correct} / {total} correct",
 "searchPlaceholder": "Search username…",
@@ -3139,7 +3141,7 @@ if (screen.kind === "new-playing") {
           celebrationTick={celebrationTick}
           guessFeedback={guessFeedback}
           onGuess={(p) => void submitPlayGuess(challenge, p)}
-          vsLabel={t("vs" as never)}
+          vsLabel={t("vs")}
           possibleCountLabel=""
           guessPlaceholder={t("searchPlaceholder")}
           guessEmptyText={t("searchEmpty")}
