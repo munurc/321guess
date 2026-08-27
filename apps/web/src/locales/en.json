@@ -204,6 +204,22 @@
       }
     }
   },
+  "challenge": {
+    "back": "Home",
+    "title": "Challenge a Friend",
+    "loading": "Loading…",
+    "newChallenge": "+ New Challenge",
+    "randomOpponent": "Random Opponent",
+    "incomingHeading": "Incoming",
+    "outgoingHeading": "Waiting",
+    "rivalriesHeading": "Head-to-Head History",
+    "emptyIncoming": "No pending invites.",
+    "emptyOutgoing": "No challenges waiting on a reply.",
+    "emptyRivalries": "You haven't finished a challenge yet.",
+    "waitingForOpponent": "Waiting for opponent",
+    "playNow": "Play Now",
+    "rivalryScore": "{wins}-{losses}"
+  },
   "privacy": {
     "title": "Privacy Policy",
     "back": "Home",
