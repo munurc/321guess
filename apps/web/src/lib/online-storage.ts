@@ -30,10 +30,33 @@ function progressKey(roundDate: string) {
 export async function loadIdentity(): Promise<Identity | null> {
   try {
     const raw = await AsyncStorage.getItem(IDENTITY_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (typeof parsed?.token === "string" && typeof parsed?.username === "string") return parsed;
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (typeof parsed?.token === "string" && typeof parsed?.username === "string") return parsed;
+    }
+  } catch {
     return null;
+  }
+
+  // No local identity yet — if this device has an active Supabase Auth
+  // session from a previously-linked account (see SettingsScreen's
+  // "Hesabını Bağla"), recover that identity instead of the caller
+  // falling through to registering a brand-new one. A network/API
+  // failure here just means "no recovery today" — never throws, matching
+  // this function's existing all-paths-return-or-null contract.
+  try {
+    const { supabase } = await import("./supabase-client");
+    const { recoverAccount } = await import("./account-api");
+    const { data } = await supabase.auth.getSession();
+    const accessToken = data.session?.access_token;
+    if (!accessToken) return null;
+
+    const result = await recoverAccount(accessToken);
+    if (!result.found) return null;
+
+    const identity: Identity = { token: result.playerToken, username: result.username };
+    await saveIdentity(identity);
+    return identity;
   } catch {
     return null;
   }
