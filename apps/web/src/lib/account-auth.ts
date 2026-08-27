@@ -21,14 +21,16 @@ export async function signInWithGoogle(): Promise<{ accessToken: string } | null
   const result = await WebBrowser.openAuthSessionAsync(data.url, REDIRECT_URL);
   if (result.type !== "success" || !result.url) return null;
 
-  const { params, errorCode } = Linking.parse(result.url.replace("#", "?"));
-  if (errorCode || !params.access_token || !params.refresh_token) return null;
+  const { queryParams } = Linking.parse(result.url.replace("#", "?"));
+  const accessToken = queryParams?.access_token;
+  const refreshToken = queryParams?.refresh_token;
+  if (queryParams?.error || typeof accessToken !== "string" || typeof refreshToken !== "string") return null;
 
   const { error: sessionError } = await supabase.auth.setSession({
-    access_token: params.access_token as string,
-    refresh_token: params.refresh_token as string,
+    access_token: accessToken,
+    refresh_token: refreshToken,
   });
   if (sessionError) return null;
 
-  return { accessToken: params.access_token as string };
+  return { accessToken };
 }
