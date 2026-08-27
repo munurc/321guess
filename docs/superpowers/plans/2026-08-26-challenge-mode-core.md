@@ -3380,6 +3380,25 @@ async function finishOpponentPlaying(challenge: ChallengeRow) {
 }
 ```
 
+**Also update Task 22's `finishPlaying`** — a random challenge (`deliveryType: "random"`, set at creation by `matchOrCreateRandomChallenge`) is already sitting in the matching queue once the creator finishes their round; it has no specific recipient to search for, and routing it through the "new-send" screen would let the creator accidentally call `/send`, which unconditionally overwrites `delivery_type` to `"invite"`/`"link"` (`setChallengeDelivery` has no guard against this) — silently pulling the challenge out of the random queue. Branch on `deliveryType` instead:
+
+```tsx
+async function finishPlaying(challenge: ChallengeRow) {
+  if (!identity) return;
+  const res = await finishChallenge(identity.token, challenge.id);
+  if (res.status !== "ok") return;
+  if (challenge.deliveryType === "random") {
+    // Already queued for random matching at creation — nothing to send,
+    // it matches automatically once another player also taps "Rastgele
+    // Rakip". Refresh the hub's list so the new outgoing entry shows up.
+    refreshList();
+    setScreen({ kind: "hub" });
+    return;
+  }
+  setScreen({ kind: "new-send", challenge, result: res.data });
+}
+```
+
 - [ ] **Step 4: Add the opponent-playing render branch**
 
 Same shape as Task 22's `new-playing` branch, but calling `finishOpponentPlaying` instead of `finishPlaying` at the end of the last question, and reusing the same `submitPlayGuess`/`goToNextPlayQuestion` handlers parameterized by which finish function to call. Refactor `goToNextPlayQuestion` to accept the finish callback:
