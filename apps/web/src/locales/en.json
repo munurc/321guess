@@ -230,7 +230,15 @@
     "orGenerateLink": "or",
     "generateLink": "Generate a Link to Share",
     "linkCopied": "Link copied!",
-    "sentSuccess": "Challenge sent!"
+    "sentSuccess": "Challenge sent!",
+    "resultHeading": "Result",
+    "youScored": "You: {correct}/{total}",
+    "opponentScored": "{username}: {correct}/{total}",
+    "youWon": "You won!",
+    "youLost": "You lost",
+    "tied": "Tied",
+    "rematch": "Rematch",
+    "backToHub": "Back"
   },
   "privacy": {
     "title": "Privacy Policy",

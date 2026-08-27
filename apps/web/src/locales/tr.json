@@ -230,7 +230,15 @@
     "orGenerateLink": "ya da",
     "generateLink": "Link Oluştur ve Paylaş",
     "linkCopied": "Link kopyalandı!",
-    "sentSuccess": "Meydan okuma gönderildi!"
+    "sentSuccess": "Meydan okuma gönderildi!",
+    "resultHeading": "Sonuç",
+    "youScored": "Sen: {correct}/{total}",
+    "opponentScored": "{username}: {correct}/{total}",
+    "youWon": "Kazandın!",
+    "youLost": "Kaybettin",
+    "tied": "Berabere",
+    "rematch": "Rovanş",
+    "backToHub": "Geri Dön"
   },
   "privacy": {
     "title": "Gizlilik Politikası",

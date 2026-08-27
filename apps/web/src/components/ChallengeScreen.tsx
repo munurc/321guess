@@ -12,6 +12,7 @@ import {
   submitChallengeGuess,
   finishChallenge,
   searchUsernames,
+  matchRandomChallenge,
   type ChallengeList,
   type ChallengeRow,
   type FinishChallengeResult,
@@ -27,9 +28,9 @@ type Screen =
   | { kind: "hub" }
   | { kind: "new-settings" }
   | { kind: "new-playing"; challenge: ChallengeRow }
-  | { kind: "new-send"; challenge: ChallengeRow; result: FinishChallengeResult };
-// Task 23 extends this union further with the random-opponent and
-// incoming-invite play/result phases.
+  | { kind: "new-send"; challenge: ChallengeRow; result: FinishChallengeResult }
+  | { kind: "opponent-playing"; challenge: ChallengeRow }
+  | { kind: "result"; challenge: ChallengeRow; myResult: FinishChallengeResult; opponentUsername: string | null };
 
 export function ChallengeScreen() {
   const t = useTranslations("challenge");
@@ -143,10 +144,10 @@ export function ChallengeScreen() {
     }
   }
 
-  async function goToNextPlayQuestion(challenge: ChallengeRow) {
+  async function goToNextPlayQuestion(challenge: ChallengeRow, onDone: (c: ChallengeRow) => Promise<void>) {
     const next = questionIndex + 1;
     if (next >= challenge.questions.length) {
-      await finishPlaying(challenge);
+      await onDone(challenge);
       return;
     }
     setQuestionIndex(next);
@@ -159,7 +160,61 @@ export function ChallengeScreen() {
     if (!identity) return;
     const res = await finishChallenge(identity.token, challenge.id);
     if (res.status !== "ok") return;
+    if (challenge.deliveryType === "random") {
+      // Already queued for random matching at creation — nothing to send,
+      // it matches automatically once another player also taps "Rastgele
+      // Rakip". Refresh the hub's list so the new outgoing entry shows up.
+      refreshList();
+      setScreen({ kind: "hub" });
+      return;
+    }
     setScreen({ kind: "new-send", challenge, result: res.data });
+  }
+
+  async function startRandomOpponent() {
+    if (!identity) return;
+    const res = await matchRandomChallenge(identity.token);
+    if (res.status !== "ok") return;
+    setQuestionIndex(0);
+    setFoundPlayers([]);
+    setWrongPlayers([]);
+    if (res.data.role === "opponent") {
+      setScreen({ kind: "opponent-playing", challenge: res.data });
+    } else {
+      setScreen({ kind: "new-playing", challenge: res.data });
+    }
+  }
+
+  function openIncomingChallenge(challenge: ChallengeRow) {
+    setQuestionIndex(0);
+    setFoundPlayers([]);
+    setWrongPlayers([]);
+    setScreen({ kind: "opponent-playing", challenge });
+  }
+
+  // FinishChallengeResult.opponentResult.username (Task 5/16) is the other
+  // player's username — no separate lookup needed.
+  async function finishOpponentPlaying(challenge: ChallengeRow) {
+    if (!identity) return;
+    const res = await finishChallenge(identity.token, challenge.id);
+    if (res.status !== "ok") return;
+    setScreen({ kind: "result", challenge, myResult: res.data, opponentUsername: res.data.opponentResult?.username ?? null });
+    refreshList();
+  }
+
+  async function rematch(challenge: ChallengeRow, opponentUsername: string | null) {
+    if (!identity || !opponentUsername) return;
+    const res = await createChallenge(identity.token, challenge.mode as GameMode, challenge.difficulty as Difficulty, challenge.includedLeagues);
+    if (res.status !== "ok") return;
+    setQuestionIndex(0);
+    setFoundPlayers([]);
+    setWrongPlayers([]);
+    setScreen({ kind: "new-playing", challenge: res.data });
+    // The send step (Task 22's "new-send" screen) is reached after playing,
+    // same as any new challenge — opponentUsername is prefilled by having
+    // the user re-search, since /send's search step doesn't currently
+    // accept a prefilled default. Acceptable for v1: a rematch still saves
+    // the settings-picking step, which is the main friction being removed.
   }
 
   useEffect(() => {
@@ -211,7 +266,7 @@ export function ChallengeScreen() {
               <Text className="text-lg font-bold text-[#2A1E00]">{t("newChallenge")}</Text>
             </ArenaPressable>
             <ArenaPressable
-              onPress={() => setScreen({ kind: "hub" } /* Task 23 replaces with the random-opponent entry */)}
+              onPress={() => void startRandomOpponent()}
               className="items-center rounded-2xl border-2 border-arena-accent-2 py-5"
             >
               <Text className="text-lg font-bold text-arena-accent-2">{t("randomOpponent")}</Text>
@@ -226,7 +281,7 @@ export function ChallengeScreen() {
               list.incoming.map((c) => (
                 <ArenaPressable
                   key={c.id}
-                  onPress={() => setScreen({ kind: "hub" } /* Task 23: open this challenge to play it */)}
+                  onPress={() => openIncomingChallenge(c)}
                   className="flex-row items-center justify-between rounded-2xl bg-arena-bg-soft p-4"
                 >
                   <Text className="text-base font-semibold text-arena-text">{c.mode}</Text>
@@ -347,7 +402,7 @@ export function ChallengeScreen() {
             guessEmptyText={t("searchEmpty")}
           />
           <ArenaPressable
-            onPress={() => void goToNextPlayQuestion(challenge)}
+            onPress={() => void goToNextPlayQuestion(challenge, finishPlaying)}
             className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-5"
           >
             <Text className="text-lg font-bold text-[#2A1E00]">→</Text>
@@ -407,6 +462,75 @@ export function ChallengeScreen() {
             </ArenaPressable>
           </View>
         )}
+      </View>
+    );
+  }
+
+  if (screen.kind === "opponent-playing") {
+    const challenge = screen.challenge;
+    const currentQuestion = challenge.questions[questionIndex];
+    if (!dataset || !currentQuestion) return null;
+
+    return (
+      <View className="flex-1 bg-arena-bg">
+        <ScrollView className="flex-1 px-4" contentContainerClassName="gap-4 pb-10" style={{ paddingTop: insets.top + 16 }}>
+          <Text className="text-sm text-arena-text-soft">
+            {questionIndex + 1} / {challenge.questions.length}
+          </Text>
+          <RoundPlayView
+            question={{ clubA: currentQuestion.clubA, clubB: currentQuestion.clubB, totalPossible: currentQuestion.totalPossible }}
+            foundPlayers={foundPlayers}
+            wrongPlayers={wrongPlayers}
+            players={dataset.players}
+            celebrationTick={celebrationTick}
+            guessFeedback={guessFeedback}
+            onGuess={(p) => void submitPlayGuess(challenge, p)}
+            vsLabel="×"
+            possibleCountLabel=""
+            guessPlaceholder={t("searchPlaceholder")}
+            guessEmptyText={t("searchEmpty")}
+          />
+          <ArenaPressable
+            onPress={() => void goToNextPlayQuestion(challenge, finishOpponentPlaying)}
+            className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-5"
+          >
+            <Text className="text-lg font-bold text-[#2A1E00]">→</Text>
+          </ArenaPressable>
+        </ScrollView>
+      </View>
+    );
+  }
+
+  if (screen.kind === "result") {
+    const { myResult, opponentUsername } = screen;
+    const opponentCorrect = myResult.opponentResult?.correctCount ?? 0;
+    const opponentTotal = myResult.opponentResult?.totalPossible ?? myResult.totalPossible;
+    const outcome =
+      myResult.correctCount === opponentCorrect ? "tied" : myResult.correctCount > opponentCorrect ? "won" : "lost";
+
+    return (
+      <View className="flex-1 items-center justify-center gap-6 bg-arena-bg px-4">
+        <Text className="text-3xl font-black text-arena-text">{t("resultHeading")}</Text>
+        <Text
+          className={`text-2xl font-bold ${outcome === "won" ? "text-arena-accent-2" : outcome === "lost" ? "text-red-300" : "text-arena-text-soft"}`}
+        >
+          {outcome === "won" ? t("youWon") : outcome === "lost" ? t("youLost") : t("tied")}
+        </Text>
+        <Text className="text-lg text-arena-text">{t("youScored", { correct: myResult.correctCount, total: myResult.totalPossible })}</Text>
+        {opponentUsername && (
+          <Text className="text-lg text-arena-text-soft">
+            {t("opponentScored", { username: opponentUsername, correct: opponentCorrect, total: opponentTotal })}
+          </Text>
+        )}
+        <ArenaPressable
+          onPress={() => void rematch(screen.challenge, opponentUsername)}
+          className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent px-8 py-5"
+        >
+          <Text className="text-lg font-bold text-[#2A1E00]">{t("rematch")}</Text>
+        </ArenaPressable>
+        <Pressable onPress={() => setScreen({ kind: "hub" })}>
+          <Text className="text-arena-text-soft">{t("backToHub")}</Text>
+        </Pressable>
       </View>
     );
   }
