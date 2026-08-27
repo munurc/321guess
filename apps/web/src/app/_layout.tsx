@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { IntlProvider } from 'use-intl';
 import type { ReactNode } from 'react';
 
+import { AccountLinkDeepLinkHandler } from '@/components/AccountLinkDeepLinkHandler';
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import { CookieConsent } from '@/components/CookieConsent';
 import { PushRegistration } from '@/components/PushRegistration';
@@ -67,6 +68,7 @@ export default function TabLayout() {
             <AnalyticsPageview />
             <AnimatedSplashOverlay />
             <PushRegistration />
+            <AccountLinkDeepLinkHandler />
             <Stack screenOptions={{ headerShown: false }} />
             <CookieConsent />
           </IntlBridge>
