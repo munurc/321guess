@@ -125,7 +125,18 @@
     "haptics": "Titreşim",
     "privacyLink": "Gizlilik Politikası",
     "termsLink": "Kullanım Şartları",
-    "back": "Ana ekran"
+    "back": "Ana ekran",
+    "accountLinking": {
+      "heading": "Hesabını Bağla",
+      "description": "Cihaz değiştirince kullanıcı adını ve geçmişini kaybetme.",
+      "google": "Google ile Bağla",
+      "apple": "Apple ile Bağla",
+      "emailPlaceholder": "E-posta adresin",
+      "sendEmailLink": "Bağlantı Gönder",
+      "emailSent": "E-postana bir bağlantı gönderdik — açman yeterli.",
+      "linked": "Bağlandı ✓",
+      "linkFailed": "Bağlanamadı, tekrar dene."
+    }
   },
   "manual": {
     "link": "Manuel oyun",

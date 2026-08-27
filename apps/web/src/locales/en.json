@@ -125,7 +125,18 @@
     "haptics": "Haptics",
     "privacyLink": "Privacy Policy",
     "termsLink": "Terms of Use",
-    "back": "Home"
+    "back": "Home",
+    "accountLinking": {
+      "heading": "Link Your Account",
+      "description": "Don't lose your username and history when you switch devices.",
+      "google": "Link with Google",
+      "apple": "Link with Apple",
+      "emailPlaceholder": "Your email address",
+      "sendEmailLink": "Send Link",
+      "emailSent": "We sent a link to your email — just open it.",
+      "linked": "Linked ✓",
+      "linkFailed": "Couldn't link, try again."
+    }
   },
   "manual": {
     "link": "Manual game",
