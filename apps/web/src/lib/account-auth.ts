@@ -34,3 +34,37 @@ export async function signInWithGoogle(): Promise<{ accessToken: string } | null
 
   return { accessToken };
 }
+
+import * as AppleAuthentication from "expo-apple-authentication";
+
+export async function isAppleSignInAvailable(): Promise<boolean> {
+  try {
+    return await AppleAuthentication.isAvailableAsync();
+  } catch {
+    return false;
+  }
+}
+
+/** Native Sign In With Apple — required (not the web OAuth popup
+ * signInWithGoogle uses) whenever another third-party sign-in is offered,
+ * per App Store guidelines. AppleAuthentication.signInAsync returns an
+ * identityToken Supabase can verify directly via signInWithIdToken —
+ * no browser round-trip needed at all. */
+export async function signInWithApple(): Promise<{ accessToken: string } | null> {
+  try {
+    const credential = await AppleAuthentication.signInAsync({
+      requestedScopes: [AppleAuthentication.AppleAuthenticationScope.FULL_NAME, AppleAuthentication.AppleAuthenticationScope.EMAIL],
+    });
+    if (!credential.identityToken) return null;
+
+    const { data, error } = await supabase.auth.signInWithIdToken({
+      provider: "apple",
+      token: credential.identityToken,
+    });
+    if (error || !data.session) return null;
+
+    return { accessToken: data.session.access_token };
+  } catch {
+    return null; // includes the user cancelling the native sheet
+  }
+}
