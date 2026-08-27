@@ -52,7 +52,6 @@ export function ChallengeScreen() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [foundPlayers, setFoundPlayers] = useState<Player[]>([]);
   const [wrongPlayers, setWrongPlayers] = useState<Player[]>([]);
-  const [overallFoundCount, setOverallFoundCount] = useState(0);
   const [celebrationTick, setCelebrationTick] = useState(0);
   const [guessFeedback, setGuessFeedback] = useState<{ id: number; status: "correct" | "wrong"; label: string } | null>(null);
   const feedbackIdRef = useRef(0);
@@ -137,7 +136,6 @@ export function ChallengeScreen() {
     if (res.data.correct) {
       flashGuessFeedback("correct", player.name);
       setFoundPlayers((prev) => [...prev, player]);
-      setOverallFoundCount(res.data.overallFoundCount);
       setCelebrationTick((n) => n + 1);
     } else {
       flashGuessFeedback("wrong", player.name);
@@ -352,7 +350,7 @@ export function ChallengeScreen() {
             onPress={() => void goToNextPlayQuestion(challenge)}
             className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-5"
           >
-            <Text className="text-lg font-bold text-[#2A1E00]">{foundPlayers.length > 0 ? "→" : "→"}</Text>
+            <Text className="text-lg font-bold text-[#2A1E00]">→</Text>
           </ArenaPressable>
         </ScrollView>
       </View>
@@ -372,7 +370,11 @@ export function ChallengeScreen() {
           <Text className="mt-8 text-lg text-arena-accent-2">{t("sentSuccess")}</Text>
         ) : shareUrl ? (
           <Pressable
-            onPress={() => void shareOrCopy(shareUrl).then(() => setSendStatus("link"))}
+            onPress={() =>
+              void shareOrCopy(shareUrl).then((result) => {
+                if (result !== "failed") setSendStatus("link");
+              })
+            }
             className="mt-8 items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-5"
           >
             <Text className="text-lg font-bold text-[#2A1E00]">{sendStatus === "link" ? t("linkCopied") : shareUrl}</Text>
