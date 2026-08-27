@@ -1,15 +1,29 @@
 import { NextResponse } from "next/server";
+import { getPlayerByToken } from "@/lib/online-db";
 import { searchPlayers } from "@/lib/challenge-db";
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function OPTIONS() {
   return new NextResponse(null, { status: 204 });
 }
 
 export async function GET(req: Request) {
-  const q = new URL(req.url).searchParams.get("q") ?? "";
-  if (q.trim().length < 2) return NextResponse.json({ usernames: [] });
+  // Same Authorization-header convention as /api/challenges/list — without
+  // it this route let anyone enumerate every registered username.
+  const auth = req.headers.get("authorization");
+  const token = auth?.startsWith("Bearer ") ? auth.slice(7) : null;
+  if (!token || !UUID_RE.test(token)) {
+    return NextResponse.json({ error: "invalid_body" }, { status: 400 });
+  }
 
   try {
+    const player = await getPlayerByToken(token);
+    if (!player) return NextResponse.json({ error: "unknown_player" }, { status: 401 });
+
+    const q = new URL(req.url).searchParams.get("q") ?? "";
+    if (q.trim().length < 2) return NextResponse.json({ usernames: [] });
+
     const results = await searchPlayers(q.trim(), 8);
     return NextResponse.json({ usernames: results.map((r) => r.username) });
   } catch (e) {

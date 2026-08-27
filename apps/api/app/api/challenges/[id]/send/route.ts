@@ -42,7 +42,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       if (!opponentToken) return NextResponse.json({ error: "unknown_username" }, { status: 404 });
       if (opponentToken === token) return NextResponse.json({ error: "cannot_challenge_self" }, { status: 400 });
 
-      await setChallengeDelivery(id, "invite", opponentToken);
+      // False means the challenge is no longer in a sendable state (already
+      // claimed, already being played, completed, or a random one still in
+      // the matching queue) — don't notify anyone or report success.
+      const sent = await setChallengeDelivery(id, "invite", opponentToken);
+      if (!sent) return NextResponse.json({ error: "not_sendable" }, { status: 409 });
+
       await notifyPlayer(
         opponentToken,
         "Sana meydan okundu!",
@@ -51,7 +56,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       return NextResponse.json({ deliveryType: "invite" });
     }
 
-    await setChallengeDelivery(id, "link", null);
+    const linked = await setChallengeDelivery(id, "link", null);
+    if (!linked) return NextResponse.json({ error: "not_sendable" }, { status: 409 });
     return NextResponse.json({ deliveryType: "link", url: `https://www.321guess.com/challenge/${id}` });
   } catch (e) {
     return NextResponse.json({ error: "server_error", message: (e as Error).message }, { status: 500 });

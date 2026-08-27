@@ -226,6 +226,8 @@
     "sendScoreLabel": "{correct} / {total} correct",
     "searchPlaceholder": "Search username…",
     "searchEmpty": "No user found",
+    "guessPlaceholder": "Search player…",
+    "guessEmpty": "No player found",
     "sendToUser": "Send to This User",
     "orGenerateLink": "or",
     "generateLink": "Generate a Link to Share",

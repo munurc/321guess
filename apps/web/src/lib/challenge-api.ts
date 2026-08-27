@@ -3,10 +3,11 @@ import type { Difficulty, GameMode } from "@321guess/core";
 
 type ClubRef = { id: string; name: string; logoUrl: string };
 export type ChallengeQuestion = { index: number; clubA: ClubRef; clubB: ClubRef; totalPossible: number };
+/** Mirrors the API's ClientChallengeRow — deliberately WITHOUT the
+ * creator/opponent player_token fields, which the server strips at the
+ * response boundary because player_token is the app's auth credential. */
 export type ChallengeRow = {
   id: string;
-  creatorToken: string;
-  opponentToken: string | null;
   deliveryType: "invite" | "link" | "random" | null;
   mode: GameMode;
   difficulty: Difficulty;
@@ -52,8 +53,9 @@ export function createChallenge(
   mode: GameMode,
   difficulty: Difficulty,
   includedLeagues: string[],
+  excludedCountries: string[],
 ): Promise<ApiResult<ChallengeRow>> {
-  return post("/api/challenges/create", { token, mode, difficulty, includedLeagues });
+  return post("/api/challenges/create", { token, mode, difficulty, includedLeagues, excludedCountries });
 }
 
 export type SendResult =
@@ -111,9 +113,11 @@ export function listChallenges(token: string): Promise<ApiResult<ChallengeList>>
   return get(`/api/challenges/list`, token);
 }
 
-export async function searchUsernames(query: string): Promise<string[]> {
+export async function searchUsernames(token: string, query: string): Promise<string[]> {
   try {
-    const res = await fetch(`${apiBaseUrl()}/api/online/search?q=${encodeURIComponent(query)}`);
+    const res = await fetch(`${apiBaseUrl()}/api/online/search?q=${encodeURIComponent(query)}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     if (!res.ok) return [];
     const data = await res.json();
     return Array.isArray(data.usernames) ? data.usernames : [];

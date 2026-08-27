@@ -18,15 +18,18 @@ import {
   type FinishChallengeResult,
 } from "../lib/challenge-api";
 import { loadDataset } from "../lib/dataset";
-import { shareOrCopy } from "../lib/share";
 import { loadIdentity, type Identity } from "../lib/online-storage";
 import { ArenaPressable } from "./ArenaPressable";
+import { Countdown } from "./Countdown";
 import { GameSettingsPicker } from "./GameSettingsPicker";
 import { RoundPlayView } from "./RoundPlayView";
 
 type Screen =
   | { kind: "hub" }
   | { kind: "new-settings" }
+  // Every entry into a playing screen routes through here first: the 3-2-1
+  // countdown is a standing requirement for every game mode.
+  | { kind: "countdown"; next: "new-playing" | "opponent-playing"; challenge: ChallengeRow }
   | { kind: "new-playing"; challenge: ChallengeRow }
   | { kind: "new-send"; challenge: ChallengeRow; result: FinishChallengeResult }
   | { kind: "opponent-playing"; challenge: ChallengeRow }
@@ -60,8 +63,7 @@ export function ChallengeScreen() {
   // --- Send phase state ---
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<string[]>([]);
-  const [sendStatus, setSendStatus] = useState<"idle" | "sent" | "link">("idle");
-  const [shareUrl, setShareUrl] = useState<string | null>(null);
+  const [sendStatus, setSendStatus] = useState<"idle" | "sent">("idle");
 
   useEffect(() => {
     loadIdentity().then(setIdentity);
@@ -118,10 +120,19 @@ export function ChallengeScreen() {
     return dataset.countries.filter((c) => codes.has(c.code));
   }, [dataset]);
 
+  function resetPlayState() {
+    setQuestionIndex(0);
+    setFoundPlayers([]);
+    setWrongPlayers([]);
+    setGuessFeedback(null);
+  }
+
   async function startNewChallenge() {
     if (!identity || !dataset) return;
-    const res = await createChallenge(identity.token, mode, difficulty, [...includedLeagues]);
-    if (res.status === "ok") setScreen({ kind: "new-playing", challenge: res.data });
+    const res = await createChallenge(identity.token, mode, difficulty, [...includedLeagues], [...excludedCountries]);
+    if (res.status !== "ok") return;
+    resetPlayState();
+    setScreen({ kind: "countdown", next: "new-playing", challenge: res.data });
   }
 
   function flashGuessFeedback(status: "correct" | "wrong", label: string) {
@@ -156,10 +167,25 @@ export function ChallengeScreen() {
     setGuessFeedback(null);
   }
 
+  // `completed` is true only once BOTH sides have finished, so it — not which
+  // screen we came from — decides whether there's a real result to show. In
+  // random mode either player can be the one who finishes second.
   async function finishPlaying(challenge: ChallengeRow) {
     if (!identity) return;
     const res = await finishChallenge(identity.token, challenge.id);
     if (res.status !== "ok") return;
+    if (res.data.completed) {
+      // The other player had already claimed and finished this challenge
+      // before we did — the result is real and ready right now.
+      setScreen({
+        kind: "result",
+        challenge,
+        myResult: res.data,
+        opponentUsername: res.data.opponentResult?.username ?? null,
+      });
+      refreshList();
+      return;
+    }
     if (challenge.deliveryType === "random") {
       // Already queued for random matching at creation — nothing to send,
       // it matches automatically once another player also taps "Rastgele
@@ -175,21 +201,17 @@ export function ChallengeScreen() {
     if (!identity) return;
     const res = await matchRandomChallenge(identity.token);
     if (res.status !== "ok") return;
-    setQuestionIndex(0);
-    setFoundPlayers([]);
-    setWrongPlayers([]);
-    if (res.data.role === "opponent") {
-      setScreen({ kind: "opponent-playing", challenge: res.data });
-    } else {
-      setScreen({ kind: "new-playing", challenge: res.data });
-    }
+    resetPlayState();
+    setScreen({
+      kind: "countdown",
+      next: res.data.role === "opponent" ? "opponent-playing" : "new-playing",
+      challenge: res.data,
+    });
   }
 
   function openIncomingChallenge(challenge: ChallengeRow) {
-    setQuestionIndex(0);
-    setFoundPlayers([]);
-    setWrongPlayers([]);
-    setScreen({ kind: "opponent-playing", challenge });
+    resetPlayState();
+    setScreen({ kind: "countdown", next: "opponent-playing", challenge });
   }
 
   // FinishChallengeResult.opponentResult.username (Task 5/16) is the other
@@ -198,18 +220,35 @@ export function ChallengeScreen() {
     if (!identity) return;
     const res = await finishChallenge(identity.token, challenge.id);
     if (res.status !== "ok") return;
-    setScreen({ kind: "result", challenge, myResult: res.data, opponentUsername: res.data.opponentResult?.username ?? null });
     refreshList();
+    if (!res.data.completed) {
+      // Rare race in random mode: this player finished before the challenge's
+      // creator did. Nothing to show yet — the result appears once the creator
+      // also finishes (their own finishPlaying will show it then). Showing a
+      // "result" here would fabricate a win against someone who hasn't played.
+      setScreen({ kind: "hub" });
+      return;
+    }
+    setScreen({
+      kind: "result",
+      challenge,
+      myResult: res.data,
+      opponentUsername: res.data.opponentResult?.username ?? null,
+    });
   }
 
   async function rematch(challenge: ChallengeRow, opponentUsername: string | null) {
     if (!identity || !opponentUsername) return;
-    const res = await createChallenge(identity.token, challenge.mode as GameMode, challenge.difficulty as Difficulty, challenge.includedLeagues);
+    const res = await createChallenge(
+      identity.token,
+      challenge.mode as GameMode,
+      challenge.difficulty as Difficulty,
+      challenge.includedLeagues,
+      [],
+    );
     if (res.status !== "ok") return;
-    setQuestionIndex(0);
-    setFoundPlayers([]);
-    setWrongPlayers([]);
-    setScreen({ kind: "new-playing", challenge: res.data });
+    resetPlayState();
+    setScreen({ kind: "countdown", next: "new-playing", challenge: res.data });
     // The send step (Task 22's "new-send" screen) is reached after playing,
     // same as any new challenge — opponentUsername is prefilled by having
     // the user re-search, since /send's search step doesn't currently
@@ -218,26 +257,21 @@ export function ChallengeScreen() {
   }
 
   useEffect(() => {
-    if (searchQuery.trim().length < 2) {
+    const token = identity?.token;
+    if (!token || searchQuery.trim().length < 2) {
       setSearchResults([]);
       return;
     }
     const handle = setTimeout(() => {
-      searchUsernames(searchQuery.trim()).then(setSearchResults);
+      searchUsernames(token, searchQuery.trim()).then(setSearchResults);
     }, 250);
     return () => clearTimeout(handle);
-  }, [searchQuery]);
+  }, [identity, searchQuery]);
 
   async function sendToUsername(challenge: ChallengeRow, username: string) {
     if (!identity) return;
     const res = await sendChallenge(identity.token, challenge.id, username);
     if (res.status === "ok") setSendStatus("sent");
-  }
-
-  async function generateLink(challenge: ChallengeRow) {
-    if (!identity) return;
-    const res = await sendChallenge(identity.token, challenge.id);
-    if (res.status === "ok" && res.data.deliveryType === "link") setShareUrl(res.data.url);
   }
 
   if (!identity) {
@@ -373,6 +407,15 @@ export function ChallengeScreen() {
     );
   }
 
+  if (screen.kind === "countdown") {
+    const { next, challenge } = screen;
+    return (
+      <View className="flex-1 bg-arena-bg">
+        <Countdown onDone={() => setScreen({ kind: next, challenge })} />
+      </View>
+    );
+  }
+
   if (screen.kind === "new-playing") {
     const challenge = screen.challenge;
     const currentQuestion = challenge.questions[questionIndex];
@@ -398,8 +441,8 @@ export function ChallengeScreen() {
             onGuess={(p) => void submitPlayGuess(challenge, p)}
             vsLabel={t("vs")}
             possibleCountLabel=""
-            guessPlaceholder={t("searchPlaceholder")}
-            guessEmptyText={t("searchEmpty")}
+            guessPlaceholder={t("guessPlaceholder")}
+            guessEmptyText={t("guessEmpty")}
           />
           <ArenaPressable
             onPress={() => void goToNextPlayQuestion(challenge, finishPlaying)}
@@ -421,19 +464,11 @@ export function ChallengeScreen() {
           {t("sendScoreLabel", { correct: result.correctCount, total: result.totalPossible })}
         </Text>
 
+        {/* Username search + send is the only delivery option: the former
+            "generate a link" flow produced https://www.321guess.com/challenge/<id>,
+            a URL with no matching route and no deep-link handling. */}
         {sendStatus === "sent" ? (
           <Text className="mt-8 text-lg text-arena-accent-2">{t("sentSuccess")}</Text>
-        ) : shareUrl ? (
-          <Pressable
-            onPress={() =>
-              void shareOrCopy(shareUrl).then((result) => {
-                if (result !== "failed") setSendStatus("link");
-              })
-            }
-            className="mt-8 items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-5"
-          >
-            <Text className="text-lg font-bold text-[#2A1E00]">{sendStatus === "link" ? t("linkCopied") : shareUrl}</Text>
-          </Pressable>
         ) : (
           <View className="mt-8 gap-4">
             <TextInput
@@ -453,13 +488,6 @@ export function ChallengeScreen() {
                 <Text className="text-lg text-arena-text">{username}</Text>
               </Pressable>
             ))}
-            <Text className="text-center text-arena-text-soft">{t("orGenerateLink")}</Text>
-            <ArenaPressable
-              onPress={() => void generateLink(challenge)}
-              className="items-center rounded-2xl border-2 border-arena-accent-2 py-5"
-            >
-              <Text className="text-lg font-bold text-arena-accent-2">{t("generateLink")}</Text>
-            </ArenaPressable>
           </View>
         )}
       </View>
@@ -487,8 +515,8 @@ export function ChallengeScreen() {
             onGuess={(p) => void submitPlayGuess(challenge, p)}
             vsLabel="×"
             possibleCountLabel=""
-            guessPlaceholder={t("searchPlaceholder")}
-            guessEmptyText={t("searchEmpty")}
+            guessPlaceholder={t("guessPlaceholder")}
+            guessEmptyText={t("guessEmpty")}
           />
           <ArenaPressable
             onPress={() => void goToNextPlayQuestion(challenge, finishOpponentPlaying)}

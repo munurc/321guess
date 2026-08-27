@@ -226,6 +226,8 @@
     "sendScoreLabel": "{correct} / {total} doğru",
     "searchPlaceholder": "Kullanıcı adı ara…",
     "searchEmpty": "Kullanıcı bulunamadı",
+    "guessPlaceholder": "Oyuncu ara…",
+    "guessEmpty": "Oyuncu bulunamadı",
     "sendToUser": "Bu Kullanıcıya Gönder",
     "orGenerateLink": "ya da",
     "generateLink": "Link Oluştur ve Paylaş",

@@ -27,6 +27,20 @@ export type ChallengeRow = {
   questions: ChallengeQuestionRow[];
 };
 
+/** The client-facing shape of a challenge: everything in ChallengeRow EXCEPT
+ * the two player_token fields. player_token is this app's entire auth
+ * credential (every route authenticates by `getPlayerByToken(token)` alone),
+ * so it must never cross the JSON boundary — but several routes DO need to
+ * read `challenge.creatorToken`/`opponentToken` server-side for their own
+ * authorization checks, which is why ChallengeRow keeps them and stripping
+ * happens here, at the response boundary, instead of in mapChallengeRow. */
+export type ClientChallengeRow = Omit<ChallengeRow, "creatorToken" | "opponentToken">;
+
+export function toClientChallenge(c: ChallengeRow): ClientChallengeRow {
+  const { creatorToken: _creatorToken, opponentToken: _opponentToken, ...rest } = c;
+  return rest;
+}
+
 function mapChallengeRow(row: any, questionRows: any[]): ChallengeRow {
   return {
     id: row.id,
@@ -92,6 +106,24 @@ async function insertQuestions(challengeId: string, settings: Settings) {
   return rows;
 }
 
+/** insertQuestions, but rolls the just-inserted `challenges` row back if
+ * question generation fails. pickChallengeQuestions now throws rather than
+ * silently under-filling (a narrow league selection at `hard` can't always
+ * produce QUESTIONS_PER_ROUND matchups), and the challenge row is always
+ * inserted first so the questions have a challenge_id to reference — without
+ * this rollback a failure would leave an orphaned, permanently-unplayable
+ * challenge behind (and, for a `random` challenge, one that another player
+ * could then be matched into). */
+async function insertQuestionsOrRollback(challengeId: string, settings: Settings) {
+  const supabase = getSupabaseServerClient();
+  try {
+    return await insertQuestions(challengeId, settings);
+  } catch (e) {
+    await supabase.from("challenges").delete().eq("id", challengeId);
+    throw e;
+  }
+}
+
 export async function createChallenge(creatorToken: string, settings: Settings): Promise<ChallengeRow> {
   const supabase = getSupabaseServerClient();
   const { data: row, error } = await supabase
@@ -106,7 +138,7 @@ export async function createChallenge(creatorToken: string, settings: Settings):
     .single();
   if (error) throw error;
 
-  const questionRows = await insertQuestions(row.id, settings);
+  const questionRows = await insertQuestionsOrRollback(row.id, settings);
   return mapChallengeRow(row, questionRows);
 }
 
@@ -125,27 +157,46 @@ export async function getChallenge(id: string): Promise<ChallengeRow | null> {
   return mapChallengeRow(row, questionRows ?? []);
 }
 
+/** Sets how a freshly-created challenge reaches its opponent. Conditional on
+ * the challenge still being unsent (`waiting`, no opponent) and NOT a
+ * `random` one — without those guards a repeat /send call could overwrite
+ * the opponent of a challenge that's already being played or is completed
+ * (orphaning the existing side's scores), or yank a random challenge out of
+ * the matching queue. Returns whether a row actually matched; false means
+ * the caller should reject the request rather than report success. */
 export async function setChallengeDelivery(
   id: string,
   delivery: "invite" | "link",
   opponentToken: string | null,
-): Promise<void> {
+): Promise<boolean> {
   const supabase = getSupabaseServerClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("challenges")
     .update({
       delivery_type: delivery,
       opponent_token: opponentToken,
       status: opponentToken ? "pending" : "waiting",
     })
-    .eq("id", id);
+    .eq("id", id)
+    .eq("status", "waiting")
+    .is("opponent_token", null)
+    // NOT a plain .neq("delivery_type", "random"): delivery_type is NULL on a
+    // freshly-created challenge (challenges.sql leaves it null until /send
+    // decides), and SQL's `NULL <> 'random'` is NULL, not true — a bare neq
+    // would filter out every legitimately sendable row.
+    .or("delivery_type.is.null,delivery_type.neq.random")
+    .select();
   if (error) throw error;
+  return (data?.length ?? 0) > 0;
 }
 
 /** Atomically claims an unclaimed link/random challenge for `opponentToken`
  * — the conditional `.eq("opponent_token", null)` in the UPDATE means a
  * concurrent second claim attempt affects zero rows and gets null back,
- * rather than racing to overwrite the first claimant. */
+ * rather than racing to overwrite the first claimant. The `expires_at` guard
+ * enforces the 7-day TTL here too, not just in the random-matching query:
+ * this is also the path a stale `link` challenge takes when opened via
+ * GET /api/challenges/[id], which previously ignored expiry entirely. */
 export async function claimChallengeAsOpponent(id: string, opponentToken: string): Promise<ChallengeRow | null> {
   const supabase = getSupabaseServerClient();
   const { data: rows, error } = await supabase
@@ -153,6 +204,7 @@ export async function claimChallengeAsOpponent(id: string, opponentToken: string
     .update({ opponent_token: opponentToken, status: "pending" })
     .eq("id", id)
     .is("opponent_token", null)
+    .gt("expires_at", new Date().toISOString())
     .select();
   if (error) throw error;
   if (!rows || rows.length === 0) return null;
@@ -223,7 +275,7 @@ export async function matchOrCreateRandomChallenge(
     .single();
   if (insertError) throw insertError;
 
-  const questionRows = await insertQuestions(row.id, settings);
+  const questionRows = await insertQuestionsOrRollback(row.id, settings);
   const challenge = mapChallengeRow(row, questionRows);
   return { challenge, role: "creator" };
 }
@@ -455,15 +507,22 @@ export async function listChallengesForPlayer(playerToken: string) {
         .from("challenge_questions")
         .select("*")
         .eq("challenge_id", c.id);
-      return { ...mapChallengeRow(c, questionRows ?? []), rivalry, opponentUsername: opponentPlayer?.username ?? "?" };
+      return {
+        ...toClientChallenge(mapChallengeRow(c, questionRows ?? [])),
+        rivalry,
+        opponentUsername: opponentPlayer?.username ?? "?",
+      };
     }),
   );
 
+  // toClientChallenge on every item: this list is returned straight to the
+  // client, and both token fields would otherwise hand the requester the
+  // other player's auth credential.
   const withQuestions = async (rows: any[]) =>
     Promise.all(
       rows.map(async (c) => {
         const { data: questionRows } = await supabase.from("challenge_questions").select("*").eq("challenge_id", c.id);
-        return mapChallengeRow(c, questionRows ?? []);
+        return toClientChallenge(mapChallengeRow(c, questionRows ?? []));
       }),
     );
 
@@ -479,10 +538,14 @@ export async function listChallengesForPlayer(playerToken: string) {
  * column), same case-insensitivity the uniqueness constraint already uses. */
 export async function searchPlayers(query: string, limit: number): Promise<{ username: string }[]> {
   const supabase = getSupabaseServerClient();
+  // Escape LIKE metacharacters before interpolating — otherwise a query
+  // containing `%` or `_` is a wildcard, so e.g. "%" alone would enumerate
+  // every registered username instead of prefix-matching a literal one.
+  const escaped = query.replace(/[\\%_]/g, (c) => `\\${c}`);
   const { data, error } = await supabase
     .from("online_players")
     .select("username")
-    .ilike("username_lower", `${query.toLowerCase()}%`)
+    .ilike("username_lower", `${escaped.toLowerCase()}%`)
     .limit(limit);
   if (error) throw error;
   return data ?? [];

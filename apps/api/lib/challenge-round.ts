@@ -11,6 +11,21 @@ export const RANDOM_LEAGUE_IDS = ["Q82595", "Q167541", "Q324867", "Q13394", "Q94
 
 export type ChallengeMatchup = { round: Round };
 
+/** Thrown when the requested settings can't yield `count` distinct matchups
+ * within the attempt budget — e.g. a single narrow league at `hard`. Mirrors
+ * daily-round.ts's NoDailyMatchupsError: an under-filled round is never a
+ * valid result, since the caller has already inserted a challenge row that
+ * would otherwise become permanently unplayable. */
+export class NotEnoughChallengeMatchupsError extends Error {
+  constructor(
+    readonly requested: number,
+    readonly found: number,
+  ) {
+    super(`not_enough_matchups: needed ${requested}, found ${found}`);
+    this.name = "NotEnoughChallengeMatchupsError";
+  }
+}
+
 function pairKey(round: Round): string {
   return round.kind === "clubClub"
     ? [round.clubA.id, round.clubB.id].sort().join("|")
@@ -41,5 +56,6 @@ export async function pickChallengeQuestions(settings: Settings, count: number):
     usedPairs.add(key);
     matchups.push({ round });
   }
+  if (matchups.length < count) throw new NotEnoughChallengeMatchupsError(count, matchups.length);
   return matchups;
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getPlayerByToken } from "@/lib/online-db";
-import { matchOrCreateRandomChallenge } from "@/lib/challenge-db";
+import { matchOrCreateRandomChallenge, toClientChallenge } from "@/lib/challenge-db";
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     if (!player) return NextResponse.json({ error: "unknown_player" }, { status: 401 });
 
     const { challenge, role } = await matchOrCreateRandomChallenge(token);
-    return NextResponse.json({ ...challenge, role });
+    return NextResponse.json({ ...toClientChallenge(challenge), role });
   } catch (e) {
     return NextResponse.json({ error: "server_error", message: (e as Error).message }, { status: 500 });
   }
