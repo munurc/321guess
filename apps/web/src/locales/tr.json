@@ -218,7 +218,19 @@
     "emptyRivalries": "Henüz bir meydan okuma tamamlamadın.",
     "waitingForOpponent": "Rakip bekleniyor",
     "playNow": "Şimdi Oyna",
-    "rivalryScore": "{wins}-{losses}"
+    "rivalryScore": "{wins}-{losses}",
+    "newSettingsHeading": "Ayarları Seç",
+    "startPlaying": "Oyna",
+    "vs": "vs",
+    "sendHeading": "Sonucun Belirlendi!",
+    "sendScoreLabel": "{correct} / {total} doğru",
+    "searchPlaceholder": "Kullanıcı adı ara…",
+    "searchEmpty": "Kullanıcı bulunamadı",
+    "sendToUser": "Bu Kullanıcıya Gönder",
+    "orGenerateLink": "ya da",
+    "generateLink": "Link Oluştur ve Paylaş",
+    "linkCopied": "Link kopyalandı!",
+    "sentSuccess": "Meydan okuma gönderildi!"
   },
   "privacy": {
     "title": "Gizlilik Politikası",

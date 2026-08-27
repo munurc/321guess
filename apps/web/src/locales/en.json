@@ -218,7 +218,19 @@
     "emptyRivalries": "You haven't finished a challenge yet.",
     "waitingForOpponent": "Waiting for opponent",
     "playNow": "Play Now",
-    "rivalryScore": "{wins}-{losses}"
+    "rivalryScore": "{wins}-{losses}",
+    "newSettingsHeading": "Choose Settings",
+    "startPlaying": "Play",
+    "vs": "vs",
+    "sendHeading": "Your Score Is In!",
+    "sendScoreLabel": "{correct} / {total} correct",
+    "searchPlaceholder": "Search username…",
+    "searchEmpty": "No user found",
+    "sendToUser": "Send to This User",
+    "orGenerateLink": "or",
+    "generateLink": "Generate a Link to Share",
+    "linkCopied": "Link copied!",
+    "sentSuccess": "Challenge sent!"
   },
   "privacy": {
     "title": "Privacy Policy",
