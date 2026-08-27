@@ -877,9 +877,16 @@ The comment in Step 2's `handleEmailLink` flags a real gap: sending the magic li
 ```tsx
 useEffect(() => {
   if (linkStatus !== 'emailSent') return;
-  const { data: subscription } = supabase.auth.onAuthStateChange(async (_event, session) => {
+  // Sync (non-async) callback intentionally: onAuthStateChange's async-callback
+  // overload is documented as deprecated in @supabase/auth-js's own types,
+  // because an awaited callback can deadlock a TOKEN_REFRESHED notification
+  // against a nested refresh -- completeLink() calls loadIdentity(), which
+  // can call supabase.auth.getSession() and trigger exactly that nested
+  // refresh. Firing completeLink without awaiting it inside the callback
+  // keeps this on the non-deprecated sync overload.
+  const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
     if (!session) return;
-    await completeLink({ accessToken: session.access_token });
+    void completeLink({ accessToken: session.access_token });
   });
   return () => subscription.subscription.unsubscribe();
 }, [linkStatus]);
