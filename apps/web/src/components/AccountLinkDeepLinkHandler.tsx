@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Platform } from "react-native";
 import * as Linking from "expo-linking";
-import { supabase } from "../lib/supabase-client";
+import { getSupabaseClient } from "../lib/supabase-client";
 import { AUTH_CALLBACK_REDIRECT_URL } from "../lib/account-auth";
 
 const EXPECTED_PATH = Linking.parse(AUTH_CALLBACK_REDIRECT_URL).path;
@@ -33,7 +33,7 @@ export function AccountLinkDeepLinkHandler() {
       const accessToken = queryParams?.access_token;
       const refreshToken = queryParams?.refresh_token;
       if (queryParams?.error || typeof accessToken !== "string" || typeof refreshToken !== "string") return;
-      await supabase.auth.setSession({
+      await getSupabaseClient().auth.setSession({
         access_token: accessToken,
         refresh_token: refreshToken,
       });

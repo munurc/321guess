@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const IDENTITY_KEY = "321guess.online.player";
@@ -41,13 +42,19 @@ export async function loadIdentity(): Promise<Identity | null> {
   // No local identity yet — if this device has an active Supabase Auth
   // session from a previously-linked account (see SettingsScreen's
   // "Hesabını Bağla"), recover that identity instead of the caller
-  // falling through to registering a brand-new one. A network/API
-  // failure here just means "no recovery today" — never throws, matching
-  // this function's existing all-paths-return-or-null contract.
+  // falling through to registering a brand-new one. Account linking is
+  // native-only (see the account-linking plan's Global Constraints), and
+  // constructing the Supabase client at all is unsafe outside a real
+  // browser — it self-initializes a session-recovery call that touches
+  // `window` unconditionally, which crashes `expo export -p web`'s
+  // Node-based static rendering. A network/API failure here just means
+  // "no recovery today" — never throws, matching this function's
+  // existing all-paths-return-or-null contract.
+  if (Platform.OS !== "ios" && Platform.OS !== "android") return null;
   try {
-    const { supabase } = await import("./supabase-client");
+    const { getSupabaseClient } = await import("./supabase-client");
     const { recoverAccount } = await import("./account-api");
-    const { data } = await supabase.auth.getSession();
+    const { data } = await getSupabaseClient().auth.getSession();
     const accessToken = data.session?.access_token;
     if (!accessToken) return null;
 

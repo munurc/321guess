@@ -1,6 +1,6 @@
 import * as Linking from "expo-linking";
 import * as WebBrowser from "expo-web-browser";
-import { supabase } from "./supabase-client";
+import { getSupabaseClient } from "./supabase-client";
 
 /** Shared by both Google OAuth and the email magic link below — they're
  * the same URL: guess321://auth-callback. Exported so
@@ -16,6 +16,7 @@ export const AUTH_CALLBACK_REDIRECT_URL = Linking.createURL("auth-callback");
  * Task 1 Step 4) with the session tokens in the URL fragment once Google
  * sign-in completes. */
 export async function signInWithGoogle(): Promise<{ accessToken: string } | null> {
+  const supabase = getSupabaseClient();
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: { redirectTo: AUTH_CALLBACK_REDIRECT_URL, skipBrowserRedirect: true },
@@ -61,7 +62,7 @@ export async function signInWithApple(): Promise<{ accessToken: string } | null>
     });
     if (!credential.identityToken) return null;
 
-    const { data, error } = await supabase.auth.signInWithIdToken({
+    const { data, error } = await getSupabaseClient().auth.signInWithIdToken({
       provider: "apple",
       token: credential.identityToken,
     });
@@ -74,7 +75,7 @@ export async function signInWithApple(): Promise<{ accessToken: string } | null>
 }
 
 export async function sendMagicLink(email: string): Promise<boolean> {
-  const { error } = await supabase.auth.signInWithOtp({
+  const { error } = await getSupabaseClient().auth.signInWithOtp({
     email,
     options: { emailRedirectTo: AUTH_CALLBACK_REDIRECT_URL },
   });

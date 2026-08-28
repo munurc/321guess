@@ -10,7 +10,7 @@ import { messages } from '@/i18n/messages';
 import { isAppleSignInAvailable, sendMagicLink, signInWithApple, signInWithGoogle } from '../lib/account-auth';
 import { linkAccount } from '../lib/account-api';
 import { loadIdentity } from '../lib/online-storage';
-import { supabase } from '../lib/supabase-client';
+import { getSupabaseClient } from '../lib/supabase-client';
 import { useGameSettings } from '@/lib/game-settings-context';
 import { localeUpper } from '@/lib/locale-upper';
 
@@ -63,7 +63,7 @@ export function SettingsScreen() {
     // trigger exactly that nested refresh. Firing completeLink without
     // awaiting it inside the callback keeps this on the non-deprecated sync
     // overload and lets _notifyAllSubscribers return before that work runs.
-    const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: subscription } = getSupabaseClient().auth.onAuthStateChange((_event, session) => {
       if (!session) return;
       void completeLink({ accessToken: session.access_token });
     });
