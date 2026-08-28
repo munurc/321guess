@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import Head from "expo-router/head";
 
 type PageMetaProps = {
@@ -28,6 +29,13 @@ function basePath(path: string): string {
  * src/app/en/), so any route's PageMeta can compute both alternates without
  * each call site repeating the pairing. */
 export function PageMeta({ title, description, path }: PageMetaProps) {
+  // expo-router/head's native (iOS) implementation isn't a no-op like its
+  // web one — mounting it registers a Handoff/Spotlight activity via a
+  // native module that alerts if the app isn't configured for it. This
+  // component exists purely for web <head> tags, so skip it entirely on
+  // native rather than configuring a feature this app doesn't use.
+  if (Platform.OS !== "web") return null;
+
   const url = `${SITE_URL}${path}`;
   const base = basePath(path);
   const trUrl = `${SITE_URL}${base}`;

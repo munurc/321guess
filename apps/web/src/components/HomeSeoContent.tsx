@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Platform, Pressable, Text, View } from "react-native";
 import Head from "expo-router/head";
 import { useLocale } from "use-intl";
 import type { AppLocale } from "@/i18n/messages";
@@ -107,6 +107,12 @@ export function HomeHeading() {
 }
 
 export function HomeSeoSections() {
+  // This SEO content (and its <Head> JSON-LD, whose native implementation
+  // isn't a no-op — see PageMeta.tsx) is web-only content; SetupScreen
+  // already never reaches this on native, but guard here too so that
+  // stays true regardless of future call sites.
+  if (Platform.OS !== "web") return null;
+
   const locale = useLocale() as AppLocale;
   const c = COPY[locale];
   const siteUrl = "https://www.321guess.com";
