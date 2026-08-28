@@ -2,6 +2,9 @@ import { useEffect } from "react";
 import { Platform } from "react-native";
 import * as Linking from "expo-linking";
 import { supabase } from "../lib/supabase-client";
+import { AUTH_CALLBACK_REDIRECT_URL } from "../lib/account-auth";
+
+const EXPECTED_PATH = Linking.parse(AUTH_CALLBACK_REDIRECT_URL).path;
 
 /** No-op on web — magic-link/OAuth deep-linking back into a native app is
  * the whole point here; web already has normal browser session handling
@@ -19,7 +22,14 @@ export function AccountLinkDeepLinkHandler() {
       // See Task 9's signInWithGoogle for why this destructures queryParams,
       // not params/errorCode — the latter don't exist on Linking.parse's
       // real return type ({ scheme, hostname, path, queryParams }).
-      const { queryParams } = Linking.parse(url.replace("#", "?"));
+      const parsed = Linking.parse(url.replace("#", "?"));
+      // Any app matching this URL scheme can be launched with an arbitrary
+      // deep link — without this check, a malicious link carrying someone
+      // else's access/refresh token would make this device sign in as
+      // them, and completeLink (Task 12) would then link the local
+      // player_token to the attacker's account.
+      if (parsed.path !== EXPECTED_PATH) return;
+      const { queryParams } = parsed;
       const accessToken = queryParams?.access_token;
       const refreshToken = queryParams?.refresh_token;
       if (queryParams?.error || typeof accessToken !== "string" || typeof refreshToken !== "string") return;

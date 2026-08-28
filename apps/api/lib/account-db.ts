@@ -34,16 +34,26 @@ export async function verifyAccessToken(accessToken: string): Promise<VerifiedUs
  * about that state fixes itself. */
 const UNIQUE_VIOLATION = "23505";
 
+/** Only sets auth_user_id when the player has none yet (.is("auth_user_id",
+ * null)) — otherwise anyone holding a player_token whose identity was
+ * already linked to a real account could silently re-point it at an
+ * account they control, permanently cutting off the original owner's
+ * recovery (a rare form of account takeover this app's player_token-only
+ * auth model would otherwise permit). Re-linking to a different account
+ * needs its own explicit unlink flow, not this endpoint. */
 export async function linkAccount(playerToken: string, authUserId: string): Promise<"ok" | "already_linked"> {
   const supabase = getSupabaseServerClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("online_players")
     .update({ auth_user_id: authUserId })
-    .eq("player_token", playerToken);
+    .eq("player_token", playerToken)
+    .is("auth_user_id", null)
+    .select("player_token");
   if (error) {
     if (error.code === UNIQUE_VIOLATION) return "already_linked";
     throw error;
   }
+  if (!data || data.length === 0) return "already_linked";
   return "ok";
 }
 

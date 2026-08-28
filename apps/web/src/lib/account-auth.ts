@@ -3,8 +3,10 @@ import * as WebBrowser from "expo-web-browser";
 import { supabase } from "./supabase-client";
 
 /** Shared by both Google OAuth and the email magic link below — they're
- * the same URL: guess321://auth-callback. */
-const AUTH_CALLBACK_REDIRECT_URL = Linking.createURL("auth-callback");
+ * the same URL: guess321://auth-callback. Exported so
+ * AccountLinkDeepLinkHandler can verify an incoming deep link is actually
+ * this callback before trusting any token in its query string. */
+export const AUTH_CALLBACK_REDIRECT_URL = Linking.createURL("auth-callback");
 
 /** Web-based OAuth via Supabase — supabase.auth.signInWithOAuth returns a
  * provider URL (skipBrowserRedirect:true stops it trying to redirect the
