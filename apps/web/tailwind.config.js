@@ -19,7 +19,7 @@ module.exports = {
         // tokens above). Never used on web; see
         // docs/superpowers/specs/2026-08-13-mobile-lively-design-design.md.
         "arena-bg": "#0F2A1E",
-        "arena-bg-soft": "#153A28",
+        "arena-bg-soft": "rgba(255,255,255,0.08)",
         "arena-card": "#F7F5F0",
         "arena-accent": "#FFC738",
         "arena-accent-strong": "#C99418",
