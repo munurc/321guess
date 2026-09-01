@@ -8,6 +8,7 @@ import { loadDataset } from "../lib/dataset";
 import { useGameSettings } from "../lib/game-settings-context";
 import { localeUpper } from "../lib/locale-upper";
 import { localizedPath } from "../lib/localized-path";
+import { ArenaBackground } from "./ArenaBackground";
 import { ArenaPressable } from "./ArenaPressable";
 import { GameSettingsPicker } from "./GameSettingsPicker";
 import { HomeHeading, HomeSeoSections } from "./HomeSeoContent";
@@ -104,7 +105,7 @@ export function SetupScreen() {
 
   if (Platform.OS !== "web") {
     return (
-      <View className="flex-1 bg-arena-bg">
+      <ArenaBackground className="flex-1">
         <View className="flex-row items-center justify-end px-4 pb-2" style={{ paddingTop: insets.top + 8 }}>
           <Pressable
             onPress={() => router.push("/settings")}
@@ -123,52 +124,43 @@ export function SetupScreen() {
         ) : (
           <>
             <View className="relative flex-1">
-              <ScrollView className="flex-1 px-4" contentContainerClassName="gap-10 pb-10">
+              <ScrollView className="flex-1 px-4" contentContainerClassName="gap-8 pb-10">
                 {screen === "modes" ? (
-                  <View className="gap-4">
+                  <View className="flex-1 justify-center gap-8">
+                    <View className="items-center gap-2">
+                      <Text className="text-6xl">⚽️</Text>
+                      <Text className="text-2xl font-black text-arena-text">321guess</Text>
+                      <Text className="text-sm text-arena-text-soft">{t("modeGroups.daily.subtitle")}</Text>
+                    </View>
+
                     <ArenaPressable
                       onPress={() => router.push("/online")}
-                      className="flex-row items-center gap-4 rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent p-5"
+                      className="items-center gap-2 rounded-3xl border-b-[8px] border-arena-accent-strong bg-arena-accent px-6 py-8"
                     >
-                      <View className="h-14 w-14 items-center justify-center rounded-2xl bg-white/25">
-                        <Text className="text-3xl">🏆</Text>
-                      </View>
-                      <View className="flex-1">
-                        <Text className="text-lg font-black text-[#2A1E00]">{t("modeGroups.daily.title")}</Text>
-                        <Text className="mt-0.5 text-sm font-semibold text-[#5C4300]">{t("modeGroups.daily.subtitle")}</Text>
-                      </View>
+                      <Text className="text-4xl">🏆</Text>
+                      <Text className="text-xl font-black text-[#2A1E00]">{t("modeGroups.daily.title")}</Text>
                       <Text className="rounded-full bg-[#2A1E00]/15 px-2.5 py-1 text-[10px] font-black tracking-wider text-[#2A1E00]">
                         ● {localeUpper(tOnline("modeCard.live"), locale)}
                       </Text>
                     </ArenaPressable>
 
-                    <ArenaPressable
-                      onPress={() => router.push("/challenge")}
-                      className="flex-row items-center gap-4 rounded-2xl border-b-[6px] border-arena-accent-2-strong bg-arena-accent-2 p-5"
-                    >
-                      <View className="h-14 w-14 items-center justify-center rounded-2xl bg-white/20">
-                        <Text className="text-3xl">⚔️</Text>
-                      </View>
-                      <View className="flex-1">
-                        <Text className="text-lg font-black text-[#04231A]">{t("modeGroups.challenge.title")}</Text>
-                        <Text className="mt-0.5 text-sm font-semibold text-[#04231A]/75">{t("modeGroups.challenge.subtitle")}</Text>
-                      </View>
-                      <Text className="text-xl font-black text-[#04231A]/60">›</Text>
-                    </ArenaPressable>
+                    <View className="flex-row gap-3">
+                      <ArenaPressable
+                        onPress={() => router.push("/challenge")}
+                        className="flex-1 items-center gap-2 rounded-2xl bg-arena-bg-soft px-3 py-5"
+                      >
+                        <Text className="text-2xl">⚔️</Text>
+                        <Text className="text-center text-sm font-bold text-arena-text">{t("modeGroups.challenge.title")}</Text>
+                      </ArenaPressable>
 
-                    <ArenaPressable
-                      onPress={() => setScreen("offline-settings")}
-                      className="flex-row items-center gap-4 rounded-2xl border-2 border-b-[6px] border-arena-accent-2/30 bg-arena-bg-soft p-5"
-                    >
-                      <View className="h-14 w-14 items-center justify-center rounded-2xl border border-arena-accent-2/30 bg-arena-bg">
+                      <ArenaPressable
+                        onPress={() => setScreen("offline-settings")}
+                        className="flex-1 items-center gap-2 rounded-2xl bg-arena-bg-soft px-3 py-5"
+                      >
                         <Text className="text-2xl">📱</Text>
-                      </View>
-                      <View className="flex-1">
-                        <Text className="text-base font-bold text-arena-text">{t("modeGroups.offline.title")}</Text>
-                        <Text className="mt-0.5 text-sm text-arena-text-soft">{t("modeGroups.offline.subtitle")}</Text>
-                      </View>
-                      <Text className="text-xl font-black text-arena-text-soft">›</Text>
-                    </ArenaPressable>
+                        <Text className="text-center text-sm font-bold text-arena-text">{t("modeGroups.offline.title")}</Text>
+                      </ArenaPressable>
+                    </View>
                   </View>
                 ) : (
                   <View className="gap-6">
@@ -229,7 +221,7 @@ export function SetupScreen() {
             )}
           </>
         )}
-      </View>
+      </ArenaBackground>
     );
   }
 
