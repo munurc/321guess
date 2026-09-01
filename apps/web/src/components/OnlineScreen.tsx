@@ -32,6 +32,7 @@ import {
   type RoundInfo,
 } from "../lib/online-api";
 import { shareOrCopy } from "../lib/share";
+import { ArenaBackground } from "./ArenaBackground";
 import { ArenaPressable } from "./ArenaPressable";
 import { Countdown } from "./Countdown";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -334,7 +335,7 @@ export function OnlineScreen() {
 
   if (Platform.OS !== "web") {
     return (
-      <View className="flex-1 bg-arena-bg">
+      <ArenaBackground className="flex-1">
         <View className="relative flex-1">
           <ScrollView
             className="flex-1 px-4 pb-8"
@@ -511,7 +512,7 @@ export function OnlineScreen() {
           </ScrollView>
           <ScrollFadeBottom />
         </View>
-      </View>
+      </ArenaBackground>
     );
   }
 

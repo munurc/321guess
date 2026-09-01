@@ -8,6 +8,7 @@ import { loadDataset } from "../lib/dataset";
 import { fetchLiveRoundPlayers } from "../lib/live-players";
 import { localeUpper } from "../lib/locale-upper";
 import { localizedPath } from "../lib/localized-path";
+import { ArenaBackground } from "./ArenaBackground";
 import { ArenaPressable } from "./ArenaPressable";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { LogoTile } from "./LogoTile";
@@ -101,7 +102,7 @@ export function ManualScreen() {
 
   if (Platform.OS !== "web") {
     return (
-      <View className="flex-1 bg-arena-bg">
+      <ArenaBackground className="flex-1">
         <View className="relative flex-1">
           <ScrollView
             className="flex-1 px-4 pb-8"
@@ -219,7 +220,7 @@ export function ManualScreen() {
           </ScrollView>
           <ScrollFadeBottom />
         </View>
-      </View>
+      </ArenaBackground>
     );
   }
 

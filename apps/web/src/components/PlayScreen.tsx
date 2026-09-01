@@ -10,6 +10,7 @@ import { buildPool, pickRound } from "@321guess/core";
 import { loadDataset } from "../lib/dataset";
 import { fetchLiveRoundPlayers } from "../lib/live-players";
 import { useGameSettings } from "../lib/game-settings-context";
+import { ArenaBackground } from "./ArenaBackground";
 import { Countdown } from "./Countdown";
 import { RoundView } from "./RoundView";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -67,7 +68,7 @@ export function PlayScreen() {
 
   if (Platform.OS !== "web") {
     return (
-      <View className="flex-1 bg-arena-bg">
+      <ArenaBackground className="flex-1">
         <View className="px-4 pb-4" style={{ paddingTop: insets.top + 16 }}>
           <Pressable onPress={() => router.push("/")}>
             <Text className="text-sm tracking-wider text-arena-text-soft">← {localeUpper(t("backToSetup"), locale)}</Text>
@@ -83,7 +84,7 @@ export function PlayScreen() {
         ) : (
           <RoundView key={roundKey(round)} round={round} onNext={rollNext} />
         )}
-      </View>
+      </ArenaBackground>
     );
   }
 

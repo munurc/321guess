@@ -19,6 +19,7 @@ import {
 } from "../lib/challenge-api";
 import { loadDataset } from "../lib/dataset";
 import { loadIdentity, type Identity } from "../lib/online-storage";
+import { ArenaBackground } from "./ArenaBackground";
 import { ArenaPressable } from "./ArenaPressable";
 import { Countdown } from "./Countdown";
 import { GameSettingsPicker } from "./GameSettingsPicker";
@@ -276,9 +277,9 @@ export function ChallengeScreen() {
 
   if (!identity) {
     return (
-      <View className="flex-1 items-center justify-center bg-arena-bg" style={{ paddingTop: insets.top }}>
+      <ArenaBackground className="flex-1 items-center justify-center" style={{ paddingTop: insets.top }}>
         <Text className="text-arena-text-soft">{t("loading")}</Text>
-      </View>
+      </ArenaBackground>
     );
   }
 
@@ -361,13 +362,13 @@ export function ChallengeScreen() {
   if (screen.kind === "new-settings") {
     if (!dataset) {
       return (
-        <View className="flex-1 items-center justify-center bg-arena-bg">
+        <ArenaBackground className="flex-1 items-center justify-center">
           <Text className="text-arena-text-soft">{t("loading")}</Text>
-        </View>
+        </ArenaBackground>
       );
     }
     return (
-      <View className="flex-1 bg-arena-bg">
+      <ArenaBackground className="flex-1">
         <ScrollView className="flex-1 px-4" contentContainerClassName="gap-6 pb-10" style={{ paddingTop: insets.top + 16 }}>
           <Pressable onPress={() => setScreen({ kind: "hub" })}>
             <Text className="text-sm tracking-wider text-arena-text-soft">← {t("title")}</Text>
@@ -403,16 +404,16 @@ export function ChallengeScreen() {
             </Text>
           </ArenaPressable>
         </View>
-      </View>
+      </ArenaBackground>
     );
   }
 
   if (screen.kind === "countdown") {
     const { next, challenge } = screen;
     return (
-      <View className="flex-1 bg-arena-bg">
+      <ArenaBackground className="flex-1">
         <Countdown onDone={() => setScreen({ kind: next, challenge })} />
-      </View>
+      </ArenaBackground>
     );
   }
 
@@ -537,7 +538,7 @@ export function ChallengeScreen() {
       myResult.correctCount === opponentCorrect ? "tied" : myResult.correctCount > opponentCorrect ? "won" : "lost";
 
     return (
-      <View className="flex-1 items-center justify-center gap-6 bg-arena-bg px-4">
+      <ArenaBackground className="flex-1 items-center justify-center gap-6 px-4">
         <Text className="text-3xl font-black text-arena-text">{t("resultHeading")}</Text>
         <Text
           className={`text-2xl font-bold ${outcome === "won" ? "text-arena-accent-2" : outcome === "lost" ? "text-red-300" : "text-arena-text-soft"}`}
@@ -559,7 +560,7 @@ export function ChallengeScreen() {
         <Pressable onPress={() => setScreen({ kind: "hub" })}>
           <Text className="text-arena-text-soft">{t("backToHub")}</Text>
         </Pressable>
-      </View>
+      </ArenaBackground>
     );
   }
 
