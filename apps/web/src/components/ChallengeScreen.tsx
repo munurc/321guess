@@ -466,8 +466,12 @@ export function ChallengeScreen() {
   if (screen.kind === "new-send") {
     const { challenge, result } = screen;
     return (
-      <View className="flex-1 bg-arena-bg px-4" style={{ paddingTop: insets.top + 16 }}>
-        <Text className="text-2xl font-black text-arena-text">{t("sendHeading")}</Text>
+      <ArenaBackground className="flex-1 px-4" style={{ paddingTop: insets.top + 16 }}>
+        <Pressable onPress={() => setScreen({ kind: "hub" })}>
+          <Text className="text-sm tracking-wider text-arena-text-soft">← {t("back")}</Text>
+        </Pressable>
+
+        <Text className="mt-6 text-2xl font-black text-arena-text">{t("sendHeading")}</Text>
         <Text className="mt-2 text-lg text-arena-accent-2">
           {t("sendScoreLabel", { correct: result.correctCount, total: result.totalPossible })}
         </Text>
@@ -478,27 +482,30 @@ export function ChallengeScreen() {
         {sendStatus === "sent" ? (
           <Text className="mt-8 text-lg text-arena-accent-2">{t("sentSuccess")}</Text>
         ) : (
-          <View className="mt-8 gap-4">
+          <View className="mt-8 flex-1 gap-3">
             <TextInput
               value={searchQuery}
               onChangeText={setSearchQuery}
               placeholder={t("searchPlaceholder")}
               placeholderTextColor="#8FE8C4"
               autoCapitalize="none"
-              className="rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-4 py-4 text-lg text-arena-text"
+              className="rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-5 py-5 text-xl text-arena-text"
             />
             {searchResults.map((username) => (
               <Pressable
                 key={username}
                 onPress={() => void sendToUsername(challenge, username)}
-                className="rounded-xl bg-arena-bg-soft px-4 py-3"
+                className="flex-row items-center gap-3 rounded-2xl bg-arena-bg-soft px-4 py-3"
               >
+                <View className="h-10 w-10 items-center justify-center rounded-full bg-arena-accent">
+                  <Text className="text-base font-black text-[#2A1E00]">{username[0]?.toUpperCase() ?? "?"}</Text>
+                </View>
                 <Text className="text-lg text-arena-text">{username}</Text>
               </Pressable>
             ))}
           </View>
         )}
-      </View>
+      </ArenaBackground>
     );
   }
 
