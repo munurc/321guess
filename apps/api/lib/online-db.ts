@@ -1,6 +1,6 @@
 import { getSupabaseServerClient } from "./supabase";
 
-type ClubRef = { id: string; name: string; logoUrl: string };
+type ClubRef = { id: string; name: string; logoUrl: string; color?: string };
 
 export type DailyQuestionRow = {
   index: number;
@@ -35,8 +35,8 @@ export async function getDailyRound(roundDate: string): Promise<DailyRoundRow | 
     roundDate,
     questions: (questionRows ?? []).map((row) => ({
       index: row.question_index,
-      clubA: { id: row.club_a_id, name: row.club_a_name, logoUrl: row.club_a_logo_url },
-      clubB: { id: row.club_b_id, name: row.club_b_name, logoUrl: row.club_b_logo_url },
+      clubA: { id: row.club_a_id, name: row.club_a_name, logoUrl: row.club_a_logo_url, color: row.club_a_color ?? undefined },
+      clubB: { id: row.club_b_id, name: row.club_b_name, logoUrl: row.club_b_logo_url, color: row.club_b_color ?? undefined },
       answerPlayerIds: row.answer_player_ids,
     })),
   };
@@ -71,9 +71,11 @@ export async function createDailyRound(roundDate: string, questions: QuestionInp
         club_a_id: q.clubA.id,
         club_a_name: q.clubA.name,
         club_a_logo_url: q.clubA.logoUrl,
+        club_a_color: q.clubA.color ?? null,
         club_b_id: q.clubB.id,
         club_b_name: q.clubB.name,
         club_b_logo_url: q.clubB.logoUrl,
+        club_b_color: q.clubB.color ?? null,
         answer_player_ids: q.answerPlayerIds,
       })),
     );

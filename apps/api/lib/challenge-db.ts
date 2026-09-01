@@ -4,7 +4,7 @@ import { applyResult, canonicalPair, type RivalryTotals } from "./rivalry";
 import { isMatchableRandomChallenge } from "./challenge-eligibility";
 import type { Settings } from "@321guess/core";
 
-type ClubRef = { id: string; name: string; logoUrl: string };
+type ClubRef = { id: string; name: string; logoUrl: string; color?: string };
 
 export type ChallengeQuestionRow = {
   index: number;
@@ -57,8 +57,8 @@ function mapChallengeRow(row: any, questionRows: any[]): ChallengeRow {
       .sort((a, b) => a.question_index - b.question_index)
       .map((q) => ({
         index: q.question_index,
-        clubA: { id: q.club_a_id, name: q.club_a_name, logoUrl: q.club_a_logo_url },
-        clubB: { id: q.club_b_id, name: q.club_b_name, logoUrl: q.club_b_logo_url },
+        clubA: { id: q.club_a_id, name: q.club_a_name, logoUrl: q.club_a_logo_url, color: q.club_a_color ?? undefined },
+        clubB: { id: q.club_b_id, name: q.club_b_name, logoUrl: q.club_b_logo_url, color: q.club_b_color ?? undefined },
         totalPossible: q.answer_player_ids.length,
       })),
   };
@@ -80,24 +80,30 @@ async function insertQuestions(challengeId: string, settings: Settings) {
         club_a_id: m.round.clubA.id,
         club_a_name: m.round.clubA.name,
         club_a_logo_url: m.round.clubA.logoUrl,
+        club_a_color: m.round.clubA.color ?? null,
         club_b_id: m.round.clubB.id,
         club_b_name: m.round.clubB.name,
         club_b_logo_url: m.round.clubB.logoUrl,
+        club_b_color: m.round.clubB.color ?? null,
         answer_player_ids: m.round.correctPlayers.map((p) => p.id),
       };
     }
     // countryClub: store the country's "club slot" as clubA (flag), the
     // actual club as clubB — ChallengeQuestionRow has no separate country
     // field, matching how the client only ever needs two logo/flag tiles.
+    // A flag has no extracted color (LogoTile keeps flags on the neutral
+    // ring regardless), so club_a_color is always null here.
     return {
       challenge_id: challengeId,
       question_index: index,
       club_a_id: m.round.country.code,
       club_a_name: m.round.country.nameEn,
       club_a_logo_url: m.round.country.flagUrl,
+      club_a_color: null,
       club_b_id: m.round.club.id,
       club_b_name: m.round.club.name,
       club_b_logo_url: m.round.club.logoUrl,
+      club_b_color: m.round.club.color ?? null,
       answer_player_ids: m.round.correctPlayers.map((p) => p.id),
     };
   });
