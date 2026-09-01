@@ -46,6 +46,16 @@ layouts, and finally wires up club colors.
 
 ## Visual direction (approved via mockup review)
 
+**Background scope:** the gradient background (below) applies to every
+native screen currently using flat `arena-bg` as its root background —
+`SetupScreen`, `ChallengeScreen`, `SettingsScreen`, `ManualScreen`,
+`OnlineScreen`, `PlayScreen`, `RoundView`, `RoundPlayView`,
+`GameSettingsPicker`, `ArenaChip` — not just the five screens with their
+own layout mockups below. This is a background-color-only change for the
+screens outside this spec's five; their internal layout is untouched.
+Consistency (one continuous "arena" backdrop app-wide) matters more than
+tightly scoping the swap to only the reviewed mockups.
+
 **Base palette — "warm arcade":** replaces `arena-bg`'s flat `#0F2A1E` with a
 dark radial gradient — `#3A2E5C` at the top fading to `#1A1330` — kept across
 every screen covered by this spec. The existing gold/turquoise accent family
