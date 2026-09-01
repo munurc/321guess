@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslations } from 'use-intl';
 
+import { ArenaBackground } from './ArenaBackground';
 import { ArenaPressable } from './ArenaPressable';
 import { useAppLocale } from '@/i18n/AppLocaleContext';
 import { messages } from '@/i18n/messages';
@@ -77,15 +78,15 @@ export function SettingsScreen() {
   }
 
   return (
-    <View className="flex-1 bg-arena-bg px-4 pb-8" style={{ paddingTop: insets.top + 32 }}>
+    <ArenaBackground className="flex-1 px-4 pb-8" style={{ paddingTop: insets.top + 32 }}>
       <ArenaPressable onPress={() => router.back()}>
         <Text className="text-xs tracking-wider text-arena-text-soft">← {localeUpper(t('back'), locale)}</Text>
       </ArenaPressable>
 
       <Text className="mt-6 text-2xl font-black text-arena-text">{t('title')}</Text>
 
-      <View className="mt-8 gap-1">
-        <SettingsRow label={t('language')}>
+      <View className="mt-8 gap-2">
+        <SettingsRow icon="🌐" label={t('language')}>
           <View className="flex-row gap-1 rounded-full border border-arena-accent-2 bg-arena-bg-soft p-1">
             {locales.map((l) => (
               <ArenaPressable
@@ -103,11 +104,11 @@ export function SettingsScreen() {
           </View>
         </SettingsRow>
 
-        <SettingsRow label={t('sound')}>
+        <SettingsRow icon="🔊" label={t('sound')}>
           <Toggle value={soundEnabled} onChange={setSoundEnabled} />
         </SettingsRow>
 
-        <SettingsRow label={t('haptics')}>
+        <SettingsRow icon="📳" label={t('haptics')}>
           <Toggle value={hapticsEnabled} onChange={setHapticsEnabled} />
         </SettingsRow>
       </View>
@@ -121,7 +122,7 @@ export function SettingsScreen() {
         </ArenaPressable>
       </View>
 
-      <View className="mt-8 gap-3">
+      <View className="mt-8 gap-3 rounded-2xl border-2 border-arena-accent/40 bg-arena-accent/10 p-4">
         <Text className="text-lg font-bold text-arena-text">{t('accountLinking.heading')}</Text>
         <Text className="text-sm text-arena-text-soft">{t('accountLinking.description')}</Text>
 
@@ -162,14 +163,17 @@ export function SettingsScreen() {
           </View>
         )}
       </View>
-    </View>
+    </ArenaBackground>
   );
 }
 
-function SettingsRow({ label, children }: { label: string; children: React.ReactNode }) {
+function SettingsRow({ icon, label, children }: { icon: string; label: string; children: React.ReactNode }) {
   return (
-    <View className="flex-row items-center justify-between border-b border-arena-bg-soft py-3">
-      <Text className="text-sm font-semibold text-arena-text">{label}</Text>
+    <View className="flex-row items-center justify-between rounded-2xl bg-arena-bg-soft px-4 py-4">
+      <View className="flex-row items-center gap-3">
+        <Text className="text-lg">{icon}</Text>
+        <Text className="text-sm font-semibold text-arena-text">{label}</Text>
+      </View>
       {children}
     </View>
   );
