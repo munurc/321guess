@@ -423,7 +423,7 @@ export function ChallengeScreen() {
     if (!dataset || !currentQuestion) return null;
 
     return (
-      <View className="flex-1 bg-arena-bg">
+      <ArenaBackground className="flex-1">
         <ScrollView className="flex-1 px-4" contentContainerClassName="gap-4 pb-10" style={{ paddingTop: insets.top + 16 }}>
           <Text className="text-sm text-arena-text-soft">
             {questionIndex + 1} / {challenge.questions.length}
@@ -447,12 +447,12 @@ export function ChallengeScreen() {
           />
           <ArenaPressable
             onPress={() => void goToNextPlayQuestion(challenge, finishPlaying)}
-            className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-5"
+            className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-6"
           >
-            <Text className="text-lg font-bold text-[#2A1E00]">→</Text>
+            <Text className="text-xl font-bold text-[#2A1E00]">→</Text>
           </ArenaPressable>
         </ScrollView>
-      </View>
+      </ArenaBackground>
     );
   }
 
@@ -501,7 +501,7 @@ export function ChallengeScreen() {
     if (!dataset || !currentQuestion) return null;
 
     return (
-      <View className="flex-1 bg-arena-bg">
+      <ArenaBackground className="flex-1">
         <ScrollView className="flex-1 px-4" contentContainerClassName="gap-4 pb-10" style={{ paddingTop: insets.top + 16 }}>
           <Text className="text-sm text-arena-text-soft">
             {questionIndex + 1} / {challenge.questions.length}
@@ -521,12 +521,12 @@ export function ChallengeScreen() {
           />
           <ArenaPressable
             onPress={() => void goToNextPlayQuestion(challenge, finishOpponentPlaying)}
-            className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-5"
+            className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-6"
           >
-            <Text className="text-lg font-bold text-[#2A1E00]">→</Text>
+            <Text className="text-xl font-bold text-[#2A1E00]">→</Text>
           </ArenaPressable>
         </ScrollView>
-      </View>
+      </ArenaBackground>
     );
   }
 

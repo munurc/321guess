@@ -52,7 +52,7 @@ export function GuessInput({
           onFocus={() => setOpen(true)}
           placeholder={placeholder}
           placeholderTextColor="#8FE8C4"
-          className="rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-4 py-4 text-lg text-arena-text"
+          className="rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-5 py-5 text-xl text-arena-text"
         />
         {open && query.trim().length >= 2 && (
           <View className="absolute top-[70px] z-20 max-h-72 w-full rounded-2xl border border-arena-accent-2 bg-arena-bg-soft">
@@ -153,7 +153,7 @@ export function RoundPlayView({
 }) {
   return (
     <View className="gap-4">
-      <View className="rounded-2xl bg-arena-bg-soft px-4 pb-5 pt-3">
+      <View className="rounded-2xl bg-arena-bg-soft px-4 pb-6 pt-4">
         {timerLabel && (
           <Text className="mb-3 self-end rounded-full bg-arena-accent/20 px-4 py-1.5 text-base font-bold text-arena-accent">
             {timerLabel}
@@ -161,9 +161,9 @@ export function RoundPlayView({
         )}
         <CelebrationPulse trigger={celebrationTick}>
           <View className="flex-row items-center justify-center gap-4">
-            <LogoTile size="sm" src={question.clubA.logoUrl} alt={question.clubA.name} caption={question.clubA.name} color={question.clubA.color} />
+            <LogoTile size="lg" src={question.clubA.logoUrl} alt={question.clubA.name} caption={question.clubA.name} color={question.clubA.color} />
             <Text className="text-sm font-black text-arena-text-soft">{vsLabel}</Text>
-            <LogoTile size="sm" src={question.clubB.logoUrl} alt={question.clubB.name} caption={question.clubB.name} color={question.clubB.color} />
+            <LogoTile size="lg" src={question.clubB.logoUrl} alt={question.clubB.name} caption={question.clubB.name} color={question.clubB.color} />
           </View>
         </CelebrationPulse>
 
