@@ -2093,7 +2093,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/e/ec/Escudo-orizaba.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
     "leagueId": "Q764690",
     "countryCode": "MX",
-    "popularity": 5
+    "popularity": 5,
+    "color": "#bd9e75"
   },
   {
     "id": "Q1346314",
@@ -2119,7 +2120,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/3/38/NEC_Nijmegen_logo.svg/330px-NEC_Nijmegen_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q167541",
     "countryCode": "NL",
-    "popularity": 46
+    "popularity": 46,
+    "color": "#bd9e75"
   },
   {
     "id": "Q1963926",
@@ -2457,7 +2459,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/d/d8/Rayo_Vallecano_logo.svg/330px-Rayo_Vallecano_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q324867",
     "countryCode": "ES",
-    "popularity": 70
+    "popularity": 70,
+    "color": "#bda775"
   },
   {
     "id": "Q702455",
@@ -2537,7 +2540,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/5/54/Real_Salt_Lake_2010.svg/330px-Real_Salt_Lake_2010.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q18543",
     "countryCode": "US",
-    "popularity": 40
+    "popularity": 40,
+    "color": "#984955"
   },
   {
     "id": "Q10315",
@@ -2633,7 +2637,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/f/fd/S.C._Beira-Mar_logo.svg/330px-S.C._Beira-Mar_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q182994",
     "countryCode": "PT",
-    "popularity": 37
+    "popularity": 37,
+    "color": "#b9ab5c"
   },
   {
     "id": "Q75684",
@@ -2650,7 +2655,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Sport_Club_Corinthians_Paulista_crest.svg/330px-Sport_Club_Corinthians_Paulista_crest.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q206813",
     "countryCode": "BR",
-    "popularity": 102
+    "popularity": 102,
+    "color": "#bd7577"
   },
   {
     "id": "Q80845",
@@ -2658,7 +2664,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Sport_Club_Internacional_logo.svg/960px-Sport_Club_Internacional_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q206813",
     "countryCode": "BR",
-    "popularity": 60
+    "popularity": 60,
+    "color": "#ea484e"
   },
   {
     "id": "Q131499",
@@ -2720,7 +2727,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/5/57/San_Mart%C3%ADn_de_San_Juan.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
     "leagueId": "Q223170",
     "countryCode": "AR",
-    "popularity": 23
+    "popularity": 23,
+    "color": "#75b667"
   },
   {
     "id": "Q80955",
@@ -2764,7 +2772,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/6/67/SC_Fives_logo.svg/330px-SC_Fives_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q13394",
     "countryCode": "FR",
-    "popularity": 19
+    "popularity": 19,
+    "color": "#7588bd"
   },
   {
     "id": "Q106394",
@@ -2772,7 +2781,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/6/6d/SC_Freiburg_logo.svg/330px-SC_Freiburg_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q82595",
     "countryCode": "DE",
-    "popularity": 71
+    "popularity": 71,
+    "color": "#b86a91"
   },
   {
     "id": "Q200321",
@@ -2798,7 +2808,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/4/4d/SC_Telstar_logo.svg/330px-SC_Telstar_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q167541",
     "countryCode": "NL",
-    "popularity": 30
+    "popularity": 30,
+    "color": "#bc8474"
   },
   {
     "id": "Q32494",
@@ -2815,7 +2826,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/8/84/Seattle_Sounders_logo.svg/330px-Seattle_Sounders_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q18543",
     "countryCode": "US",
-    "popularity": 49
+    "popularity": 49,
+    "color": "#6db9a1"
   },
   {
     "id": "Q10329",
@@ -2981,7 +2993,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/Stade_Rennais_FC.svg/330px-Stade_Rennais_FC.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q13394",
     "countryCode": "FR",
-    "popularity": 60
+    "popularity": 60,
+    "color": "#ae6b57"
   },
   {
     "id": "Q190561",
@@ -3034,7 +3047,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/3/33/Tampa_Bay_Mutiny_logo.svg/330px-Tampa_Bay_Mutiny_logo.svg.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
     "leagueId": "Q18543",
     "countryCode": "US",
-    "popularity": 26
+    "popularity": 26,
+    "color": "#4b879d"
   },
   {
     "id": "Q2979895",
@@ -3113,7 +3127,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/c/cd/Toulouse_FC_%281937%29.gif?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
     "leagueId": "Q13394",
     "countryCode": "FR",
-    "popularity": 17
+    "popularity": 17,
+    "color": "#bd8475"
   },
   {
     "id": "Q192641",
@@ -3157,7 +3172,8 @@
     "logoUrl": "https://upload.wikimedia.org/wikipedia/en/8/85/Uberl%C3%A2ndia_Esporte_Clube.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
     "leagueId": "Q206813",
     "countryCode": "BR",
-    "popularity": 14
+    "popularity": 14,
+    "color": "#75bd7d"
   },
   {
     "id": "Q2798",
