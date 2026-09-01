@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Platform } from "react-native";
 import * as Linking from "expo-linking";
 import { getSupabaseClient } from "../lib/supabase-client";
-import { AUTH_CALLBACK_REDIRECT_URL } from "../lib/account-auth";
+import { AUTH_CALLBACK_REDIRECT_URL, clearPendingMagicLink, hasPendingMagicLink } from "../lib/account-auth";
 
 const EXPECTED_PATH = Linking.parse(AUTH_CALLBACK_REDIRECT_URL).path;
 
@@ -29,6 +29,16 @@ export function AccountLinkDeepLinkHandler() {
       // them, and completeLink (Task 12) would then link the local
       // player_token to the attacker's account.
       if (parsed.path !== EXPECTED_PATH) return;
+      // The path check alone isn't enough: anyone can craft a link with
+      // this exact path carrying a REAL access/refresh token pair for an
+      // account they control (their own throwaway sign-in), and get this
+      // device to sign in as them. Only accept a deep-link session if
+      // this device itself requested a magic link recently — Google/Apple
+      // never reach this handler at all (see account-auth.ts). Consumed
+      // (single-use) regardless of outcome, so one window can't be reused.
+      const pending = await hasPendingMagicLink();
+      await clearPendingMagicLink();
+      if (!pending) return;
       const { queryParams } = parsed;
       const accessToken = queryParams?.access_token;
       const refreshToken = queryParams?.refresh_token;
