@@ -348,7 +348,7 @@ export function ChallengeScreen() {
                 <View key={c.id} className="flex-row items-center justify-between rounded-2xl bg-arena-bg-soft p-4">
                   <View className="flex-row items-center gap-3">
                     <View className="flex-row">
-                      <View className="h-9 w-9 items-center justify-center rounded-full border-2 border-arena-bg bg-arena-accent">
+                      <View className="h-9 w-9 items-center justify-center rounded-full border-2 border-black/20 bg-arena-accent">
                         <Text className="text-xs font-black text-[#2A1E00]">{c.opponentUsername?.[0]?.toUpperCase() ?? "?"}</Text>
                       </View>
                     </View>

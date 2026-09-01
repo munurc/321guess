@@ -185,7 +185,7 @@ function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) =>
       onPress={() => onChange(!value)}
       accessibilityRole="switch"
       accessibilityState={{ checked: value }}
-      className={`h-6 w-10 justify-center rounded-full p-0.5 ${value ? 'bg-arena-accent-2' : 'bg-arena-bg-soft'}`}
+      className={`h-6 w-10 justify-center rounded-full p-0.5 ${value ? 'bg-arena-accent-2' : 'bg-white/20'}`}
     >
       <View className={`h-5 w-5 rounded-full bg-arena-card ${value ? 'self-end' : 'self-start'}`} />
     </ArenaPressable>

@@ -55,7 +55,7 @@ export function GuessInput({
           className="rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-5 py-5 text-xl text-arena-text"
         />
         {open && query.trim().length >= 2 && (
-          <View className="absolute top-[70px] z-20 max-h-72 w-full rounded-2xl border border-arena-accent-2 bg-arena-bg-soft">
+          <View className="absolute top-full z-20 mt-2 max-h-72 w-full rounded-2xl border border-arena-accent-2 bg-arena-bg">
             {filtered.length === 0 ? (
               <Text className="px-4 py-3 text-base text-arena-text-soft">{emptyText}</Text>
             ) : (

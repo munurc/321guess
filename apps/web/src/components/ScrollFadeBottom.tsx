@@ -7,7 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 export function ScrollFadeBottom() {
   return (
     <LinearGradient
-      colors={['transparent', '#0F2A1E']}
+      colors={['transparent', '#1A1330']}
       pointerEvents="none"
       style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 40 }}
     />

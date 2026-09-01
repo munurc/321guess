@@ -60,7 +60,7 @@ export function RoundView({ round, onNext }: { round: Round; onNext: () => void 
                 ) : (
                   <View className="gap-2">
                     {round.correctPlayers.map((p) => (
-                      <View key={p.id} className="flex-row items-center gap-2 rounded-md bg-arena-bg px-4 py-3">
+                      <View key={p.id} className="flex-row items-center gap-2 rounded-md bg-black/20 px-4 py-3">
                         <Text className="text-lg">{codeToFlag(p.nationalityCode)}</Text>
                         <Text className="flex-1 text-lg text-arena-text">{p.name}</Text>
                         <Text className="text-xs font-medium uppercase text-arena-text-soft">
