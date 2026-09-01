@@ -285,7 +285,7 @@ export function ChallengeScreen() {
 
   if (screen.kind === "hub") {
     return (
-      <View className="flex-1 bg-arena-bg">
+      <ArenaBackground className="flex-1">
         <ScrollView className="flex-1 px-4" contentContainerClassName="gap-8 pb-10" style={{ paddingTop: insets.top + 16 }}>
           <Pressable onPress={() => router.push("/")}>
             <Text className="text-sm tracking-wider text-arena-text-soft">← {t("back")}</Text>
@@ -296,9 +296,9 @@ export function ChallengeScreen() {
           <View className="gap-3">
             <ArenaPressable
               onPress={() => setScreen({ kind: "new-settings" })}
-              className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-5"
+              className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-6"
             >
-              <Text className="text-lg font-bold text-[#2A1E00]">{t("newChallenge")}</Text>
+              <Text className="text-xl font-bold text-[#2A1E00]">{t("newChallenge")}</Text>
             </ArenaPressable>
             <ArenaPressable
               onPress={() => void startRandomOpponent()}
@@ -309,9 +309,9 @@ export function ChallengeScreen() {
           </View>
 
           <View className="gap-3">
-            <Text className="text-lg font-semibold tracking-wider text-arena-text-soft">{t("incomingHeading")}</Text>
+            <Text className="text-xs font-bold uppercase tracking-widest text-arena-text-soft">{t("incomingHeading")}</Text>
             {!list || list.incoming.length === 0 ? (
-              <Text className="text-arena-text-soft">{t("emptyIncoming")}</Text>
+              <Text className="rounded-2xl bg-arena-bg-soft p-4 text-arena-text-soft">{t("emptyIncoming")}</Text>
             ) : (
               list.incoming.map((c) => (
                 <ArenaPressable
@@ -327,9 +327,9 @@ export function ChallengeScreen() {
           </View>
 
           <View className="gap-3">
-            <Text className="text-lg font-semibold tracking-wider text-arena-text-soft">{t("outgoingHeading")}</Text>
+            <Text className="text-xs font-bold uppercase tracking-widest text-arena-text-soft">{t("outgoingHeading")}</Text>
             {!list || list.outgoing.length === 0 ? (
-              <Text className="text-arena-text-soft">{t("emptyOutgoing")}</Text>
+              <Text className="rounded-2xl bg-arena-bg-soft p-4 text-arena-text-soft">{t("emptyOutgoing")}</Text>
             ) : (
               list.outgoing.map((c) => (
                 <View key={c.id} className="rounded-2xl bg-arena-bg-soft p-4">
@@ -340,13 +340,20 @@ export function ChallengeScreen() {
           </View>
 
           <View className="gap-3">
-            <Text className="text-lg font-semibold tracking-wider text-arena-text-soft">{t("rivalriesHeading")}</Text>
+            <Text className="text-xs font-bold uppercase tracking-widest text-arena-text-soft">{t("rivalriesHeading")}</Text>
             {!list || list.completed.length === 0 ? (
-              <Text className="text-arena-text-soft">{t("emptyRivalries")}</Text>
+              <Text className="rounded-2xl bg-arena-bg-soft p-4 text-arena-text-soft">{t("emptyRivalries")}</Text>
             ) : (
               list.completed.map((c) => (
                 <View key={c.id} className="flex-row items-center justify-between rounded-2xl bg-arena-bg-soft p-4">
-                  <Text className="text-base font-semibold text-arena-text">{c.opponentUsername}</Text>
+                  <View className="flex-row items-center gap-3">
+                    <View className="flex-row">
+                      <View className="h-9 w-9 items-center justify-center rounded-full border-2 border-arena-bg bg-arena-accent">
+                        <Text className="text-xs font-black text-[#2A1E00]">{c.opponentUsername?.[0]?.toUpperCase() ?? "?"}</Text>
+                      </View>
+                    </View>
+                    <Text className="text-base font-semibold text-arena-text">{c.opponentUsername}</Text>
+                  </View>
                   <Text className="font-bold text-arena-accent-2">
                     {t("rivalryScore", { wins: c.rivalry.myWins, losses: c.rivalry.opponentWins })}
                   </Text>
@@ -355,7 +362,7 @@ export function ChallengeScreen() {
             )}
           </View>
         </ScrollView>
-      </View>
+      </ArenaBackground>
     );
   }
 
