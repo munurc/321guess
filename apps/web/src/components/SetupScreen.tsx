@@ -131,7 +131,7 @@ export function SetupScreen() {
                 contentContainerStyle={{ flexGrow: 1, gap: 32, paddingBottom: 40, backgroundColor: "green" }}
               >
                 {screen === "modes" ? (
-                  <View className="flex-1 justify-center gap-8" style={{ backgroundColor: "orange" }}>
+                  <View style={{ flex: 1, justifyContent: "center", gap: 32, backgroundColor: "orange" }}>
                     <View className="items-center gap-2">
                       <Text className="text-6xl">⚽️</Text>
                       <Text className="text-2xl font-black text-arena-text">321guess</Text>
