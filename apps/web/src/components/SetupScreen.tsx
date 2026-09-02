@@ -107,7 +107,7 @@ export function SetupScreen() {
     return (
       <ArenaBackground className="flex-1">
         <View className="flex-row items-center justify-between px-4 pb-2" style={{ paddingTop: insets.top + 8 }}>
-          <Text style={{ color: "red", fontWeight: "900" }}>DEBUG-BUILD-6</Text>
+          <Text style={{ color: "red", fontWeight: "900" }}>DBG-132254</Text>
           <Pressable
             onPress={() => router.push("/settings")}
             accessibilityLabel={tSettings("title")}
@@ -116,6 +116,10 @@ export function SetupScreen() {
           >
             <Text className="text-2xl">⚙️</Text>
           </Pressable>
+        </View>
+
+        <View style={{ height: 200, backgroundColor: "purple", justifyContent: "center", alignItems: "center" }}>
+          <Text style={{ color: "white", fontWeight: "900" }}>ISOLATED-CENTER-TEST</Text>
         </View>
 
         {!dataset ? (
