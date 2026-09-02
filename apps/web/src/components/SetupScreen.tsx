@@ -106,7 +106,8 @@ export function SetupScreen() {
   if (Platform.OS !== "web") {
     return (
       <ArenaBackground className="flex-1">
-        <View className="flex-row items-center justify-end px-4 pb-2" style={{ paddingTop: insets.top + 8 }}>
+        <View className="flex-row items-center justify-between px-4 pb-2" style={{ paddingTop: insets.top + 8 }}>
+          <Text style={{ color: "red", fontWeight: "900" }}>DEBUG-BUILD-6</Text>
           <Pressable
             onPress={() => router.push("/settings")}
             accessibilityLabel={tSettings("title")}
@@ -123,13 +124,14 @@ export function SetupScreen() {
           </View>
         ) : (
           <>
-            <View className="relative flex-1">
+            <View className="relative flex-1" style={{ backgroundColor: "red" }}>
               <ScrollView
                 className="flex-1 px-4"
-                contentContainerStyle={{ flexGrow: 1, gap: 32, paddingBottom: 40 }}
+                style={{ backgroundColor: "blue" }}
+                contentContainerStyle={{ flexGrow: 1, gap: 32, paddingBottom: 40, backgroundColor: "green" }}
               >
                 {screen === "modes" ? (
-                  <View className="flex-1 justify-center gap-8">
+                  <View className="flex-1 justify-center gap-8" style={{ backgroundColor: "orange" }}>
                     <View className="items-center gap-2">
                       <Text className="text-6xl">⚽️</Text>
                       <Text className="text-2xl font-black text-arena-text">321guess</Text>
