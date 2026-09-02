@@ -124,7 +124,7 @@ export function SetupScreen() {
         ) : (
           <>
             <View className="relative flex-1">
-              <ScrollView className="flex-1 px-4" contentContainerClassName="gap-8 pb-10">
+              <ScrollView className="flex-1 px-4" contentContainerClassName="flex-grow gap-8 pb-10">
                 {screen === "modes" ? (
                   <View className="flex-1 justify-center gap-8">
                     <View className="items-center gap-2">
