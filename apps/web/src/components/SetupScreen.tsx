@@ -106,8 +106,7 @@ export function SetupScreen() {
   if (Platform.OS !== "web") {
     return (
       <ArenaBackground className="flex-1">
-        <View className="flex-row items-center justify-between px-4 pb-2" style={{ paddingTop: insets.top + 8 }}>
-          <Text style={{ color: "red", fontWeight: "900" }}>DBG-132254</Text>
+        <View className="flex-row items-center justify-end px-4 pb-2" style={{ paddingTop: insets.top + 8 }}>
           <Pressable
             onPress={() => router.push("/settings")}
             accessibilityLabel={tSettings("title")}
@@ -118,100 +117,91 @@ export function SetupScreen() {
           </Pressable>
         </View>
 
-        <View style={{ height: 200, backgroundColor: "purple", justifyContent: "center", alignItems: "center" }}>
-          <Text style={{ color: "white", fontWeight: "900" }}>ISOLATED-CENTER-TEST</Text>
-        </View>
-
         {!dataset ? (
           <View className="flex-1 items-center justify-center px-8">
             <Text className="text-arena-text-soft">{t("loading")}</Text>
           </View>
         ) : (
           <>
-            <View className="relative flex-1" style={{ backgroundColor: "red" }}>
-              <ScrollView
-                className="flex-1 px-4"
-                style={{ backgroundColor: "blue" }}
-                contentContainerStyle={{ flexGrow: 1, gap: 32, paddingBottom: 40, backgroundColor: "green" }}
-              >
-                {screen === "modes" ? (
-                  <View style={{ flex: 1, justifyContent: "center", backgroundColor: "orange" }}>
-                    <View className="items-center gap-2" style={{ marginBottom: 32 }}>
-                      <Text className="text-6xl">⚽️</Text>
-                      <Text className="text-2xl font-black text-arena-text">321guess</Text>
-                      <Text className="text-sm text-arena-text-soft">{t("modeGroups.daily.subtitle")}</Text>
-                    </View>
+            <View className="relative flex-1">
+              {screen === "modes" ? (
+                <View className="flex-1 justify-center px-4">
+                  <View className="items-center gap-2 mb-8">
+                    <Text className="text-6xl">⚽️</Text>
+                    <Text className="text-2xl font-black text-arena-text">321guess</Text>
+                    <Text className="text-sm text-arena-text-soft">{t("modeGroups.daily.subtitle")}</Text>
+                  </View>
 
+                  <ArenaPressable
+                    onPress={() => router.push("/online")}
+                    className="items-center gap-2 rounded-3xl border-b-[8px] border-arena-accent-strong bg-arena-accent px-6 py-8 mb-8"
+                  >
+                    <Text className="text-4xl">🏆</Text>
+                    <Text className="text-xl font-black text-[#2A1E00]">{t("modeGroups.daily.title")}</Text>
+                    <Text className="rounded-full bg-[#2A1E00]/15 px-2.5 py-1 text-[10px] font-black tracking-wider text-[#2A1E00]">
+                      ● {localeUpper(tOnline("modeCard.live"), locale)}
+                    </Text>
+                  </ArenaPressable>
+
+                  <View className="flex-row gap-3">
                     <ArenaPressable
-                      onPress={() => router.push("/online")}
-                      className="items-center gap-2 rounded-3xl border-b-[8px] border-arena-accent-strong bg-arena-accent px-6 py-8"
-                      style={{ marginBottom: 32 }}
+                      onPress={() => router.push("/challenge")}
+                      className="flex-1 items-center gap-2 rounded-2xl bg-arena-bg-soft px-3 py-5"
                     >
-                      <Text className="text-4xl">🏆</Text>
-                      <Text className="text-xl font-black text-[#2A1E00]">{t("modeGroups.daily.title")}</Text>
-                      <Text className="rounded-full bg-[#2A1E00]/15 px-2.5 py-1 text-[10px] font-black tracking-wider text-[#2A1E00]">
-                        ● {localeUpper(tOnline("modeCard.live"), locale)}
-                      </Text>
+                      <Text className="text-2xl">⚔️</Text>
+                      <Text className="text-center text-sm font-bold text-arena-text">{t("modeGroups.challenge.title")}</Text>
                     </ArenaPressable>
 
-                    <View className="flex-row gap-3">
-                      <ArenaPressable
-                        onPress={() => router.push("/challenge")}
-                        className="flex-1 items-center gap-2 rounded-2xl bg-arena-bg-soft px-3 py-5"
-                      >
-                        <Text className="text-2xl">⚔️</Text>
-                        <Text className="text-center text-sm font-bold text-arena-text">{t("modeGroups.challenge.title")}</Text>
-                      </ArenaPressable>
-
-                      <ArenaPressable
-                        onPress={() => setScreen("offline-settings")}
-                        className="flex-1 items-center gap-2 rounded-2xl bg-arena-bg-soft px-3 py-5"
-                      >
-                        <Text className="text-2xl">📱</Text>
-                        <Text className="text-center text-sm font-bold text-arena-text">{t("modeGroups.offline.title")}</Text>
-                      </ArenaPressable>
-                    </View>
+                    <ArenaPressable
+                      onPress={() => setScreen("offline-settings")}
+                      className="flex-1 items-center gap-2 rounded-2xl bg-arena-bg-soft px-3 py-5"
+                    >
+                      <Text className="text-2xl">📱</Text>
+                      <Text className="text-center text-sm font-bold text-arena-text">{t("modeGroups.offline.title")}</Text>
+                    </ArenaPressable>
                   </View>
-                ) : (
-                  <View className="gap-6">
-                    <Pressable onPress={() => setScreen("modes")}>
-                      <Text className="text-sm tracking-wider text-arena-text-soft">← {localeUpper(t("modeGroups.offline.title"), locale)}</Text>
-                    </Pressable>
-                    <View className="gap-4">
-                      <ArenaPressable
-                        onPress={() => router.push("/manual")}
-                        className="flex-row items-center gap-4 rounded-2xl border-[3px] border-dashed border-arena-bg-soft p-6"
-                      >
-                        <Text className="text-4xl">🔍</Text>
-                        <View className="flex-1">
-                          <Text className="text-lg font-bold text-arena-text">{tManual("title")}</Text>
-                          <Text className="mt-1 text-base text-arena-text-soft">{tManual("description")}</Text>
-                        </View>
-                      </ArenaPressable>
+                </View>
+              ) : (
+                <>
+                  <ScrollView className="flex-1 px-4" contentContainerClassName="gap-6 pb-10">
+                    <View className="gap-6">
+                      <Pressable onPress={() => setScreen("modes")}>
+                        <Text className="text-sm tracking-wider text-arena-text-soft">← {localeUpper(t("modeGroups.offline.title"), locale)}</Text>
+                      </Pressable>
+                      <View className="gap-4">
+                        <ArenaPressable
+                          onPress={() => router.push("/manual")}
+                          className="flex-row items-center gap-4 rounded-2xl border-[3px] border-dashed border-arena-bg-soft p-6"
+                        >
+                          <Text className="text-4xl">🔍</Text>
+                          <View className="flex-1">
+                            <Text className="text-lg font-bold text-arena-text">{tManual("title")}</Text>
+                            <Text className="mt-1 text-base text-arena-text-soft">{tManual("description")}</Text>
+                          </View>
+                        </ArenaPressable>
+                      </View>
                     </View>
-                  </View>
-                )}
 
-                {screen === "offline-settings" && (
-                  <GameSettingsPicker
-                    mode={mode}
-                    difficulty={difficulty}
-                    includedLeagues={includedLeagues}
-                    excludedCountries={excludedCountries}
-                    onModeChange={setMode}
-                    onDifficultyChange={setDifficulty}
-                    onToggleLeague={toggleLeague}
-                    onToggleCountry={toggleCountry}
-                    onSelectAllLeagues={selectAllLeagues}
-                    onClearAllLeagues={clearAllLeagues}
-                    dataset={dataset}
-                    clubCountries={clubCountries}
-                    countriesReady={countriesReady}
-                    locale={locale}
-                  />
-                )}
-              </ScrollView>
-              <ScrollFadeBottom />
+                    <GameSettingsPicker
+                      mode={mode}
+                      difficulty={difficulty}
+                      includedLeagues={includedLeagues}
+                      excludedCountries={excludedCountries}
+                      onModeChange={setMode}
+                      onDifficultyChange={setDifficulty}
+                      onToggleLeague={toggleLeague}
+                      onToggleCountry={toggleCountry}
+                      onSelectAllLeagues={selectAllLeagues}
+                      onClearAllLeagues={clearAllLeagues}
+                      dataset={dataset}
+                      clubCountries={clubCountries}
+                      countriesReady={countriesReady}
+                      locale={locale}
+                    />
+                  </ScrollView>
+                  <ScrollFadeBottom />
+                </>
+              )}
             </View>
 
             {screen === "offline-settings" && (
