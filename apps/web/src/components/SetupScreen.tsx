@@ -135,8 +135,8 @@ export function SetupScreen() {
                 contentContainerStyle={{ flexGrow: 1, gap: 32, paddingBottom: 40, backgroundColor: "green" }}
               >
                 {screen === "modes" ? (
-                  <View style={{ flex: 1, justifyContent: "center", gap: 32, backgroundColor: "orange" }}>
-                    <View className="items-center gap-2">
+                  <View style={{ flex: 1, justifyContent: "center", backgroundColor: "orange" }}>
+                    <View className="items-center gap-2" style={{ marginBottom: 32 }}>
                       <Text className="text-6xl">⚽️</Text>
                       <Text className="text-2xl font-black text-arena-text">321guess</Text>
                       <Text className="text-sm text-arena-text-soft">{t("modeGroups.daily.subtitle")}</Text>
@@ -145,6 +145,7 @@ export function SetupScreen() {
                     <ArenaPressable
                       onPress={() => router.push("/online")}
                       className="items-center gap-2 rounded-3xl border-b-[8px] border-arena-accent-strong bg-arena-accent px-6 py-8"
+                      style={{ marginBottom: 32 }}
                     >
                       <Text className="text-4xl">🏆</Text>
                       <Text className="text-xl font-black text-[#2A1E00]">{t("modeGroups.daily.title")}</Text>
