@@ -126,8 +126,7 @@ export function SetupScreen() {
             <View className="relative flex-1">
               <ScrollView
                 className="flex-1 px-4"
-                contentContainerClassName="gap-8 pb-10"
-                contentContainerStyle={{ flexGrow: 1 }}
+                contentContainerStyle={{ flexGrow: 1, gap: 32, paddingBottom: 40 }}
               >
                 {screen === "modes" ? (
                   <View className="flex-1 justify-center gap-8">
