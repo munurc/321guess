@@ -21,8 +21,10 @@ import { loadDataset } from "../lib/dataset";
 import { loadIdentity, type Identity } from "../lib/online-storage";
 import { ArenaBackground } from "./ArenaBackground";
 import { ArenaPressable } from "./ArenaPressable";
+import { BottomTabBar } from "./BottomTabBar";
 import { Countdown } from "./Countdown";
 import { GameSettingsPicker } from "./GameSettingsPicker";
+import { InitialAvatar } from "./InitialAvatar";
 import { RoundPlayView } from "./RoundPlayView";
 
 type Screen =
@@ -44,6 +46,11 @@ export function ChallengeScreen() {
 
   const [identity, setIdentity] = useState<Identity | null>(null);
   const [list, setList] = useState<ChallengeList | null>(null);
+  // Declining an invite has no server-side concept today (there's no
+  // "decline" endpoint) — this just hides it from THIS device's view for
+  // the current session; refreshing the list (e.g. reopening the hub
+  // later) brings it back until the sender's challenge expires on its own.
+  const [dismissedInviteIds, setDismissedInviteIds] = useState<Set<string>>(new Set());
   const [screen, setScreen] = useState<Screen>({ kind: "hub" });
 
   // --- Settings-picking phase state ---
@@ -284,44 +291,61 @@ export function ChallengeScreen() {
   }
 
   if (screen.kind === "hub") {
+    const visibleIncoming = (list?.incoming ?? []).filter((c) => !dismissedInviteIds.has(c.id));
     return (
       <ArenaBackground className="flex-1">
-        <ScrollView className="flex-1 px-4" contentContainerClassName="gap-8 pb-10" style={{ paddingTop: insets.top + 16 }}>
+        <ScrollView className="flex-1 px-4" contentContainerClassName="gap-6 pb-4" style={{ paddingTop: insets.top + 16 }}>
           <Pressable onPress={() => router.push("/")}>
             <Text className="text-sm tracking-wider text-arena-text-soft">← {t("back")}</Text>
           </Pressable>
 
-          <Text className="text-3xl font-black text-arena-text">{t("title")}</Text>
+          <Text className="text-2xl font-black text-arena-text">🏆 {t("title")}</Text>
+
+          <ArenaPressable
+            onPress={() => setScreen({ kind: "new-settings" })}
+            className="flex-row items-center justify-center gap-2 rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-5"
+          >
+            <Text className="text-lg">⚡</Text>
+            <Text className="text-lg font-bold text-[#2A1E00]">{t("newChallenge")}</Text>
+          </ArenaPressable>
+          <ArenaPressable
+            onPress={() => void startRandomOpponent()}
+            className="flex-row items-center justify-center gap-2 rounded-2xl border-b-[6px] border-arena-accent-2-strong bg-arena-accent-2 py-5"
+          >
+            <Text className="text-lg">👥</Text>
+            <Text className="text-lg font-bold text-[#04231A]">{t("randomOpponent")}</Text>
+          </ArenaPressable>
 
           <View className="gap-3">
-            <ArenaPressable
-              onPress={() => setScreen({ kind: "new-settings" })}
-              className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-6"
-            >
-              <Text className="text-xl font-bold text-[#2A1E00]">{t("newChallenge")}</Text>
-            </ArenaPressable>
-            <ArenaPressable
-              onPress={() => void startRandomOpponent()}
-              className="items-center rounded-2xl border-2 border-arena-accent-2 py-5"
-            >
-              <Text className="text-lg font-bold text-arena-accent-2">{t("randomOpponent")}</Text>
-            </ArenaPressable>
-          </View>
-
-          <View className="gap-3">
-            <Text className="text-xs font-bold uppercase tracking-widest text-arena-text-soft">{t("incomingHeading")}</Text>
-            {!list || list.incoming.length === 0 ? (
+            <Text className="text-xs font-bold uppercase tracking-widest text-arena-text-soft">
+              {t("incomingHeading")}
+              {visibleIncoming.length > 0 ? ` (${visibleIncoming.length})` : ""}
+            </Text>
+            {visibleIncoming.length === 0 ? (
               <Text className="rounded-2xl bg-arena-bg-soft p-4 text-arena-text-soft">{t("emptyIncoming")}</Text>
             ) : (
-              list.incoming.map((c) => (
-                <ArenaPressable
-                  key={c.id}
-                  onPress={() => openIncomingChallenge(c)}
-                  className="flex-row items-center justify-between rounded-2xl bg-arena-bg-soft p-4"
-                >
-                  <Text className="text-base font-semibold text-arena-text">{c.mode}</Text>
-                  <Text className="font-bold text-arena-accent">{t("playNow")}</Text>
-                </ArenaPressable>
+              visibleIncoming.map((c) => (
+                <View key={c.id} className="flex-row items-start gap-3 rounded-2xl bg-arena-bg-soft p-4">
+                  <InitialAvatar username={c.fromUsername} />
+                  <View className="flex-1 gap-2">
+                    <Text className="text-base font-bold text-arena-text">{c.fromUsername}</Text>
+                    <Text className="text-sm text-arena-text-soft">{t("inviteMessage")}</Text>
+                    <View className="mt-1 flex-row gap-2">
+                      <Pressable
+                        onPress={() => setDismissedInviteIds((prev) => new Set(prev).add(c.id))}
+                        className="flex-1 items-center rounded-xl bg-arena-bg py-2.5"
+                      >
+                        <Text className="text-sm font-bold text-arena-text-soft">{t("decline")}</Text>
+                      </Pressable>
+                      <Pressable
+                        onPress={() => openIncomingChallenge(c)}
+                        className="flex-1 items-center rounded-xl bg-arena-accent py-2.5"
+                      >
+                        <Text className="text-sm font-bold text-[#2A1E00]">{t("accept")}</Text>
+                      </Pressable>
+                    </View>
+                  </View>
+                </View>
               ))
             )}
           </View>
@@ -347,11 +371,7 @@ export function ChallengeScreen() {
               list.completed.map((c) => (
                 <View key={c.id} className="flex-row items-center justify-between rounded-2xl bg-arena-bg-soft p-4">
                   <View className="flex-row items-center gap-3">
-                    <View className="flex-row">
-                      <View className="h-9 w-9 items-center justify-center rounded-full border-2 border-black/20 bg-arena-accent">
-                        <Text className="text-xs font-black text-[#2A1E00]">{c.opponentUsername?.[0]?.toUpperCase() ?? "?"}</Text>
-                      </View>
-                    </View>
+                    <InitialAvatar username={c.opponentUsername} size={36} />
                     <Text className="text-base font-semibold text-arena-text">{c.opponentUsername}</Text>
                   </View>
                   <Text className="font-bold text-arena-accent-2">
@@ -362,6 +382,7 @@ export function ChallengeScreen() {
             )}
           </View>
         </ScrollView>
+        <BottomTabBar active="challenges" />
       </ArenaBackground>
     );
   }
@@ -492,16 +513,16 @@ export function ChallengeScreen() {
               className="rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-5 py-5 text-xl text-arena-text"
             />
             {searchResults.map((username) => (
-              <Pressable
-                key={username}
-                onPress={() => void sendToUsername(challenge, username)}
-                className="flex-row items-center gap-3 rounded-2xl bg-arena-bg-soft px-4 py-3"
-              >
-                <View className="h-10 w-10 items-center justify-center rounded-full bg-arena-accent">
-                  <Text className="text-base font-black text-[#2A1E00]">{username[0]?.toUpperCase() ?? "?"}</Text>
-                </View>
-                <Text className="text-lg text-arena-text">{username}</Text>
-              </Pressable>
+              <View key={username} className="flex-row items-center gap-3 rounded-2xl bg-arena-bg-soft px-4 py-3">
+                <InitialAvatar username={username} />
+                <Text className="flex-1 text-lg text-arena-text">{username}</Text>
+                <Pressable
+                  onPress={() => void sendToUsername(challenge, username)}
+                  className="rounded-full bg-arena-accent px-4 py-2"
+                >
+                  <Text className="text-sm font-bold text-[#2A1E00]">{t("sendButton")}</Text>
+                </Pressable>
+              </View>
             ))}
           </View>
         )}

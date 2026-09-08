@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { ScrollView, Text, TextInput, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslations } from 'use-intl';
 
 import { ArenaBackground } from './ArenaBackground';
 import { ArenaPressable } from './ArenaPressable';
+import { BottomTabBar } from './BottomTabBar';
 import { useAppLocale } from '@/i18n/AppLocaleContext';
 import { messages } from '@/i18n/messages';
 import { isAppleSignInAvailable, sendMagicLink, signInWithApple, signInWithGoogle } from '../lib/account-auth';
@@ -78,14 +79,18 @@ export function SettingsScreen() {
   }
 
   return (
-    <ArenaBackground className="flex-1 px-4 pb-8" style={{ paddingTop: insets.top + 32 }}>
+    <ArenaBackground className="flex-1">
+      <ScrollView className="flex-1 px-4" contentContainerStyle={{ paddingTop: insets.top + 32 }}>
       <ArenaPressable onPress={() => router.back()}>
         <Text className="text-xs tracking-wider text-arena-text-soft">← {localeUpper(t('back'), locale)}</Text>
       </ArenaPressable>
 
-      <Text className="mt-6 text-2xl font-black text-arena-text">{t('title')}</Text>
+      <Text className="mt-6 text-2xl font-black text-arena-text">⚙️ {t('title')}</Text>
 
-      <View className="mt-8 gap-2">
+      <Text className="mt-6 mb-2 text-xs font-bold uppercase tracking-widest text-arena-text-soft">
+        {t('appSettingsHeading')}
+      </Text>
+      <View className="gap-2">
         <SettingsRow icon="🌐" label={t('language')}>
           <View className="flex-row gap-1 rounded-full border border-arena-accent-2 bg-arena-bg-soft p-1">
             {locales.map((l) => (
@@ -113,15 +118,6 @@ export function SettingsScreen() {
         </SettingsRow>
       </View>
 
-      <View className="mt-6 gap-3">
-        <ArenaPressable onPress={() => router.push('/privacy')} className="items-start">
-          <Text className="text-sm text-arena-text-soft underline">{t('privacyLink')}</Text>
-        </ArenaPressable>
-        <ArenaPressable onPress={() => router.push('/terms')} className="items-start">
-          <Text className="text-sm text-arena-text-soft underline">{t('termsLink')}</Text>
-        </ArenaPressable>
-      </View>
-
       <View className="mt-8 gap-3 rounded-2xl border-2 border-arena-accent/40 bg-arena-accent/10 p-4">
         <Text className="text-lg font-bold text-arena-text">{t('accountLinking.heading')}</Text>
         <Text className="text-sm text-arena-text-soft">{t('accountLinking.description')}</Text>
@@ -132,14 +128,16 @@ export function SettingsScreen() {
           <View className="gap-3">
             <ArenaPressable
               onPress={() => void handleGoogleLink()}
-              className="items-center rounded-xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-4"
+              className="flex-row items-center justify-center gap-2 rounded-xl bg-arena-card py-4"
             >
-              <Text className="text-base font-bold text-[#2A1E00]">{t('accountLinking.google')}</Text>
+              <Text className="text-base">🔵</Text>
+              <Text className="text-base font-bold text-[#1A1330]">{t('accountLinking.google')}</Text>
             </ArenaPressable>
 
             {appleAvailable && (
-              <ArenaPressable onPress={() => void handleAppleLink()} className="items-center rounded-xl border border-arena-text py-4">
-                <Text className="text-base font-bold text-arena-text">{t('accountLinking.apple')}</Text>
+              <ArenaPressable onPress={() => void handleAppleLink()} className="flex-row items-center justify-center gap-2 rounded-xl bg-arena-text py-4">
+                <Text className="text-base">🍎</Text>
+                <Text className="text-base font-bold text-[#1A1330]">{t('accountLinking.apple')}</Text>
               </ArenaPressable>
             )}
 
@@ -163,6 +161,26 @@ export function SettingsScreen() {
           </View>
         )}
       </View>
+
+      <Text className="mt-8 mb-2 text-xs font-bold uppercase tracking-widest text-arena-text-soft">
+        {t('appInfoHeading')}
+      </Text>
+      <View className="gap-2 pb-6">
+        <View className="flex-row items-center justify-between rounded-2xl bg-arena-bg-soft px-4 py-4">
+          <Text className="text-sm font-semibold text-arena-text">{t('version')}</Text>
+          <Text className="text-sm text-arena-text-soft">1.0.0</Text>
+        </View>
+        <ArenaPressable onPress={() => router.push('/privacy')} className="flex-row items-center justify-between rounded-2xl bg-arena-bg-soft px-4 py-4">
+          <Text className="text-sm font-semibold text-arena-text">{t('privacyLink')}</Text>
+          <Text className="text-arena-text-soft">›</Text>
+        </ArenaPressable>
+        <ArenaPressable onPress={() => router.push('/terms')} className="flex-row items-center justify-between rounded-2xl bg-arena-bg-soft px-4 py-4">
+          <Text className="text-sm font-semibold text-arena-text">{t('termsLink')}</Text>
+          <Text className="text-arena-text-soft">›</Text>
+        </ArenaPressable>
+      </View>
+      </ScrollView>
+      <BottomTabBar active="settings" />
     </ArenaBackground>
   );
 }

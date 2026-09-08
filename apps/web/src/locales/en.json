@@ -58,7 +58,7 @@
   "setup": {
     "title": "321guess",
     "modeGroups": {
-      "daily": { "title": "Daily Challenge", "subtitle": "Race the world" },
+      "daily": { "title": "Daily Challenge", "subtitle": "Race the world", "badge": "Game of the Day" },
       "challenge": { "title": "Challenge a Friend", "subtitle": "Invite them, beat your score" },
       "offline": { "title": "Play on One Device", "subtitle": "Same screen as your friend" }
     },
@@ -118,8 +118,17 @@
     "tr": "Türkçe",
     "en": "English"
   },
+  "tabBar": {
+    "home": "Home",
+    "challenges": "Challenges",
+    "scores": "Scores",
+    "settings": "Settings"
+  },
   "settings": {
     "title": "Settings",
+    "appSettingsHeading": "App Settings",
+    "appInfoHeading": "App Info",
+    "version": "Version",
     "language": "Language",
     "sound": "Sound effects",
     "haptics": "Haptics",
@@ -219,7 +228,7 @@
     "back": "Home",
     "title": "Challenge a Friend",
     "loading": "Loading…",
-    "newChallenge": "+ New Challenge",
+    "newChallenge": "New Challenge",
     "randomOpponent": "Random Opponent",
     "incomingHeading": "Incoming",
     "outgoingHeading": "Waiting",
@@ -229,6 +238,9 @@
     "emptyRivalries": "You haven't finished a challenge yet.",
     "waitingForOpponent": "Waiting for opponent",
     "playNow": "Play Now",
+    "inviteMessage": "challenged you",
+    "decline": "Decline",
+    "accept": "Accept",
     "rivalryScore": "{wins}-{losses}",
     "newSettingsHeading": "Choose Settings",
     "startPlaying": "Play",
@@ -236,6 +248,7 @@
     "sendHeading": "Your Score Is In!",
     "sendScoreLabel": "{correct} / {total} correct",
     "searchPlaceholder": "Search username…",
+    "sendButton": "Send",
     "searchEmpty": "No user found",
     "guessPlaceholder": "Search player…",
     "guessEmpty": "No player found",

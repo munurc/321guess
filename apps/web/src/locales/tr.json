@@ -58,7 +58,7 @@
   "setup": {
     "title": "321guess",
     "modeGroups": {
-      "daily": { "title": "Günlük Meydan Okuma", "subtitle": "Dünyayla yarış" },
+      "daily": { "title": "Günlük Meydan Okuma", "subtitle": "Dünyayla yarış", "badge": "Günün Oyunu" },
       "challenge": { "title": "Arkadaşına Meydan Oku", "subtitle": "Davet et, skorunu geç" },
       "offline": { "title": "Tek Cihazdan Oyna", "subtitle": "Arkadaşınla aynı ekranda" }
     },
@@ -118,8 +118,17 @@
     "tr": "Türkçe",
     "en": "English"
   },
+  "tabBar": {
+    "home": "Ana Sayfa",
+    "challenges": "Meydan Okumalar",
+    "scores": "Skorlar",
+    "settings": "Ayarlar"
+  },
   "settings": {
     "title": "Ayarlar",
+    "appSettingsHeading": "Uygulama Ayarları",
+    "appInfoHeading": "Uygulama Bilgisi",
+    "version": "Versiyon",
     "language": "Dil",
     "sound": "Ses efektleri",
     "haptics": "Titreşim",
@@ -219,7 +228,7 @@
     "back": "Ana ekran",
     "title": "Arkadaşına Meydan Oku",
     "loading": "Yükleniyor…",
-    "newChallenge": "+ Yeni Meydan Okuma",
+    "newChallenge": "Yeni Meydan Okuma",
     "randomOpponent": "Rastgele Rakip",
     "incomingHeading": "Gelen Davetler",
     "outgoingHeading": "Bekleyenler",
@@ -229,6 +238,9 @@
     "emptyRivalries": "Henüz bir meydan okuma tamamlamadın.",
     "waitingForOpponent": "Rakip bekleniyor",
     "playNow": "Şimdi Oyna",
+    "inviteMessage": "seni meydan okumaya davet etti",
+    "decline": "Reddet",
+    "accept": "Kabul Et",
     "rivalryScore": "{wins}-{losses}",
     "newSettingsHeading": "Ayarları Seç",
     "startPlaying": "Oyna",
@@ -237,6 +249,7 @@
     "sendScoreLabel": "{correct} / {total} doğru",
     "searchPlaceholder": "Kullanıcı adı ara…",
     "searchEmpty": "Kullanıcı bulunamadı",
+    "sendButton": "Gönder",
     "guessPlaceholder": "Oyuncu ara…",
     "guessEmpty": "Oyuncu bulunamadı",
     "sendToUser": "Bu Kullanıcıya Gönder",

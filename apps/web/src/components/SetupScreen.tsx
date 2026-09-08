@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { InteractionManager, Platform, Pressable, ScrollView, Text, View } from "react-native";
+import { InteractionManager, Modal, Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocale, useTranslations } from "use-intl";
@@ -10,11 +10,53 @@ import { localeUpper } from "../lib/locale-upper";
 import { localizedPath } from "../lib/localized-path";
 import { ArenaBackground } from "./ArenaBackground";
 import { ArenaPressable } from "./ArenaPressable";
+import { BottomTabBar } from "./BottomTabBar";
 import { GameSettingsPicker } from "./GameSettingsPicker";
 import { HomeHeading, HomeSeoSections } from "./HomeSeoContent";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ScrollFadeBottom } from "./ScrollFadeBottom";
 import { ThemeToggle } from "./ThemeToggle";
+
+type MenuLink = { icon: string; labelKey: string; href: "/" | "/challenge" | "/scores" | "/settings" | "/privacy" | "/terms" };
+
+const MENU_LINKS: MenuLink[] = [
+  { icon: "🏠", labelKey: "tabBar.home", href: "/" },
+  { icon: "🏆", labelKey: "tabBar.challenges", href: "/challenge" },
+  { icon: "📊", labelKey: "tabBar.scores", href: "/scores" },
+  { icon: "⚙️", labelKey: "tabBar.settings", href: "/settings" },
+  { icon: "🔒", labelKey: "settings.privacyLink", href: "/privacy" },
+  { icon: "📄", labelKey: "settings.termsLink", href: "/terms" },
+];
+
+/** Simple modal sheet for the home screen's hamburger icon — every link
+ * here already exists elsewhere (the bottom tab bar, or web-only
+ * privacy/terms pages); this is a convenience shortcut, not a real drawer
+ * navigator, so it doesn't need its own routing state. */
+function HamburgerMenu({ visible, onClose }: { visible: boolean; onClose: () => void }) {
+  const t = useTranslations();
+  const router = useRouter();
+  return (
+    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
+      <Pressable className="flex-1 bg-black/50" onPress={onClose}>
+        <View className="mt-auto rounded-t-3xl bg-arena-bg p-4 pb-10">
+          {MENU_LINKS.map((link) => (
+            <Pressable
+              key={link.href}
+              onPress={() => {
+                onClose();
+                router.push(link.href as never);
+              }}
+              className="flex-row items-center gap-4 rounded-2xl px-3 py-4"
+            >
+              <Text className="text-xl">{link.icon}</Text>
+              <Text className="text-base font-semibold text-arena-text">{t(link.labelKey)}</Text>
+            </Pressable>
+          ))}
+        </View>
+      </Pressable>
+    </Modal>
+  );
+}
 
 export function SetupScreen() {
   const t = useTranslations("setup");
@@ -26,6 +68,7 @@ export function SetupScreen() {
   const insets = useSafeAreaInsets();
   const { setSettings } = useGameSettings();
   const [dataset, setDataset] = useState<Dataset | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [screen, setScreen] = useState<"modes" | "offline-settings">("modes");
   const [mode, setMode] = useState<GameMode>("clubClub");
   const [difficulty, setDifficulty] = useState<Difficulty>("medium");
@@ -106,16 +149,7 @@ export function SetupScreen() {
   if (Platform.OS !== "web") {
     return (
       <ArenaBackground className="flex-1">
-        <View className="flex-row items-center justify-end px-4 pb-2" style={{ paddingTop: insets.top + 8 }}>
-          <Pressable
-            onPress={() => router.push("/settings")}
-            accessibilityLabel={tSettings("title")}
-            hitSlop={12}
-            className="p-2"
-          >
-            <Text className="text-2xl">⚙️</Text>
-          </Pressable>
-        </View>
+        <HamburgerMenu visible={menuOpen} onClose={() => setMenuOpen(false)} />
 
         {!dataset ? (
           <View className="flex-1 items-center justify-center px-8">
@@ -125,42 +159,70 @@ export function SetupScreen() {
           <>
             <View className="relative flex-1">
               {screen === "modes" ? (
-                <View className="flex-1 justify-center px-4">
-                  <View className="items-center gap-2 mb-8">
-                    <Text className="text-6xl">⚽️</Text>
-                    <Text className="text-2xl font-black text-arena-text">321guess</Text>
+                <ScrollView className="flex-1" contentContainerClassName="px-4 pb-4">
+                  <View className="flex-row items-center justify-between pb-4" style={{ paddingTop: insets.top + 8 }}>
+                    <Pressable onPress={() => setMenuOpen(true)} accessibilityLabel="menu" hitSlop={12} className="p-2">
+                      <Text className="text-2xl">☰</Text>
+                    </Pressable>
+                    <View className="items-center">
+                      <Text className="text-lg font-black text-arena-text">🏆 321guess</Text>
+                    </View>
+                    <Pressable
+                      onPress={() => router.push("/settings")}
+                      accessibilityLabel={tSettings("title")}
+                      hitSlop={12}
+                      className="p-2"
+                    >
+                      <Text className="text-2xl">👤</Text>
+                    </Pressable>
+                  </View>
+
+                  <View className="items-center gap-1 mb-6">
+                    <Text className="text-5xl">⚽️</Text>
+                    <Text className="mt-2 text-2xl font-black text-arena-text">321guess</Text>
                     <Text className="text-sm text-arena-text-soft">{t("modeGroups.daily.subtitle")}</Text>
                   </View>
 
-                  <ArenaPressable
-                    onPress={() => router.push("/online")}
-                    className="items-center gap-2 rounded-3xl border-b-[8px] border-arena-accent-strong bg-arena-accent px-6 py-8 mb-8"
-                  >
-                    <Text className="text-4xl">🏆</Text>
-                    <Text className="text-xl font-black text-[#2A1E00]">{t("modeGroups.daily.title")}</Text>
-                    <Text className="rounded-full bg-[#2A1E00]/15 px-2.5 py-1 text-[10px] font-black tracking-wider text-[#2A1E00]">
-                      ● {localeUpper(tOnline("modeCard.live"), locale)}
+                  <View className="mb-6 rounded-3xl bg-arena-bg-soft p-4">
+                    <Text className="self-center rounded-full bg-arena-accent/20 px-3 py-1 text-[10px] font-black tracking-wider text-arena-accent mb-3">
+                      {localeUpper(t("modeGroups.daily.badge"), locale)}
                     </Text>
-                  </ArenaPressable>
-
-                  <View className="flex-row gap-3">
                     <ArenaPressable
-                      onPress={() => router.push("/challenge")}
-                      className="flex-1 items-center gap-2 rounded-2xl bg-arena-bg-soft px-3 py-5"
+                      onPress={() => router.push("/online")}
+                      className="items-center gap-2 rounded-2xl border-b-[8px] border-arena-accent-strong bg-arena-accent px-6 py-7"
                     >
-                      <Text className="text-2xl">⚔️</Text>
-                      <Text className="text-center text-sm font-bold text-arena-text">{t("modeGroups.challenge.title")}</Text>
-                    </ArenaPressable>
-
-                    <ArenaPressable
-                      onPress={() => setScreen("offline-settings")}
-                      className="flex-1 items-center gap-2 rounded-2xl bg-arena-bg-soft px-3 py-5"
-                    >
-                      <Text className="text-2xl">📱</Text>
-                      <Text className="text-center text-sm font-bold text-arena-text">{t("modeGroups.offline.title")}</Text>
+                      <Text className="text-4xl">🏆</Text>
+                      <Text className="text-xl font-black text-[#2A1E00]">{t("modeGroups.daily.title")}</Text>
+                      <Text className="rounded-full bg-[#2A1E00]/15 px-2.5 py-1 text-[10px] font-black tracking-wider text-[#2A1E00]">
+                        ● {localeUpper(tOnline("modeCard.live"), locale)}
+                      </Text>
                     </ArenaPressable>
                   </View>
-                </View>
+
+                  <ArenaPressable
+                    onPress={() => router.push("/challenge")}
+                    className="flex-row items-center gap-4 rounded-2xl border-b-[6px] border-arena-accent-2-strong bg-arena-accent-2 px-5 py-5 mb-4"
+                  >
+                    <Text className="text-3xl">⚔️</Text>
+                    <View className="flex-1">
+                      <Text className="text-base font-black text-[#04231A]">{t("modeGroups.challenge.title")}</Text>
+                      <Text className="text-sm text-[#04231A]/70">{t("modeGroups.challenge.subtitle")}</Text>
+                    </View>
+                    <Text className="text-xl font-black text-[#04231A]/60">›</Text>
+                  </ArenaPressable>
+
+                  <ArenaPressable
+                    onPress={() => setScreen("offline-settings")}
+                    className="flex-row items-center gap-4 rounded-2xl bg-arena-bg-soft px-5 py-5"
+                  >
+                    <Text className="text-3xl">📱</Text>
+                    <View className="flex-1">
+                      <Text className="text-base font-bold text-arena-text">{t("modeGroups.offline.title")}</Text>
+                      <Text className="text-sm text-arena-text-soft">{t("modeGroups.offline.subtitle")}</Text>
+                    </View>
+                    <Text className="text-xl font-black text-arena-text-soft">›</Text>
+                  </ArenaPressable>
+                </ScrollView>
               ) : (
                 <>
                   <ScrollView className="flex-1 px-4" contentContainerClassName="gap-6 pb-10">
@@ -203,6 +265,8 @@ export function SetupScreen() {
                 </>
               )}
             </View>
+
+            {screen === "modes" && <BottomTabBar active="home" />}
 
             {screen === "offline-settings" && (
               <View className="border-t border-arena-bg-soft px-4 pb-6 pt-4">

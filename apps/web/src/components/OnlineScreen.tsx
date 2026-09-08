@@ -720,7 +720,7 @@ function LoadingBox({ text }: { text: string }) {
   );
 }
 
-function Leaderboard({
+export function Leaderboard({
   data,
   tab,
   currentUsername,

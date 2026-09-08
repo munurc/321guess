@@ -15,25 +15,29 @@ export function PushRegistration() {
     if (!Device.isDevice) return; // simulators/emulators can't receive real push
 
     (async () => {
-      if (Platform.OS === 'android') {
-        await Notifications.setNotificationChannelAsync('default', {
-          name: 'default',
-          importance: Notifications.AndroidImportance.DEFAULT,
-        });
+      try {
+        if (Platform.OS === 'android') {
+          await Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.DEFAULT,
+          });
+        }
+
+        let permission = await Notifications.getPermissionsAsync();
+        if (permission.status !== 'granted') {
+          permission = await Notifications.requestPermissionsAsync();
+        }
+        if (permission.status !== 'granted') return;
+
+        const projectId = Constants.expoConfig?.extra?.eas?.projectId;
+        if (!projectId) return; // not yet linked to an EAS project (`eas init`)
+
+        const { data: expoPushToken } = await Notifications.getExpoPushTokenAsync({ projectId });
+        const identity = await loadIdentity();
+        await registerPushToken(expoPushToken, Platform.OS, identity?.token);
+      } catch {
+        // Best-effort — a failed push registration shouldn't disrupt the game.
       }
-
-      let permission = await Notifications.getPermissionsAsync();
-      if (permission.status !== 'granted') {
-        permission = await Notifications.requestPermissionsAsync();
-      }
-      if (permission.status !== 'granted') return;
-
-      const projectId = Constants.expoConfig?.extra?.eas?.projectId;
-      if (!projectId) return; // not yet linked to an EAS project (`eas init`)
-
-      const { data: expoPushToken } = await Notifications.getExpoPushTokenAsync({ projectId });
-      const identity = await loadIdentity();
-      await registerPushToken(expoPushToken, Platform.OS, identity?.token);
     })();
   }, []);
 

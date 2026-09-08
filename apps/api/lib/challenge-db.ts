@@ -532,8 +532,22 @@ export async function listChallengesForPlayer(playerToken: string) {
       }),
     );
 
+  // Incoming invites show who sent them (the hub's "X seni meydan okumaya
+  // davet etti" card) — the creator, from the recipient's point of view.
+  const incomingWithSender = await Promise.all(
+    incoming.map(async (c) => {
+      const { data: creatorPlayer } = await supabase
+        .from("online_players")
+        .select("username")
+        .eq("player_token", c.creator_token)
+        .maybeSingle();
+      const { data: questionRows } = await supabase.from("challenge_questions").select("*").eq("challenge_id", c.id);
+      return { ...toClientChallenge(mapChallengeRow(c, questionRows ?? [])), fromUsername: creatorPlayer?.username ?? "?" };
+    }),
+  );
+
   return {
-    incoming: await withQuestions(incoming),
+    incoming: incomingWithSender,
     outgoing: await withQuestions(outgoing),
     completed,
   };
