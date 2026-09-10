@@ -36,7 +36,7 @@ export function ScoresScreen() {
   return (
     <ArenaBackground className="flex-1">
       <ScrollView className="flex-1 px-4" contentContainerStyle={{ paddingTop: insets.top + 16, paddingBottom: 16 }}>
-        <Text className="mb-6 text-2xl font-black text-arena-text">📊 {tTabBar("scores")}</Text>
+        <Text className="font-display mb-6 text-2xl text-arena-text">📊 {tTabBar("scores")}</Text>
 
         <View className="mb-4 flex-row self-start rounded-full border border-arena-accent-2 bg-arena-bg-soft p-1.5">
           {(["today", "total"] as const).map((tabKey) => (

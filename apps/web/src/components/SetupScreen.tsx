@@ -165,7 +165,7 @@ export function SetupScreen() {
                       <Text className="text-2xl">☰</Text>
                     </Pressable>
                     <View className="items-center">
-                      <Text className="text-lg font-black text-arena-text">🏆 321guess</Text>
+                      <Text className="font-display text-lg text-arena-text">🏆 321guess</Text>
                     </View>
                     <Pressable
                       onPress={() => router.push("/settings")}
@@ -179,7 +179,7 @@ export function SetupScreen() {
 
                   <View className="items-center gap-1 mb-6">
                     <Text className="text-5xl">⚽️</Text>
-                    <Text className="mt-2 text-2xl font-black text-arena-text">321guess</Text>
+                    <Text className="font-display mt-2 text-2xl text-arena-text">321guess</Text>
                     <Text className="text-sm text-arena-text-soft">{t("modeGroups.daily.subtitle")}</Text>
                   </View>
 
@@ -192,7 +192,7 @@ export function SetupScreen() {
                       className="items-center gap-2 rounded-2xl border-b-[8px] border-arena-accent-strong bg-arena-accent px-6 py-7"
                     >
                       <Text className="text-4xl">🏆</Text>
-                      <Text className="text-xl font-black text-[#2A1E00]">{t("modeGroups.daily.title")}</Text>
+                      <Text className="font-display text-xl text-[#2A1E00]">{t("modeGroups.daily.title")}</Text>
                       <Text className="rounded-full bg-[#2A1E00]/15 px-2.5 py-1 text-[10px] font-black tracking-wider text-[#2A1E00]">
                         ● {localeUpper(tOnline("modeCard.live"), locale)}
                       </Text>
@@ -205,7 +205,7 @@ export function SetupScreen() {
                   >
                     <Text className="text-3xl">⚔️</Text>
                     <View className="flex-1">
-                      <Text className="text-base font-black text-[#04231A]">{t("modeGroups.challenge.title")}</Text>
+                      <Text className="font-display text-base text-[#04231A]">{t("modeGroups.challenge.title")}</Text>
                       <Text className="text-sm text-[#04231A]/70">{t("modeGroups.challenge.subtitle")}</Text>
                     </View>
                     <Text className="text-xl font-black text-[#04231A]/60">›</Text>

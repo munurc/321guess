@@ -85,7 +85,7 @@ export function SettingsScreen() {
         <Text className="text-xs tracking-wider text-arena-text-soft">← {localeUpper(t('back'), locale)}</Text>
       </ArenaPressable>
 
-      <Text className="mt-6 text-2xl font-black text-arena-text">⚙️ {t('title')}</Text>
+      <Text className="font-display mt-6 text-2xl text-arena-text">⚙️ {t('title')}</Text>
 
       <Text className="mt-6 mb-2 text-xs font-bold uppercase tracking-widest text-arena-text-soft">
         {t('appSettingsHeading')}

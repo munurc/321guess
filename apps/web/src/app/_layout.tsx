@@ -3,6 +3,7 @@ import '@/global.css';
 
 import { useEffect } from 'react';
 import { Platform } from 'react-native';
+import { Baloo2_700Bold, Baloo2_800ExtraBold, useFonts } from '@expo-google-fonts/baloo-2';
 import { Stack, usePathname } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { colorScheme } from 'nativewind';
@@ -59,6 +60,12 @@ function IntlBridge({ children }: { children: ReactNode }) {
 }
 
 export default function TabLayout() {
+  // Native-only display font (see tailwind.config.js's `display`/`display-bold`
+  // tokens) — loading is fire-and-forget here rather than gating the whole
+  // app's render on it, so a slow font fetch never blocks first paint; text
+  // using those classes just swaps from the system font once this resolves.
+  useFonts({ Baloo2_700Bold, Baloo2_800ExtraBold });
+
   return (
     <AppLocaleProvider>
       <GameSettingsProvider>

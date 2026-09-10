@@ -44,7 +44,7 @@ export function BottomTabBar({ active }: { active: Tab["key"] }) {
               {tab.icon}
             </Text>
             <Text
-              className={`text-[11px] font-semibold ${isActive ? "text-arena-accent" : "text-arena-text-soft"}`}
+              className={`font-display-bold text-[11px] ${isActive ? "text-arena-accent" : "text-arena-text-soft"}`}
             >
               {t(tab.key)}
             </Text>

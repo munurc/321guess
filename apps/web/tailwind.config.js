@@ -28,6 +28,14 @@ module.exports = {
         "arena-text": "#F0FBF5",
         "arena-text-soft": "#8FE8C4",
       },
+      fontFamily: {
+        // Mobile-only display face (rounded, playful — matches the
+        // approved mockup, replaces the plain system font). Never used on
+        // web; each React Native weight is a distinct loaded font file,
+        // registered in app/_layout.tsx via @expo-google-fonts/baloo-2.
+        display: ["Baloo2_800ExtraBold"],
+        "display-bold": ["Baloo2_700Bold"],
+      },
       keyframes: {
         "fade-in": {
           "0%": { opacity: "0", transform: "translateY(8px)" },

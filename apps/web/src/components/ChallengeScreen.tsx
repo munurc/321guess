@@ -299,7 +299,7 @@ export function ChallengeScreen() {
             <Text className="text-sm tracking-wider text-arena-text-soft">← {t("back")}</Text>
           </Pressable>
 
-          <Text className="text-2xl font-black text-arena-text">🏆 {t("title")}</Text>
+          <Text className="font-display text-2xl text-arena-text">🏆 {t("title")}</Text>
 
           <ArenaPressable
             onPress={() => setScreen({ kind: "new-settings" })}
@@ -401,7 +401,7 @@ export function ChallengeScreen() {
           <Pressable onPress={() => setScreen({ kind: "hub" })}>
             <Text className="text-sm tracking-wider text-arena-text-soft">← {t("title")}</Text>
           </Pressable>
-          <Text className="text-2xl font-black text-arena-text">{t("newSettingsHeading")}</Text>
+          <Text className="font-display text-2xl text-arena-text">{t("newSettingsHeading")}</Text>
           <GameSettingsPicker
             mode={mode}
             difficulty={difficulty}
@@ -492,7 +492,7 @@ export function ChallengeScreen() {
           <Text className="text-sm tracking-wider text-arena-text-soft">← {t("back")}</Text>
         </Pressable>
 
-        <Text className="mt-6 text-2xl font-black text-arena-text">{t("sendHeading")}</Text>
+        <Text className="font-display mt-6 text-2xl text-arena-text">{t("sendHeading")}</Text>
         <Text className="mt-2 text-lg text-arena-accent-2">
           {t("sendScoreLabel", { correct: result.correctCount, total: result.totalPossible })}
         </Text>
@@ -574,7 +574,7 @@ export function ChallengeScreen() {
 
     return (
       <ArenaBackground className="flex-1 items-center justify-center gap-6 px-4">
-        <Text className="text-3xl font-black text-arena-text">{t("resultHeading")}</Text>
+        <Text className="font-display text-3xl text-arena-text">{t("resultHeading")}</Text>
         <Text
           className={`text-2xl font-bold ${outcome === "won" ? "text-arena-accent-2" : outcome === "lost" ? "text-red-300" : "text-arena-text-soft"}`}
         >
