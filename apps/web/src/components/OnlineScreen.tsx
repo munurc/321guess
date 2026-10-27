@@ -309,6 +309,10 @@ export function OnlineScreen() {
   }
 
   const badges = useMemo(() => (result ? computeBadges(result) : []), [result]);
+  const guessedIds = useMemo(
+    () => new Set([...foundPlayers, ...wrongPlayers].map((p) => p.id)),
+    [foundPlayers, wrongPlayers],
+  );
   const currentQuestion = round?.questions[questionIndex] ?? null;
 
   function shareText(): string {
@@ -617,7 +621,7 @@ export function OnlineScreen() {
 
           <GuessInput
             players={dataset.players}
-            excludedIds={new Set([...foundPlayers, ...wrongPlayers].map((p) => p.id))}
+            excludedIds={guessedIds}
             onGuess={submitGuess}
             placeholder={t("guessPlaceholder")}
             emptyText={t("guessEmpty")}

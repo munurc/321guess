@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
 import { Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import type { Player } from "@321guess/core";
 import { LogoTile } from "./LogoTile";
@@ -10,6 +10,20 @@ function stripDiacritics(s: string): string {
 function normalize(s: string): string {
   return stripDiacritics(s).toLowerCase();
 }
+
+// Normalizing ~76k names per keystroke made suggestions lag on device, so
+// each players array gets its normalized names computed once and reused.
+const normalizedNamesCache = new WeakMap<Player[], string[]>();
+function normalizedNames(players: Player[]): string[] {
+  let names = normalizedNamesCache.get(players);
+  if (!names) {
+    names = players.map((p) => normalize(p.name));
+    normalizedNamesCache.set(players, names);
+  }
+  return names;
+}
+
+const MAX_SUGGESTIONS = 8;
 
 export function GuessInput({
   players,
@@ -28,11 +42,19 @@ export function GuessInput({
   const [open, setOpen] = useState(false);
   const isNative = Platform.OS !== "web";
 
+  // Deferred so the keystroke itself renders immediately and the scan runs
+  // right after, instead of the input waiting on it.
+  const deferredQuery = useDeferredValue(query);
   const filtered = useMemo(() => {
-    const q = normalize(query.trim());
+    const q = normalize(deferredQuery.trim());
     if (q.length < 2) return [];
-    return players.filter((p) => !excludedIds.has(p.id) && normalize(p.name).includes(q)).slice(0, 8);
-  }, [query, players, excludedIds]);
+    const names = normalizedNames(players);
+    const out: Player[] = [];
+    for (let i = 0; i < players.length && out.length < MAX_SUGGESTIONS; i++) {
+      if (names[i].includes(q) && !excludedIds.has(players[i].id)) out.push(players[i]);
+    }
+    return out;
+  }, [deferredQuery, players, excludedIds]);
 
   function pick(player: Player) {
     onGuess(player);
@@ -151,6 +173,10 @@ export function RoundPlayView({
    * Challenge Mode, which has no time limit. */
   timerLabel?: string;
 }) {
+  const guessedIds = useMemo(
+    () => new Set([...foundPlayers, ...wrongPlayers].map((p) => p.id)),
+    [foundPlayers, wrongPlayers],
+  );
   return (
     <View className="gap-4">
       <View className="rounded-2xl bg-arena-bg-soft px-4 pb-6 pt-4">
@@ -182,7 +208,7 @@ export function RoundPlayView({
 
       <GuessInput
         players={players}
-        excludedIds={new Set([...foundPlayers, ...wrongPlayers].map((p) => p.id))}
+        excludedIds={guessedIds}
         onGuess={onGuess}
         placeholder={guessPlaceholder}
         emptyText={guessEmptyText}

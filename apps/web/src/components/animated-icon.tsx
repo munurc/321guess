@@ -1,16 +1,34 @@
 import { Image } from 'expo-image';
 import * as SplashScreen from 'expo-splash-screen';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import Animated, { Easing, Keyframe } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 
+import { loadDataset } from '@/lib/dataset';
+
 const INITIAL_SCALE_FACTOR = Dimensions.get('screen').height / 90;
 const DURATION = 600;
+// Upper bound on holding the splash for the dataset download — past this,
+// fade out anyway and let the screen's own loading state take over, so a
+// slow/offline launch never looks frozen on the logo.
+const MAX_DATA_WAIT_MS = 10_000;
 
 export function AnimatedSplashOverlay() {
   const [animate, setAnimate] = useState(false);
   const [visible, setVisible] = useState(true);
+  const [dataReady, setDataReady] = useState(false);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setDataReady(true), MAX_DATA_WAIT_MS);
+    loadDataset()
+      .catch(() => {})
+      .finally(() => {
+        clearTimeout(timeout);
+        setDataReady(true);
+      });
+    return () => clearTimeout(timeout);
+  }, []);
 
   if (!visible) return null;
 
@@ -35,7 +53,9 @@ export function AnimatedSplashOverlay() {
 
   const image = <Image style={styles.image} source={require('@/assets/images/splash-icon.png')} />;
 
-  return animate ? (
+  // The native splash is swapped for this identical-looking overlay on first
+  // layout; the overlay only starts its fade once the dataset is in.
+  return animate && dataReady ? (
     <Animated.View
       entering={splashKeyframe.duration(DURATION).withCallback((finished) => {
         'worklet';
