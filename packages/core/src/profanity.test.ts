@@ -36,6 +36,14 @@ describe("validateUsername", () => {
     expect(validateUsername("fuckboy")).toEqual({ valid: false, reason: "blocked" });
   });
 
+  it("rejects handles containing 'allah', including disguised spellings", () => {
+    expect(validateUsername("allahziken")).toEqual({ valid: false, reason: "blocked" });
+    expect(validateUsername("Allah_123")).toEqual({ valid: false, reason: "blocked" });
+    expect(validateUsername("4ll4h")).toEqual({ valid: false, reason: "format" });
+    expect(validateUsername("xAll4hx")).toEqual({ valid: false, reason: "blocked" });
+    expect(validateUsername("Allâh")).toEqual({ valid: false, reason: "blocked" });
+  });
+
   it("rejects reserved/impersonation handles", () => {
     expect(validateUsername("admin")).toEqual({ valid: false, reason: "blocked" });
   });

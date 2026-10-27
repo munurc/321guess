@@ -21,6 +21,34 @@ async function main() {
   }
 
   const token = player.player_token;
+
+  // Challenge Mode rows reference online_players, so they must go first.
+  // A challenge the player created or was matched into is deleted whole
+  // (with its questions/guesses/scores) — it can't be played without them.
+  const { data: challengeRows, error: challengesError } = await supabase
+    .from("challenges")
+    .select("id")
+    .or(`creator_token.eq.${token},opponent_token.eq.${token}`);
+  if (challengesError) throw challengesError;
+  const challengeIds = (challengeRows ?? []).map((c) => c.id);
+  for (const table of ["challenge_guesses", "challenge_scores"]) {
+    const { error } = await supabase.from(table).delete().eq("player_token", token);
+    if (error) throw error;
+  }
+  if (challengeIds.length > 0) {
+    for (const table of ["challenge_guesses", "challenge_scores", "challenge_questions"]) {
+      const { error } = await supabase.from(table).delete().in("challenge_id", challengeIds);
+      if (error) throw error;
+    }
+    const { error } = await supabase.from("challenges").delete().in("id", challengeIds);
+    if (error) throw error;
+  }
+  const { error: rivalriesError } = await supabase
+    .from("rivalries")
+    .delete()
+    .or(`player_a_token.eq.${token},player_b_token.eq.${token}`);
+  if (rivalriesError) throw rivalriesError;
+
   for (const table of ["daily_starts", "daily_guesses", "daily_scores", "streaks"]) {
     const { error } = await supabase.from(table).delete().eq("player_token", token);
     if (error) throw error;

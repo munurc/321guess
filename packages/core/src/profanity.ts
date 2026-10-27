@@ -79,9 +79,12 @@ const BLOCKED_EN = [
   "hitler",
 ];
 
+// Religious terms that read as disrespectful in a joke/game handle.
+const BLOCKED_RELIGIOUS = ["allah"];
+
 const RESERVED = ["admin", "administrator", "moderator", "mod", "321guess", "system", "support", "official", "staff"];
 
-const BLOCKLIST = [...BLOCKED_TR, ...BLOCKED_EN, ...RESERVED]
+const BLOCKLIST = [...BLOCKED_TR, ...BLOCKED_EN, ...BLOCKED_RELIGIOUS, ...RESERVED]
   .map(normalizeForFilter)
   .filter((w) => w.length > 0);
 
