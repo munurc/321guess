@@ -58,6 +58,12 @@
       ],
       "expo-apple-authentication"
     ],
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/53b189d2-92c7-4712-b8dc-b894d31fdd35"
+    },
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true

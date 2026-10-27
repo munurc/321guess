@@ -13,7 +13,8 @@
         "EXPO_PUBLIC_API_URL": "https://api.321guess.com",
         "EXPO_PUBLIC_SUPABASE_URL": "https://pbytknifdcrmruikukzu.supabase.co",
         "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBieXRrbmlmZGNybXJ1aWt1a3p1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5MzA0ODEsImV4cCI6MjEwMTUwNjQ4MX0.HFZiPfPp_FtnOeldMQgDKl64b1VhrE3_ww7ZcR3XDjA"
-      }
+      },
+      "channel": "preview"
     },
     "device-test": {
       "distribution": "internal",
@@ -21,7 +22,8 @@
         "EXPO_PUBLIC_API_URL": "https://321guess-cwdb2ew1v-munurc.vercel.app",
         "EXPO_PUBLIC_SUPABASE_URL": "https://pbytknifdcrmruikukzu.supabase.co",
         "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBieXRrbmlmZGNybXJ1aWt1a3p1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5MzA0ODEsImV4cCI6MjEwMTUwNjQ4MX0.HFZiPfPp_FtnOeldMQgDKl64b1VhrE3_ww7ZcR3XDjA"
-      }
+      },
+      "channel": "device-test"
     },
     "production": {
       "autoIncrement": true,
@@ -29,7 +31,8 @@
         "EXPO_PUBLIC_API_URL": "https://api.321guess.com",
         "EXPO_PUBLIC_SUPABASE_URL": "https://pbytknifdcrmruikukzu.supabase.co",
         "EXPO_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBieXRrbmlmZGNybXJ1aWt1a3p1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU5MzA0ODEsImV4cCI6MjEwMTUwNjQ4MX0.HFZiPfPp_FtnOeldMQgDKl64b1VhrE3_ww7ZcR3XDjA"
-      }
+      },
+      "channel": "production"
     }
   },
   "submit": {
