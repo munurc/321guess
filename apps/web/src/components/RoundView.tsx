@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Platform, Pressable, Text, View } from "react-native";
+import { Platform, Pressable, ScrollView, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocale, useTranslations } from "use-intl";
 import type { Round } from "@321guess/core";
 import { ArenaPressable } from "./ArenaPressable";
@@ -16,10 +17,24 @@ export function RoundView({ round, onNext }: { round: Round; onNext: () => void 
   const t = useTranslations("play");
   const locale = useLocale();
   const [revealed, setRevealed] = useState(false);
+  const insets = useSafeAreaInsets();
 
   if (Platform.OS !== "web") {
+    // Scrollable because a well-connected pair (e.g. Trabzonspor–Gençlerbirliği)
+    // reveals dozens of answers, pushing the list and the next-round button
+    // off-screen. Inline contentContainerStyle rather than className: gap on a
+    // ScrollView content container via className misbehaved on Yoga before.
     return (
-      <View className="items-center gap-8 px-4 py-8">
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{
+          alignItems: "center",
+          gap: 32,
+          paddingHorizontal: 16,
+          paddingTop: 32,
+          paddingBottom: insets.bottom + 32,
+        }}
+      >
         <View className="flex-row items-center gap-6">
           {round.kind === "clubClub" ? (
             <>
@@ -80,7 +95,7 @@ export function RoundView({ round, onNext }: { round: Round; onNext: () => void 
             </>
           )}
         </View>
-      </View>
+      </ScrollView>
     );
   }
 
