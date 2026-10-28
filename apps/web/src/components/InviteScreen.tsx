@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { Linking, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocale, useTranslations } from "use-intl";
@@ -254,9 +254,7 @@ export function InviteScreen({ code }: { code: string }) {
         {phase.kind === "invite" && invite && (
           <View className="gap-3">
             <WebButton label={t("start")} onPress={start} disabled={joining} />
-            <Pressable onPress={() => void Linking.openURL(`guess321://m/${code}`)} className="items-center py-2">
-              <Text className="text-xs text-ink-mute underline">{t("openInApp")}</Text>
-            </Pressable>
+            <Text className="py-2 text-center text-sm font-semibold text-accent">{t("appSoon")}</Text>
           </View>
         )}
 

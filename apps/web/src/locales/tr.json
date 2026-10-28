@@ -359,7 +359,6 @@
     "title": "{username} seni meydan okumaya davet etti",
     "score": "Skoru: {correct}/{total} — geçebilir misin?",
     "start": "Başla",
-    "openInApp": "Uygulaman varsa uygulamada aç",
     "inactive": "Bu davet linki artık geçerli değil.",
     "own": "Bu senin davet linkin.",
     "goHome": "321guess'e git",
