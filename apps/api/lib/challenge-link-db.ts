@@ -27,6 +27,20 @@ async function countCompletedClones(code: string): Promise<number> {
   return count ?? 0;
 }
 
+async function findActiveLink(sourceChallengeId: string): Promise<string | null> {
+  const supabase = getSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("challenge_links")
+    .select("code")
+    .eq("source_challenge_id", sourceChallengeId)
+    .is("revoked_at", null)
+    .order("created_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+  if (error) throw error;
+  return data?.code ?? null;
+}
+
 /** Creates the invite link for a challenge its creator has already played,
  * or returns the existing active one. The creator's score must exist: the
  * link shares it, and every clone copies it. */
@@ -47,19 +61,22 @@ export async function getOrCreateLink(
   if (scoreError) throw scoreError;
   if (!score) return { error: "not_finished" };
 
-  const { data: existing, error: existingError } = await supabase
-    .from("challenge_links")
-    .select("code")
-    .eq("source_challenge_id", sourceChallengeId)
-    .is("revoked_at", null)
-    .maybeSingle();
-  if (existingError) throw existingError;
-  if (existing) return { code: existing.code, url: linkUrl(existing.code) };
+  const existing = await findActiveLink(sourceChallengeId);
+  if (existing) return { code: existing, url: linkUrl(existing) };
 
-  // Marks the source as link-delivered; false means it was already sent to
-  // a username (or is a random-queue challenge) and can't also be a link.
+  // Marks the source as link-delivered. Only one concurrent caller can win
+  // this conditional update; a loser re-checks for the winner's link (a
+  // double tap). Otherwise it was already sent to a username or is a
+  // random-queue challenge, and can't also be a link.
   const marked = await setChallengeDelivery(sourceChallengeId, "link", null);
-  if (!marked) return { error: "not_linkable" };
+  if (!marked) {
+    for (let attempt = 0; attempt < 5; attempt++) {
+      const raced = await findActiveLink(sourceChallengeId);
+      if (raced) return { code: raced, url: linkUrl(raced) };
+      await new Promise((r) => setTimeout(r, 200));
+    }
+    return { error: "not_linkable" };
+  }
 
   for (let attempt = 0; attempt < 3; attempt++) {
     const code = generateLinkCode();

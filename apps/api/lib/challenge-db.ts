@@ -186,11 +186,12 @@ export async function setChallengeDelivery(
     .eq("id", id)
     .eq("status", "waiting")
     .is("opponent_token", null)
-    // NOT a plain .neq("delivery_type", "random"): delivery_type is NULL on a
-    // freshly-created challenge (challenges.sql leaves it null until /send
-    // decides), and SQL's `NULL <> 'random'` is NULL, not true — a bare neq
-    // would filter out every legitimately sendable row.
-    .or("delivery_type.is.null,delivery_type.neq.random")
+    // Only a challenge whose delivery hasn't been decided yet is sendable.
+    // This excludes random-queue challenges and challenges already shared as
+    // an invite link: a link's source must never also become a 1-to-1
+    // invite, or deleting that invite from the hub would strip the rows
+    // every link clone is copied from.
+    .is("delivery_type", null)
     .select();
   if (error) throw error;
   return (data?.length ?? 0) > 0;
@@ -591,6 +592,17 @@ export async function listChallengesForPlayer(playerToken: string) {
  * challenge doesn't exist or doesn't qualify, so the route can report it. */
 export async function cancelChallengeAsCreator(id: string, creatorToken: string): Promise<boolean> {
   const supabase = getSupabaseServerClient();
+  // An invite link's source is managed through the link (revoke), never
+  // deleted here: its questions and score back every clone. Checked before
+  // touching any child rows.
+  const { data: link, error: linkError } = await supabase
+    .from("challenge_links")
+    .select("code")
+    .eq("source_challenge_id", id)
+    .limit(1)
+    .maybeSingle();
+  if (linkError) throw linkError;
+  if (link) return false;
   const { data: row, error } = await supabase
     .from("challenges")
     .select("id")
