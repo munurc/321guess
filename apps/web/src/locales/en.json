@@ -352,5 +352,15 @@
         "body": "Questions about these terms can be sent to munurcoskun@gmail.com."
       }
     ]
+  },
+  "invite": {
+    "title": "{username} challenged you",
+    "score": "Their score: {correct}/{total}. Can you beat it?",
+    "start": "Start",
+    "openInApp": "Have the app? Open it there",
+    "inactive": "This invite link is no longer active.",
+    "own": "This is your invite link.",
+    "goHome": "Go to 321guess",
+    "appSoon": "321guess is coming soon to the App Store and Google Play!"
   }
 }

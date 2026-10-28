@@ -352,5 +352,15 @@
         "body": "Bu şartlarla ilgili sorularını munurcoskun@gmail.com adresine gönderebilirsin."
       }
     ]
+  },
+  "invite": {
+    "title": "{username} seni meydan okumaya davet etti",
+    "score": "Skoru: {correct}/{total} — geçebilir misin?",
+    "start": "Başla",
+    "openInApp": "Uygulaman varsa uygulamada aç",
+    "inactive": "Bu davet linki artık geçerli değil.",
+    "own": "Bu senin davet linkin.",
+    "goHome": "321guess'e git",
+    "appSoon": "321guess çok yakında App Store ve Google Play'de!"
   }
 }
