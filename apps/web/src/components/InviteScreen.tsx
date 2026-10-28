@@ -19,6 +19,7 @@ import { localizedPath } from "../lib/localized-path";
 import { registerPlayer } from "../lib/online-api";
 import { loadIdentity, saveIdentity, type Identity } from "../lib/online-storage";
 import { useScrollToEndOnKeyboard } from "../lib/use-scroll-to-end-on-keyboard";
+import { ArenaSurfaceContext } from "../lib/arena-surface";
 import { ArenaBackground } from "./ArenaBackground";
 import { ArenaPressable } from "./ArenaPressable";
 import { Countdown } from "./Countdown";
@@ -41,6 +42,14 @@ type Phase =
  * countdown, and sees a 1-to-1 result. Arena-themed on both platforms — it's
  * a game screen. */
 export function InviteScreen({ code }: { code: string }) {
+  return (
+    <ArenaSurfaceContext.Provider value={true}>
+      <InviteFlow code={code} />
+    </ArenaSurfaceContext.Provider>
+  );
+}
+
+function InviteFlow({ code }: { code: string }) {
   const t = useTranslations("invite");
   const tc = useTranslations("challenge");
   const tu = useTranslations("online.username");

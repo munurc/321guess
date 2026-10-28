@@ -1,8 +1,9 @@
 import { useDeferredValue, useMemo, useState } from "react";
-import { Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import type { Player } from "@321guess/core";
 import { LogoTile } from "./LogoTile";
 import { CelebrationPulse } from "./CelebrationPulse";
+import { useArenaStyling } from "../lib/arena-surface";
 
 function stripDiacritics(s: string): string {
   return s.normalize("NFD").replace(/[̀-ͯ]/g, "");
@@ -40,7 +41,7 @@ export function GuessInput({
 }) {
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
-  const isNative = Platform.OS !== "web";
+  const isNative = useArenaStyling();
 
   // Deferred so the keystroke itself renders immediately and the scan runs
   // right after, instead of the input waiting on it.
