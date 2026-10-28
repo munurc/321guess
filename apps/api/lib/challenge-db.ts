@@ -321,6 +321,10 @@ export type FinishChallengeResult = {
   correctCount: number;
   totalPossible: number;
   completed: boolean;
+  /** True only for the call that moved the challenge to "completed" — so the
+   * other player is notified once, not on every re-finish (e.g. a friend
+   * reopening an invite link they already played). */
+  newlyCompleted: boolean;
   opponentToken: string | null;
   opponentResult: { correctCount: number; totalPossible: number; username: string } | null;
 };
@@ -372,7 +376,7 @@ export async function finishChallenge(
 
   const otherToken = challengeRow.creator_token === token ? challengeRow.opponent_token : challengeRow.creator_token;
   if (!otherToken) {
-    return { correctCount, totalPossible, completed: false, opponentToken: null, opponentResult: null };
+    return { correctCount, totalPossible, completed: false, newlyCompleted: false, opponentToken: null, opponentResult: null };
   }
 
   const { data: otherScore, error: otherError } = await supabase
@@ -384,7 +388,7 @@ export async function finishChallenge(
   if (otherError) throw otherError;
 
   if (!otherScore) {
-    return { correctCount, totalPossible, completed: false, opponentToken: otherToken, opponentResult: null };
+    return { correctCount, totalPossible, completed: false, newlyCompleted: false, opponentToken: otherToken, opponentResult: null };
   }
 
   // Both sides have now finished — this call MIGHT be the second one, but
@@ -438,6 +442,7 @@ export async function finishChallenge(
     correctCount,
     totalPossible,
     completed: true,
+    newlyCompleted: (completedRows?.length ?? 0) > 0,
     opponentToken: otherToken,
     opponentResult: {
       correctCount: otherScore.correct_count,

@@ -39,7 +39,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     const totalPossible = challenge.questions.reduce((sum, q) => sum + q.totalPossible, 0);
     const result = await finishChallenge(id, token, player.username, totalPossible);
 
-    if (result.completed && result.opponentToken) {
+    if (result.newlyCompleted && result.opponentToken) {
       // Whoever just finished second sees the result immediately in this
       // response — this push is for the OTHER player, who finished first
       // and has been waiting.
