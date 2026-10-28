@@ -8,6 +8,8 @@ import type { Dataset, Difficulty, GameMode, Player } from "@321guess/core";
 import {
   listChallenges,
   cancelChallenge,
+  createChallengeLink,
+  revokeLink,
   createChallenge,
   sendChallenge,
   submitChallengeGuess,
@@ -18,7 +20,9 @@ import {
   type ChallengeRow,
   type FinishChallengeResult,
   type OutgoingChallenge,
+  type ChallengeLinkSummary,
 } from "../lib/challenge-api";
+import { shareOrCopy } from "../lib/share";
 import { loadDataset } from "../lib/dataset";
 import { loadIdentity, type Identity } from "../lib/online-storage";
 import { ArenaBackground } from "./ArenaBackground";
@@ -79,6 +83,7 @@ export function ChallengeScreen() {
   // Keyed by challenge id: a plain "sent" flag outlived the challenge it was
   // for, so every later friend challenge skipped straight to "sent".
   const [sentTo, setSentTo] = useState<{ challengeId: string; username: string } | null>(null);
+  const [inviteCopied, setInviteCopied] = useState(false);
 
   useEffect(() => {
     loadIdentity().then(setIdentity);
@@ -102,21 +107,46 @@ export function ChallengeScreen() {
     refreshList();
   }, [refreshList]);
 
-  function confirmDeleteOutgoing(challenge: OutgoingChallenge) {
+  // Optimistic: the row disappears right away, and the list re-syncs with
+  // the server either way so a failed delete reappears.
+  function confirmDelete(removeLocally: (prev: ChallengeList) => ChallengeList, remoteDelete: () => Promise<unknown>) {
     Alert.alert(t("deleteConfirmTitle"), t("deleteConfirmMessage"), [
       { text: t("deleteConfirmCancel"), style: "cancel" },
       {
         text: t("deleteChallenge"),
         style: "destructive",
         onPress: () => {
-          if (!identity) return;
-          // Optimistic: drop it from the list right away, then re-sync with
-          // the server either way so a failed delete reappears.
-          setList((prev) => (prev ? { ...prev, outgoing: prev.outgoing.filter((c) => c.id !== challenge.id) } : prev));
-          void cancelChallenge(identity.token, challenge.id).finally(refreshList);
+          setList((prev) => (prev ? removeLocally(prev) : prev));
+          void remoteDelete().finally(refreshList);
         },
       },
     ]);
+  }
+
+  function confirmDeleteOutgoing(challenge: OutgoingChallenge) {
+    if (!identity) return;
+    confirmDelete(
+      (prev) => ({ ...prev, outgoing: prev.outgoing.filter((c) => c.id !== challenge.id) }),
+      () => cancelChallenge(identity.token, challenge.id),
+    );
+  }
+
+  function confirmDeleteLink(link: ChallengeLinkSummary) {
+    if (!identity) return;
+    confirmDelete(
+      (prev) => ({ ...prev, links: prev.links.filter((l) => l.code !== link.code) }),
+      () => revokeLink(identity.token, link.code),
+    );
+  }
+
+  async function inviteFriend(challenge: ChallengeRow, result: FinishChallengeResult) {
+    if (!identity) return;
+    const res = await createChallengeLink(identity.token, challenge.id);
+    if (res.status !== "ok") return;
+    const shared = await shareOrCopy(
+      t("inviteShareText", { score: result.correctCount, total: result.totalPossible, url: res.data.url }),
+    );
+    if (shared === "copied") setInviteCopied(true);
   }
 
   function outgoingLabel(c: OutgoingChallenge): string {
@@ -232,6 +262,7 @@ export function ChallengeScreen() {
       setScreen({ kind: "hub" });
       return;
     }
+    setInviteCopied(false);
     setScreen({ kind: "new-send", challenge, result: res.data });
   }
 
@@ -382,7 +413,23 @@ export function ChallengeScreen() {
 
           <View className="gap-3">
             <Text className="text-xs font-bold uppercase tracking-widest text-arena-text-soft">{t("outgoingHeading")}</Text>
-            {!list || list.outgoing.length === 0 ? (
+            {list?.links.map((l) => (
+              <View key={l.code} className="flex-row items-center gap-3 rounded-2xl bg-arena-bg-soft p-4">
+                <Text className="w-9 text-center text-2xl">🔗</Text>
+                <Text className="flex-1 text-base font-semibold text-arena-text">
+                  {t("linkRow", { count: l.playedCount })}
+                </Text>
+                <Pressable
+                  onPress={() => confirmDeleteLink(l)}
+                  hitSlop={8}
+                  accessibilityLabel={t("deleteChallenge")}
+                  className="rounded-full border border-arena-accent-2 px-3 py-1.5"
+                >
+                  <Text className="text-sm font-semibold text-arena-text-soft">{t("deleteChallenge")}</Text>
+                </Pressable>
+              </View>
+            ))}
+            {!list || (list.outgoing.length === 0 && list.links.length === 0) ? (
               <Text className="rounded-2xl bg-arena-bg-soft p-4 text-arena-text-soft">{t("emptyOutgoing")}</Text>
             ) : (
               list.outgoing.map((c) => (
@@ -546,6 +593,15 @@ export function ChallengeScreen() {
         <Text className="mt-2 text-lg text-arena-accent-2">
           {t("sendScoreLabel", { correct: result.correctCount, total: result.totalPossible })}
         </Text>
+
+        <ArenaPressable
+          onPress={() => void inviteFriend(challenge, result)}
+          className="mt-6 items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-5"
+        >
+          <Text className="text-lg font-bold text-[#2A1E00]">{t("inviteFriend")}</Text>
+        </ArenaPressable>
+        {inviteCopied && <Text className="mt-2 text-center text-arena-accent-2">{t("linkCopied")}</Text>}
+        <Text className="mt-6 text-center text-sm text-arena-text-soft">{t("orSendToUser")}</Text>
 
         {/* Username search + send is the only delivery option: the former
             "generate a link" flow produced https://www.321guess.com/challenge/<id>,

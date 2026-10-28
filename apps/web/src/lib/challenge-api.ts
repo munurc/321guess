@@ -110,7 +110,57 @@ export type RivalryChallenge = ChallengeRow & { rivalry: { myWins: number; oppon
 export type IncomingChallenge = ChallengeRow & { fromUsername: string };
 /** opponentUsername is null until the challenge is sent or randomly matched. */
 export type OutgoingChallenge = ChallengeRow & { opponentUsername: string | null };
-export type ChallengeList = { incoming: IncomingChallenge[]; outgoing: OutgoingChallenge[]; completed: RivalryChallenge[] };
+export type ChallengeLinkSummary = { code: string; url: string; playedCount: number; createdAt: string; expiresAt: string };
+export type ChallengeList = {
+  incoming: IncomingChallenge[];
+  outgoing: OutgoingChallenge[];
+  completed: RivalryChallenge[];
+  links: ChallengeLinkSummary[];
+};
+
+/** Public invite info for /m/[code]. `active` is false once revoked or expired. */
+export type LinkInvite = {
+  code: string;
+  creatorUsername: string;
+  creatorScore: { correctCount: number; totalPossible: number };
+  mode: string;
+  difficulty: string;
+  playedCount: number;
+  active: boolean;
+};
+
+export function createChallengeLink(token: string, challengeId: string): Promise<ApiResult<{ code: string; url: string }>> {
+  return post(`/api/challenges/${challengeId}/link`, { token });
+}
+
+export function fetchLinkInvite(code: string): Promise<ApiResult<LinkInvite>> {
+  return get(`/api/links/${code}`);
+}
+
+/** "gone": link revoked/expired/unknown; "own": the creator opened their own link. */
+export async function joinLink(
+  token: string,
+  code: string,
+): Promise<ApiResult<ChallengeRow> | { status: "gone" } | { status: "own" }> {
+  try {
+    const res = await fetch(`${apiBaseUrl()}/api/links/${code}/join`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token }),
+    });
+    if (res.status === 401) return { status: "expired" };
+    if (res.status === 404 || res.status === 410) return { status: "gone" };
+    if (res.status === 409) return { status: "own" };
+    if (!res.ok) return { status: "failed" };
+    return { status: "ok", data: (await res.json()) as ChallengeRow };
+  } catch {
+    return { status: "failed" };
+  }
+}
+
+export function revokeLink(token: string, code: string): Promise<ApiResult<{ revoked: true }>> {
+  return post(`/api/links/${code}/revoke`, { token });
+}
 
 export function cancelChallenge(token: string, challengeId: string): Promise<ApiResult<{ cancelled: true }>> {
   return post(`/api/challenges/${challengeId}/cancel`, { token });
