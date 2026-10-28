@@ -1,5 +1,4 @@
-import { Image, Text, View } from "react-native";
-import { useArenaStyling } from "../lib/arena-surface";
+import { Image, Platform, Text, View } from "react-native";
 
 type LogoTileProps = {
   src: string;
@@ -19,10 +18,8 @@ const NEUTRAL_RING_COLOR = "#2ECC8F"; // arena-accent-2
 
 export function LogoTile({ src, alt, caption, variant = "logo", size = "lg", color }: LogoTileProps) {
   const isSmall = size === "sm";
-  const arena = useArenaStyling();
-  const web = !arena;
 
-  if (arena && variant === "logo") {
+  if (Platform.OS !== "web" && variant === "logo") {
     const ringColor = color ?? NEUTRAL_RING_COLOR;
     return (
       <View className={`items-center ${isSmall ? "gap-1.5" : "gap-3"}`}>
@@ -62,9 +59,9 @@ export function LogoTile({ src, alt, caption, variant = "logo", size = "lg", col
     <View className={`items-center ${isSmall ? "gap-1.5" : "gap-3"}`}>
       <View
         className={`aspect-square items-center justify-center rounded-2xl border ${
-          web ? "border-rule bg-paper-2" : "border-arena-accent-2 bg-arena-card"
+          Platform.OS === "web" ? "border-rule bg-paper-2" : "border-arena-accent-2 bg-arena-card"
         } ${
-          isSmall ? "w-14 p-2" : web ? "w-28 p-4 sm:w-40 sm:p-6" : "w-40 p-6"
+          isSmall ? "w-14 p-2" : Platform.OS === "web" ? "w-28 p-4 sm:w-40 sm:p-6" : "w-40 p-6"
         } ${variant === "flag" ? "overflow-hidden p-0" : ""}`}
       >
         <Image
@@ -75,8 +72,8 @@ export function LogoTile({ src, alt, caption, variant = "logo", size = "lg", col
         />
       </View>
       <Text
-        className={`text-center font-medium ${web ? "text-ink-soft" : "text-arena-text-soft"} ${
-          web
+        className={`text-center font-medium ${Platform.OS === "web" ? "text-ink-soft" : "text-arena-text-soft"} ${
+          Platform.OS === "web"
             ? isSmall
               ? "max-w-[5.5rem] text-[11px]"
               : "max-w-[16rem] text-sm"
