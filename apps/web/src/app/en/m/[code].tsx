@@ -10,6 +10,7 @@ export default function InviteRouteEn() {
         title="A friend challenged you on 321guess!"
         description="Answer the same football questions and compare scores. No sign-up, play right in your browser."
         path="/en/m"
+        noindex
       />
       <InviteScreen code={code} />
     </>

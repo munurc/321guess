@@ -361,6 +361,7 @@
     "start": "Başla",
     "inactive": "Bu davet linki artık geçerli değil.",
     "own": "Bu senin davet linkin.",
+    "ownScore": "Skorun: {correct}/{total}",
     "goHome": "321guess'e git",
     "retry": "Tekrar dene",
     "appSoon": "321guess çok yakında App Store ve Google Play'de!"

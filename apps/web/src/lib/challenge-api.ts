@@ -129,6 +129,11 @@ export type LinkInvite = {
   active: boolean;
 };
 
+/** A joined link copy plus the joiner's own guesses so far (never answers). */
+export type JoinedChallenge = ChallengeRow & {
+  myGuesses?: { questionIndex: number; playerId: string; correct: boolean }[];
+};
+
 export function createChallengeLink(token: string, challengeId: string): Promise<ApiResult<{ code: string; url: string }>> {
   return post(`/api/challenges/${challengeId}/link`, { token });
 }
@@ -141,7 +146,7 @@ export function fetchLinkInvite(code: string): Promise<ApiResult<LinkInvite>> {
 export async function joinLink(
   token: string,
   code: string,
-): Promise<ApiResult<ChallengeRow> | { status: "gone" } | { status: "own" }> {
+): Promise<ApiResult<JoinedChallenge> | { status: "gone" } | { status: "own" }> {
   try {
     const res = await fetch(`${apiBaseUrl()}/api/links/${code}/join`, {
       method: "POST",
@@ -152,7 +157,7 @@ export async function joinLink(
     if (res.status === 404 || res.status === 410) return { status: "gone" };
     if (res.status === 409) return { status: "own" };
     if (!res.ok) return { status: "failed" };
-    return { status: "ok", data: (await res.json()) as ChallengeRow };
+    return { status: "ok", data: (await res.json()) as JoinedChallenge };
   } catch {
     return { status: "failed" };
   }

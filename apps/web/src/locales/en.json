@@ -361,6 +361,7 @@
     "start": "Start",
     "inactive": "This invite link is no longer active.",
     "own": "This is your invite link.",
+    "ownScore": "Your score: {correct}/{total}",
     "goHome": "Go to 321guess",
     "retry": "Try again",
     "appSoon": "321guess is coming soon to the App Store and Google Play!"

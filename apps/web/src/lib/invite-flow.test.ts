@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { phaseAfterJoin, shouldTryJoinOnOpen } from "./invite-flow";
+import { phaseAfterJoin, resumePoint, shouldTryJoinOnOpen } from "./invite-flow";
 
 const invite = { code: "abcd2345", creatorUsername: "ali", creatorScore: { correctCount: 3, totalPossible: 9 }, mode: "clubClub", difficulty: "easy", playedCount: 2 };
 const challenge = { id: "c1", status: "pending" } as never;
@@ -38,5 +38,31 @@ describe("phaseAfterJoin", () => {
   });
   it("surfaces network/server failures as a retryable error", () => {
     expect(phaseAfterJoin({ status: "failed" })).toEqual({ kind: "error" });
+  });
+});
+
+describe("shouldTryJoinOnOpen — own link", () => {
+  it("sends the creator straight to the own-link screen instead of 'X challenged you'", () => {
+    expect(shouldTryJoinOnOpen({ status: "ok", data: { ...invite, active: true } }, { token: "t", username: "ali" })).toBe("own");
+  });
+  it("still shows the invite to a different player", () => {
+    expect(shouldTryJoinOnOpen({ status: "ok", data: { ...invite, active: true } }, { token: "t", username: "veli" })).toBe("invite");
+  });
+});
+
+describe("resumePoint", () => {
+  it("starts a fresh copy at question 1 with no chips", () => {
+    expect(resumePoint([], 5)).toEqual({ questionIndex: 0, foundIds: [], wrongIds: [] });
+  });
+  it("resumes at the last question the player guessed on, restoring that question's chips", () => {
+    const guesses = [
+      { questionIndex: 0, playerId: "a", correct: true },
+      { questionIndex: 2, playerId: "b", correct: true },
+      { questionIndex: 2, playerId: "c", correct: false },
+    ];
+    expect(resumePoint(guesses, 5)).toEqual({ questionIndex: 2, foundIds: ["b"], wrongIds: ["c"] });
+  });
+  it("never points past the last question", () => {
+    expect(resumePoint([{ questionIndex: 9, playerId: "a", correct: true }], 5).questionIndex).toBe(4);
   });
 });

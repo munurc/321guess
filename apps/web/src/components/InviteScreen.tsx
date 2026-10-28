@@ -15,7 +15,7 @@ import {
   type LinkInvite,
 } from "../lib/challenge-api";
 import { loadDataset } from "../lib/dataset";
-import { phaseAfterJoin, shouldTryJoinOnOpen } from "../lib/invite-flow";
+import { phaseAfterJoin, resumePoint, shouldTryJoinOnOpen } from "../lib/invite-flow";
 import { localizedPath } from "../lib/localized-path";
 import { registerPlayer } from "../lib/online-api";
 import { clearIdentity, loadIdentity, saveIdentity, type Identity } from "../lib/online-storage";
@@ -88,6 +88,9 @@ export function InviteScreen({ code }: { code: string }) {
   const [invite, setInvite] = useState<LinkInvite | null>(null);
   const [identity, setIdentity] = useState<Identity | null>(null);
   const [dataset, setDataset] = useState<Dataset | null>(null);
+  const [datasetFailed, setDatasetFailed] = useState(false);
+  // Chips of a resumed copy, held as ids until the player dataset is loaded.
+  const [pendingChips, setPendingChips] = useState<{ found: string[]; wrong: string[] } | null>(null);
 
   const [usernameInput, setUsernameInput] = useState("");
   const [usernameError, setUsernameError] = useState<UsernameError | null>(null);
@@ -104,8 +107,24 @@ export function InviteScreen({ code }: { code: string }) {
   useScrollToEndOnKeyboard(playScrollRef, !isWeb && phase.kind === "playing");
   const guessedIds = useMemo(() => new Set([...foundPlayers, ...wrongPlayers].map((p) => p.id)), [foundPlayers, wrongPlayers]);
 
+  function fetchDataset() {
+    setDatasetFailed(false);
+    loadDataset()
+      .then(setDataset)
+      .catch(() => setDatasetFailed(true));
+  }
+
   useEffect(() => {
-    loadDataset().then(setDataset).catch(() => {});
+    if (!dataset || !pendingChips) return;
+    const byId = new Map(dataset.players.map((p) => [p.id, p]));
+    const pick = (ids: string[]) => ids.map((id) => byId.get(id)).filter((p): p is Player => !!p);
+    setFoundPlayers(pick(pendingChips.found));
+    setWrongPlayers(pick(pendingChips.wrong));
+    setPendingChips(null);
+  }, [dataset, pendingChips]);
+
+  useEffect(() => {
+    fetchDataset();
     Promise.all([fetchLinkInvite(code), loadIdentity()]).then(([res, id]) => {
       setIdentity(id);
       if (res.status === "ok") setInvite(res.data);
@@ -133,6 +152,12 @@ export function InviteScreen({ code }: { code: string }) {
       setUsernameError(outcome.error);
       setPhase({ kind: "username" });
     } else if (outcome.kind === "countdown") {
+      // A reopened, partly played copy picks up where the player left off.
+      const resume = resumePoint(outcome.challenge.myGuesses ?? [], outcome.challenge.questions.length);
+      setQuestionIndex(resume.questionIndex);
+      setFoundPlayers([]);
+      setWrongPlayers([]);
+      setPendingChips({ found: resume.foundIds, wrong: resume.wrongIds });
       setPhase({ kind: "countdown", challenge: outcome.challenge });
     } else {
       setPhase({ kind: outcome.kind });
@@ -245,6 +270,9 @@ export function InviteScreen({ code }: { code: string }) {
           <View className="gap-4">
             <View className="items-center rounded-lg border border-rule bg-ink/5 p-8">
               <Text className="text-ink">{t("own")}</Text>
+              <Text className="mt-2 text-2xl font-black text-ink">
+                {t("ownScore", { correct: invite.creatorScore.correctCount, total: invite.creatorScore.totalPossible })}
+              </Text>
               <Text className="mt-2 text-sm font-semibold text-accent">{tc("linkRow", { count: invite.playedCount })}</Text>
             </View>
             <WebButton label={t("goHome")} onPress={goHome} />
@@ -289,7 +317,12 @@ export function InviteScreen({ code }: { code: string }) {
         )}
 
         {challenge &&
-          (!dataset || !question ? (
+          (datasetFailed ? (
+            <View className="gap-4">
+              <WebLoadingBox text={tu("error.server")} />
+              <WebButton label={t("retry")} onPress={fetchDataset} />
+            </View>
+          ) : !dataset || !question ? (
             <WebLoadingBox text={tc("loading")} />
           ) : (
             <View className="gap-4">
@@ -387,7 +420,12 @@ export function InviteScreen({ code }: { code: string }) {
           keyboardShouldPersistTaps="handled"
           automaticallyAdjustKeyboardInsets
         >
-          {!dataset || !question ? (
+          {datasetFailed ? (
+            <>
+              <Text className={ui.body}>{tu("error.server")}</Text>
+              <Button label={t("retry")} onPress={fetchDataset} />
+            </>
+          ) : !dataset || !question ? (
             <Text className={ui.soft}>{tc("loading")}</Text>
           ) : (
             <>
@@ -439,6 +477,9 @@ export function InviteScreen({ code }: { code: string }) {
         {phase.kind === "own" && invite && (
           <>
             <Text className={ui.body}>{t("own")}</Text>
+            <Text className={ui.title}>
+              {t("ownScore", { correct: invite.creatorScore.correctCount, total: invite.creatorScore.totalPossible })}
+            </Text>
             <Text className={ui.accent}>{tc("linkRow", { count: invite.playedCount })}</Text>
             <Button label={t("goHome")} onPress={goHome} />
           </>

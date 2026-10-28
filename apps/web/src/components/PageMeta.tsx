@@ -7,10 +7,15 @@ type PageMetaProps = {
   /** Path only, e.g. "/manual" — combined with the site origin for the
    * canonical URL and og:url. */
   path: string;
+  /** Personal pages (invite links) that shouldn't appear in search: emits
+   * robots noindex and leaves out canonical/hreflang/og:url, so a shared
+   * link previews with its own URL. */
+  noindex?: boolean;
 };
 
 const SITE_URL = "https://www.321guess.com";
-const OG_IMAGE = `${SITE_URL}/og-image.png`;
+// Logo only, centered: survives both the wide card and WhatsApp's square crop.
+const OG_IMAGE = `${SITE_URL}/og-logo.png`;
 
 /** Given any route's path (e.g. "/manual" or "/en/manual"), returns the
  * unprefixed base path ("/manual") both locale variants share. */
@@ -28,7 +33,7 @@ function basePath(path: string): string {
  * an unprefixed Turkish URL and an "/en"-prefixed English URL (see
  * src/app/en/), so any route's PageMeta can compute both alternates without
  * each call site repeating the pairing. */
-export function PageMeta({ title, description, path }: PageMetaProps) {
+export function PageMeta({ title, description, path, noindex }: PageMetaProps) {
   // expo-router/head's native (iOS) implementation isn't a no-op like its
   // web one — mounting it registers a Handoff/Spotlight activity via a
   // native module that alerts if the app isn't configured for it. This
@@ -49,16 +54,20 @@ export function PageMeta({ title, description, path }: PageMetaProps) {
       <html lang={lang} />
       <title>{title}</title>
       <meta name="description" content={description} />
-      <link rel="canonical" href={url} />
-      <link rel="alternate" hrefLang="tr" href={trUrl} />
-      <link rel="alternate" hrefLang="en" href={enUrl} />
-      <link rel="alternate" hrefLang="x-default" href={trUrl} />
+      {noindex && <meta name="robots" content="noindex" />}
+      {!noindex && <link rel="canonical" href={url} />}
+      {!noindex && <link rel="alternate" hrefLang="tr" href={trUrl} />}
+      {!noindex && <link rel="alternate" hrefLang="en" href={enUrl} />}
+      {!noindex && <link rel="alternate" hrefLang="x-default" href={trUrl} />}
       <meta property="og:type" content="website" />
       <meta property="og:site_name" content="321guess" />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
-      <meta property="og:url" content={url} />
+      {!noindex && <meta property="og:url" content={url} />}
       <meta property="og:image" content={OG_IMAGE} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content="321guess" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
