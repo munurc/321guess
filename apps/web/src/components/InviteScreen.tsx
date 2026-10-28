@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Linking, Platform, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -10,21 +10,24 @@ import {
   finishChallenge,
   joinLink,
   submitChallengeGuess,
+  type ChallengeQuestion,
   type ChallengeRow,
   type FinishChallengeResult,
   type LinkInvite,
 } from "../lib/challenge-api";
 import { loadDataset } from "../lib/dataset";
+import { phaseAfterJoin, shouldTryJoinOnOpen } from "../lib/invite-flow";
 import { localizedPath } from "../lib/localized-path";
 import { registerPlayer } from "../lib/online-api";
-import { loadIdentity, saveIdentity, type Identity } from "../lib/online-storage";
+import { clearIdentity, loadIdentity, saveIdentity, type Identity } from "../lib/online-storage";
 import { useScrollToEndOnKeyboard } from "../lib/use-scroll-to-end-on-keyboard";
 import { ArenaBackground } from "./ArenaBackground";
 import { ArenaPressable } from "./ArenaPressable";
 import { Countdown } from "./Countdown";
-import { RoundPlayView } from "./RoundPlayView";
+import { LogoTile } from "./LogoTile";
+import { GuessInput, RoundPlayView } from "./RoundPlayView";
 
-type UsernameError = "format" | "blocked" | "taken" | "server";
+type UsernameError = "format" | "blocked" | "taken" | "server" | "expired";
 
 type Phase =
   | { kind: "loading" }
@@ -32,14 +35,60 @@ type Phase =
   | { kind: "invite" }
   | { kind: "username" }
   | { kind: "own" }
+  | { kind: "error" }
   | { kind: "countdown"; challenge: ChallengeRow }
   | { kind: "playing"; challenge: ChallengeRow }
   | { kind: "result"; result: FinishChallengeResult };
 
+const isWeb = Platform.OS === "web";
+
+// The website keeps its light "paper" look; the app keeps the arena theme.
+// Same flow, two skins.
+const ui = isWeb
+  ? {
+      title: "text-2xl font-black text-ink",
+      body: "text-base text-ink-soft",
+      soft: "text-sm text-ink-mute",
+      accent: "text-base font-semibold text-accent",
+      brand: "text-2xl font-black text-accent",
+      error: "text-sm text-red-600",
+      input: "rounded-xl border border-rule bg-paper-2 px-4 py-3 text-base text-ink",
+      button: "items-center rounded-xl bg-accent py-4",
+      buttonText: "text-lg font-bold text-paper",
+      won: "text-accent",
+      lost: "text-red-600",
+      tied: "text-ink-mute",
+    }
+  : {
+      title: "text-2xl font-bold text-arena-text",
+      body: "text-xl text-arena-text",
+      soft: "text-sm text-arena-text-soft",
+      accent: "text-lg text-arena-accent-2",
+      brand: "font-display text-3xl text-arena-accent",
+      error: "text-sm text-red-400",
+      input: "rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-4 py-4 text-lg text-arena-text",
+      button: "items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-6",
+      buttonText: "text-2xl font-bold text-[#2A1E00]",
+      won: "text-arena-accent-2",
+      lost: "text-red-300",
+      tied: "text-arena-text-soft",
+    };
+
+function Surface({ children }: { children: ReactNode }) {
+  return isWeb ? <View className="flex-1 bg-paper">{children}</View> : <ArenaBackground className="flex-1">{children}</ArenaBackground>;
+}
+
+function Button({ label, onPress, disabled }: { label: string; onPress: () => void; disabled?: boolean }) {
+  return (
+    <ArenaPressable onPress={onPress} disabled={disabled} className={`${ui.button} ${disabled ? "opacity-60" : ""}`}>
+      <Text className={ui.buttonText}>{label}</Text>
+    </ArenaPressable>
+  );
+}
+
 /** /m/[code]: a friend opens a creator's invite link (web or app), creates a
  * username if needed, plays the creator's exact questions after the 3-2-1
- * countdown, and sees a 1-to-1 result. Arena-themed on both platforms — it's
- * a game screen. */
+ * countdown, and sees a 1-to-1 result. */
 export function InviteScreen({ code }: { code: string }) {
   const t = useTranslations("invite");
   const tc = useTranslations("challenge");
@@ -65,37 +114,42 @@ export function InviteScreen({ code }: { code: string }) {
   const [guessFeedback, setGuessFeedback] = useState<{ id: number; status: "correct" | "wrong"; label: string } | null>(null);
   const feedbackIdRef = useRef(0);
   const playScrollRef = useRef<ScrollView>(null);
-  useScrollToEndOnKeyboard(playScrollRef, Platform.OS !== "web" && phase.kind === "playing");
+  useScrollToEndOnKeyboard(playScrollRef, !isWeb && phase.kind === "playing");
+  const guessedIds = useMemo(() => new Set([...foundPlayers, ...wrongPlayers].map((p) => p.id)), [foundPlayers, wrongPlayers]);
 
   useEffect(() => {
     loadDataset().then(setDataset).catch(() => {});
     Promise.all([fetchLinkInvite(code), loadIdentity()]).then(([res, id]) => {
       setIdentity(id);
-      if (res.status !== "ok" || !res.data.active) {
-        setPhase({ kind: "inactive" });
-        return;
-      }
-      setInvite(res.data);
-      setPhase({ kind: "invite" });
+      if (res.status === "ok") setInvite(res.data);
+      const next = shouldTryJoinOnOpen(res, id);
+      if (next !== "rejoin") setPhase({ kind: next });
+      else if (id) void join(id);
     });
+    // One-shot open per code; join reads only its argument and code.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
 
   async function join(id: Identity) {
     setJoining(true);
-    const res = await joinLink(id.token, code);
+    const outcome = phaseAfterJoin(await joinLink(id.token, code));
     setJoining(false);
-    if (res.status === "gone") return setPhase({ kind: "inactive" });
-    if (res.status === "own") return setPhase({ kind: "own" });
-    if (res.status !== "ok") return;
-    const challenge = res.data;
-    if (challenge.status === "completed") {
-      // Already played this link: finish is idempotent and returns the
-      // stored result, so a reopen lands on the result, never a replay.
-      const finished = await finishChallenge(id.token, challenge.id);
-      if (finished.status === "ok") setPhase({ kind: "result", result: finished.data });
-      return;
+    if (outcome.kind === "load-result") {
+      // Already played: finish is idempotent and returns the stored result,
+      // so a reopen lands on the result, never a replay.
+      const finished = await finishChallenge(id.token, outcome.challenge.id);
+      setPhase(finished.status === "ok" ? { kind: "result", result: finished.data } : { kind: "error" });
+    } else if (outcome.kind === "username") {
+      // The stored identity no longer exists on the server: start over.
+      await clearIdentity();
+      setIdentity(null);
+      setUsernameError(outcome.error);
+      setPhase({ kind: "username" });
+    } else if (outcome.kind === "countdown") {
+      setPhase({ kind: "countdown", challenge: outcome.challenge });
+    } else {
+      setPhase({ kind: outcome.kind });
     }
-    setPhase({ kind: "countdown", challenge });
   }
 
   function start() {
@@ -126,7 +180,7 @@ export function InviteScreen({ code }: { code: string }) {
   }
 
   async function submitGuess(challenge: ChallengeRow, player: Player) {
-    if (!identity || foundPlayers.some((p) => p.id === player.id) || wrongPlayers.some((p) => p.id === player.id)) return;
+    if (!identity || guessedIds.has(player.id)) return;
     const res = await submitChallengeGuess(identity.token, challenge.id, questionIndex, player.id);
     if (res.status !== "ok") return;
     if (res.data.correct) {
@@ -150,111 +204,116 @@ export function InviteScreen({ code }: { code: string }) {
     }
     if (!identity) return;
     const res = await finishChallenge(identity.token, challenge.id);
-    if (res.status === "ok") setPhase({ kind: "result", result: res.data });
+    setPhase(res.status === "ok" ? { kind: "result", result: res.data } : { kind: "error" });
   }
 
-  const goHome = () => router.replace(localizedPath(Platform.OS === "web" ? "/" : "/challenge", locale) as never);
-  const container = { paddingTop: insets.top + 24, paddingBottom: insets.bottom + 32 };
+  const goHome = () => router.replace(localizedPath(isWeb ? "/" : "/challenge", locale) as never);
+  const container = { paddingTop: insets.top + (isWeb ? 32 : 24), paddingBottom: insets.bottom + 32 };
+  const scrollClass = `flex-1 ${isWeb ? "px-4" : "px-6"}`;
+  const contentClass = `gap-6 ${isWeb ? "mx-auto w-full max-w-md" : ""}`;
 
   if (phase.kind === "countdown") {
     return (
-      <ArenaBackground className="flex-1">
+      <Surface>
         <Countdown onDone={() => setPhase({ kind: "playing", challenge: phase.challenge })} />
-      </ArenaBackground>
+      </Surface>
     );
   }
 
   if (phase.kind === "playing") {
     const challenge = phase.challenge;
     const question = challenge.questions[questionIndex];
-    if (!dataset || !question) {
-      return (
-        <ArenaBackground className="flex-1 items-center justify-center">
-          <Text className="text-arena-text-soft">{tc("loading")}</Text>
-        </ArenaBackground>
-      );
-    }
     return (
-      <ArenaBackground className="flex-1">
+      <Surface>
         <ScrollView
           ref={playScrollRef}
-          className="flex-1 px-4"
-          contentContainerClassName="gap-4"
+          className={scrollClass}
+          contentContainerClassName={contentClass}
           contentContainerStyle={container}
           keyboardShouldPersistTaps="handled"
           automaticallyAdjustKeyboardInsets
         >
-          <Text className="text-sm text-arena-text-soft">
-            {questionIndex + 1} / {challenge.questions.length}
-          </Text>
-          <RoundPlayView
-            question={{ clubA: question.clubA, clubB: question.clubB, totalPossible: question.totalPossible }}
-            foundPlayers={foundPlayers}
-            wrongPlayers={wrongPlayers}
-            players={dataset.players}
-            celebrationTick={celebrationTick}
-            guessFeedback={guessFeedback}
-            onGuess={(p) => void submitGuess(challenge, p)}
-            vsLabel="×"
-            possibleCountLabel=""
-            guessPlaceholder={tc("guessPlaceholder")}
-            guessEmptyText={tc("guessEmpty")}
-          />
-          <ArenaPressable
-            onPress={() => void nextQuestion(challenge)}
-            className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-6"
-          >
-            <Text className="text-xl font-bold text-[#2A1E00]">→</Text>
-          </ArenaPressable>
+          {!dataset || !question ? (
+            <Text className={ui.soft}>{tc("loading")}</Text>
+          ) : (
+            <>
+              <Text className={ui.soft}>
+                {questionIndex + 1} / {challenge.questions.length}
+              </Text>
+              {isWeb ? (
+                <>
+                  <WebQuestion question={question} foundCount={foundPlayers.length} />
+                  <GuessInput
+                    players={dataset.players}
+                    excludedIds={guessedIds}
+                    onGuess={(p) => void submitGuess(challenge, p)}
+                    placeholder={tc("guessPlaceholder")}
+                    emptyText={tc("guessEmpty")}
+                  />
+                  <WebGuessChips found={foundPlayers} wrong={wrongPlayers} feedback={guessFeedback} />
+                </>
+              ) : (
+                <RoundPlayView
+                  question={{ clubA: question.clubA, clubB: question.clubB, totalPossible: question.totalPossible }}
+                  foundPlayers={foundPlayers}
+                  wrongPlayers={wrongPlayers}
+                  players={dataset.players}
+                  celebrationTick={celebrationTick}
+                  guessFeedback={guessFeedback}
+                  onGuess={(p) => void submitGuess(challenge, p)}
+                  vsLabel="×"
+                  possibleCountLabel=""
+                  guessPlaceholder={tc("guessPlaceholder")}
+                  guessEmptyText={tc("guessEmpty")}
+                />
+              )}
+              <Button label="→" onPress={() => void nextQuestion(challenge)} />
+            </>
+          )}
         </ScrollView>
-      </ArenaBackground>
+      </Surface>
     );
   }
 
   return (
-    <ArenaBackground className="flex-1">
-      <ScrollView className="flex-1 px-6" contentContainerClassName="gap-6" contentContainerStyle={container}>
-        <Text className="font-display text-3xl text-arena-accent">321guess</Text>
+    <Surface>
+      <ScrollView className={scrollClass} contentContainerClassName={contentClass} contentContainerStyle={container}>
+        <Text className={ui.brand}>321guess</Text>
 
-        {phase.kind === "loading" && <Text className="text-arena-text-soft">{tc("loading")}</Text>}
+        {phase.kind === "loading" && <Text className={ui.soft}>{tc("loading")}</Text>}
+
+        {phase.kind === "error" && (
+          <>
+            <Text className={ui.body}>{tu("error.server")}</Text>
+            <Button label={t("retry")} onPress={() => (identity ? void join(identity) : setPhase({ kind: "invite" }))} />
+          </>
+        )}
 
         {phase.kind === "inactive" && (
           <>
-            <Text className="text-xl text-arena-text">{t("inactive")}</Text>
-            <ArenaPressable onPress={goHome} className="items-center rounded-2xl bg-arena-accent py-5">
-              <Text className="text-lg font-bold text-[#2A1E00]">{t("goHome")}</Text>
-            </ArenaPressable>
+            <Text className={ui.body}>{t("inactive")}</Text>
+            <Button label={t("goHome")} onPress={goHome} />
           </>
         )}
 
         {phase.kind === "own" && invite && (
           <>
-            <Text className="text-xl text-arena-text">{t("own")}</Text>
-            <Text className="text-lg text-arena-accent-2">{tc("linkRow", { count: invite.playedCount })}</Text>
-            <ArenaPressable onPress={goHome} className="items-center rounded-2xl bg-arena-accent py-5">
-              <Text className="text-lg font-bold text-[#2A1E00]">{t("goHome")}</Text>
-            </ArenaPressable>
+            <Text className={ui.body}>{t("own")}</Text>
+            <Text className={ui.accent}>{tc("linkRow", { count: invite.playedCount })}</Text>
+            <Button label={t("goHome")} onPress={goHome} />
           </>
         )}
 
         {phase.kind === "invite" && invite && (
           <>
-            <Text className="text-2xl font-bold text-arena-text">
-              {t("title", { username: invite.creatorUsername })}
-            </Text>
-            <Text className="text-lg text-arena-accent-2">
+            <Text className={ui.title}>{t("title", { username: invite.creatorUsername })}</Text>
+            <Text className={ui.accent}>
               {t("score", { correct: invite.creatorScore.correctCount, total: invite.creatorScore.totalPossible })}
             </Text>
-            <ArenaPressable
-              onPress={start}
-              disabled={joining}
-              className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-6"
-            >
-              <Text className="text-2xl font-bold text-[#2A1E00]">{t("start")}</Text>
-            </ArenaPressable>
-            {Platform.OS === "web" && (
+            <Button label={t("start")} onPress={start} disabled={joining} />
+            {isWeb && (
               <Pressable onPress={() => void Linking.openURL(`guess321://m/${code}`)} className="items-center py-2">
-                <Text className="text-base text-arena-text-soft underline">{t("openInApp")}</Text>
+                <Text className={`${ui.soft} underline`}>{t("openInApp")}</Text>
               </Pressable>
             )}
           </>
@@ -262,7 +321,7 @@ export function InviteScreen({ code }: { code: string }) {
 
         {phase.kind === "username" && (
           <View className="gap-4">
-            <Text className="text-base font-semibold text-arena-text">{tu("label")}</Text>
+            <Text className={ui.title}>{tu("label")}</Text>
             <TextInput
               value={usernameInput}
               onChangeText={(v) => {
@@ -270,30 +329,80 @@ export function InviteScreen({ code }: { code: string }) {
                 setUsernameError(null);
               }}
               placeholder={tu("placeholder")}
-              placeholderTextColor="#8FE8C4"
+              placeholderTextColor={isWeb ? undefined : "#8FE8C4"}
               maxLength={20}
               autoCapitalize="none"
               autoFocus
               onSubmitEditing={() => void handleRegister()}
-              className="rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-4 py-4 text-lg text-arena-text"
+              className={ui.input}
             />
-            {usernameError && <Text className="text-sm text-red-400">{tu(`error.${usernameError}`)}</Text>}
-            <Text className="text-sm text-arena-text-soft">{tu("hint")}</Text>
-            <ArenaPressable
+            {usernameError && <Text className={ui.error}>{tu(`error.${usernameError}`)}</Text>}
+            <Text className={ui.soft}>{tu("hint")}</Text>
+            <Button
+              label={registering ? tu("submitting") : tu("submit")}
               onPress={() => void handleRegister()}
               disabled={registering || joining || usernameInput.trim().length === 0}
-              className="items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-6"
-            >
-              <Text className="text-2xl font-bold text-[#2A1E00]">
-                {registering ? tu("submitting") : tu("submit")}
-              </Text>
-            </ArenaPressable>
+            />
           </View>
         )}
 
         {phase.kind === "result" && <InviteResult result={phase.result} />}
       </ScrollView>
-    </ArenaBackground>
+    </Surface>
+  );
+}
+
+/** Web question card, matching the website's Daily Challenge look. */
+function WebQuestion({ question, foundCount }: { question: ChallengeQuestion; foundCount: number }) {
+  return (
+    <View className="rounded-2xl border-2 border-rule bg-ink/5 px-4 pb-4 pt-4">
+      <View className="flex-row items-center justify-center gap-4">
+        <LogoTile size="sm" src={question.clubA.logoUrl} alt={question.clubA.name} caption={question.clubA.name} />
+        <Text className="text-xs font-black text-ink-mute">×</Text>
+        <LogoTile size="sm" src={question.clubB.logoUrl} alt={question.clubB.name} caption={question.clubB.name} />
+      </View>
+      <View className="mt-3 flex-row flex-wrap justify-center gap-1.5">
+        {Array.from({ length: question.totalPossible }).map((_, i) => (
+          <View key={i} className={`h-2.5 w-2.5 rounded-full border border-accent ${i < foundCount ? "bg-accent" : ""}`} />
+        ))}
+      </View>
+    </View>
+  );
+}
+
+function WebGuessChips({
+  found,
+  wrong,
+  feedback,
+}: {
+  found: Player[];
+  wrong: Player[];
+  feedback: { status: "correct" | "wrong"; label: string } | null;
+}) {
+  return (
+    <>
+      {feedback && (
+        <View className={`rounded-lg px-3 py-2 ${feedback.status === "correct" ? "bg-accent/15" : "bg-red-500/10"}`}>
+          <Text className={feedback.status === "correct" ? "text-accent" : "text-red-600"}>
+            {feedback.status === "correct" ? "✓" : "✗"} {feedback.label}
+          </Text>
+        </View>
+      )}
+      {(found.length > 0 || wrong.length > 0) && (
+        <View className="flex-row flex-wrap gap-2">
+          {found.map((p) => (
+            <View key={p.id} className="rounded-full border border-accent/30 bg-accent/10 px-3 py-1">
+              <Text className="text-xs font-medium text-ink">{p.name}</Text>
+            </View>
+          ))}
+          {wrong.map((p) => (
+            <View key={p.id} className="rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1">
+              <Text className="text-xs font-medium text-red-600">✕ {p.name}</Text>
+            </View>
+          ))}
+        </View>
+      )}
+    </>
   );
 }
 
@@ -306,19 +415,17 @@ function InviteResult({ result }: { result: FinishChallengeResult }) {
     result.correctCount === opponentCorrect ? "tied" : result.correctCount > opponentCorrect ? "won" : "lost";
   return (
     <View className="items-center gap-4">
-      <Text className="font-display text-3xl text-arena-text">{tc("resultHeading")}</Text>
-      <Text
-        className={`text-2xl font-bold ${outcome === "won" ? "text-arena-accent-2" : outcome === "lost" ? "text-red-300" : "text-arena-text-soft"}`}
-      >
+      <Text className={ui.title}>{tc("resultHeading")}</Text>
+      <Text className={`text-2xl font-bold ${ui[outcome]}`}>
         {outcome === "won" ? tc("youWon") : outcome === "lost" ? tc("youLost") : tc("tied")}
       </Text>
-      <Text className="text-lg text-arena-text">{tc("youScored", { correct: result.correctCount, total: result.totalPossible })}</Text>
+      <Text className={ui.body}>{tc("youScored", { correct: result.correctCount, total: result.totalPossible })}</Text>
       {opponent && (
-        <Text className="text-lg text-arena-text-soft">
+        <Text className={ui.body}>
           {tc("opponentScored", { username: opponent.username, correct: opponent.correctCount, total: opponent.totalPossible })}
         </Text>
       )}
-      {Platform.OS === "web" && <Text className="mt-4 text-center text-base text-arena-accent-2">{t("appSoon")}</Text>}
+      {isWeb && <Text className={`mt-4 text-center ${ui.accent}`}>{t("appSoon")}</Text>}
     </View>
   );
 }

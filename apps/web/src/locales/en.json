@@ -238,6 +238,8 @@
     "emptyRivalries": "You haven't finished a challenge yet.",
     "waitingForOpponent": "Waiting for opponent",
     "inviteFriend": "Invite a friend",
+    "inviteFailed": "Couldn't create the invite link, try again.",
+    "inviteLinkReady": "Your link is ready. Share it with as many people as you like.",
     "inviteShareText": "I'm challenging you on 321guess! I scored {score}/{total}, can you beat me? {url}",
     "orSendToUser": "or send it to someone already on the app",
     "linkRow": "Shared via link · {count} played",
@@ -361,6 +363,7 @@
     "inactive": "This invite link is no longer active.",
     "own": "This is your invite link.",
     "goHome": "Go to 321guess",
+    "retry": "Try again",
     "appSoon": "321guess is coming soon to the App Store and Google Play!"
   }
 }

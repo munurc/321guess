@@ -238,6 +238,8 @@
     "emptyRivalries": "Henüz bir meydan okuma tamamlamadın.",
     "waitingForOpponent": "Rakip bekleniyor",
     "inviteFriend": "Arkadaşını davet et",
+    "inviteFailed": "Davet linki oluşturulamadı, tekrar dene.",
+    "inviteLinkReady": "Link hazır. İstediğin kadar kişiye paylaşabilirsin.",
     "inviteShareText": "321guess'te seni meydan okumaya davet ediyorum! Benim skorum {score}/{total}, geçebilir misin? {url}",
     "orSendToUser": "ya da uygulamadaki bir kullanıcıya gönder",
     "linkRow": "Link ile paylaşıldı · {count} kişi oynadı",
@@ -361,6 +363,7 @@
     "inactive": "Bu davet linki artık geçerli değil.",
     "own": "Bu senin davet linkin.",
     "goHome": "321guess'e git",
+    "retry": "Tekrar dene",
     "appSoon": "321guess çok yakında App Store ve Google Play'de!"
   }
 }

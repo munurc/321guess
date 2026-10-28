@@ -84,6 +84,11 @@ export function ChallengeScreen() {
   // for, so every later friend challenge skipped straight to "sent".
   const [sentTo, setSentTo] = useState<{ challengeId: string; username: string } | null>(null);
   const [inviteCopied, setInviteCopied] = useState(false);
+  // Keyed by challenge, like sentTo: once a challenge is shared as a link it
+  // can't also go to a username (the server refuses), and vice versa.
+  const [inviteLinkFor, setInviteLinkFor] = useState<string | null>(null);
+  const [inviteBusy, setInviteBusy] = useState(false);
+  const [inviteFailed, setInviteFailed] = useState(false);
 
   useEffect(() => {
     loadIdentity().then(setIdentity);
@@ -140,9 +145,16 @@ export function ChallengeScreen() {
   }
 
   async function inviteFriend(challenge: ChallengeRow, result: FinishChallengeResult) {
-    if (!identity) return;
+    if (!identity || inviteBusy) return;
+    setInviteBusy(true);
+    setInviteFailed(false);
     const res = await createChallengeLink(identity.token, challenge.id);
-    if (res.status !== "ok") return;
+    setInviteBusy(false);
+    if (res.status !== "ok") {
+      setInviteFailed(true);
+      return;
+    }
+    setInviteLinkFor(challenge.id);
     const shared = await shareOrCopy(
       t("inviteShareText", { score: result.correctCount, total: result.totalPossible, url: res.data.url }),
     );
@@ -263,6 +275,7 @@ export function ChallengeScreen() {
       return;
     }
     setInviteCopied(false);
+    setInviteFailed(false);
     setScreen({ kind: "new-send", challenge, result: res.data });
   }
 
@@ -594,19 +607,29 @@ export function ChallengeScreen() {
           {t("sendScoreLabel", { correct: result.correctCount, total: result.totalPossible })}
         </Text>
 
-        <ArenaPressable
-          onPress={() => void inviteFriend(challenge, result)}
-          className="mt-6 items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-5"
-        >
-          <Text className="text-lg font-bold text-[#2A1E00]">{t("inviteFriend")}</Text>
-        </ArenaPressable>
-        {inviteCopied && <Text className="mt-2 text-center text-arena-accent-2">{t("linkCopied")}</Text>}
-        <Text className="mt-6 text-center text-sm text-arena-text-soft">{t("orSendToUser")}</Text>
+        {sentTo?.challengeId !== challenge.id && (
+          <>
+            <ArenaPressable
+              onPress={() => void inviteFriend(challenge, result)}
+              disabled={inviteBusy}
+              className={`mt-6 items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-5 ${inviteBusy ? "opacity-60" : ""}`}
+            >
+              <Text className="text-lg font-bold text-[#2A1E00]">{t("inviteFriend")}</Text>
+            </ArenaPressable>
+            {inviteCopied && <Text className="mt-2 text-center text-arena-accent-2">{t("linkCopied")}</Text>}
+            {inviteFailed && <Text className="mt-2 text-center text-red-300">{t("inviteFailed")}</Text>}
+            {inviteLinkFor === challenge.id ? (
+              <Text className="mt-4 text-center text-sm text-arena-text-soft">{t("inviteLinkReady")}</Text>
+            ) : (
+              <Text className="mt-6 text-center text-sm text-arena-text-soft">{t("orSendToUser")}</Text>
+            )}
+          </>
+        )}
 
         {/* Username search + send is the only delivery option: the former
             "generate a link" flow produced https://www.321guess.com/challenge/<id>,
             a URL with no matching route and no deep-link handling. */}
-        {sentTo?.challengeId === challenge.id ? (
+        {inviteLinkFor === challenge.id ? null : sentTo?.challengeId === challenge.id ? (
           <Text className="mt-8 text-lg text-arena-accent-2">{t("sentSuccess", { username: sentTo.username })}</Text>
         ) : (
           <View className="mt-8 flex-1 gap-3">
