@@ -40,6 +40,18 @@ async function main() {
       const { error } = await supabase.from(table).delete().in("challenge_id", challengeIds);
       if (error) throw error;
     }
+    // Reference chain: link clone -> challenge_links -> source challenge.
+    // Delete clones first, then the player's links, then the rest.
+    const { error: clonesError } = await supabase
+      .from("challenges")
+      .delete()
+      .in("id", challengeIds)
+      .not("link_code", "is", null);
+    if (clonesError) throw clonesError;
+  }
+  const { error: linksError } = await supabase.from("challenge_links").delete().eq("creator_token", token);
+  if (linksError) throw linksError;
+  if (challengeIds.length > 0) {
     const { error } = await supabase.from("challenges").delete().in("id", challengeIds);
     if (error) throw error;
   }

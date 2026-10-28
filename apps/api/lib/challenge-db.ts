@@ -484,7 +484,13 @@ export async function listChallengesForPlayer(playerToken: string) {
   // no delivery yet), queued for a random match, and invites already sent to
   // someone ("pending"). Filtering on "waiting" alone hid every sent invite.
   const outgoing = all.filter(
-    (c) => (c.status === "waiting" || c.status === "pending") && c.creator_token === playerToken,
+    (c) =>
+      (c.status === "waiting" || c.status === "pending") &&
+      c.creator_token === playerToken &&
+      // Invite links are listed separately (one row per link, from
+      // challenge_links): skip each link's per-friend clones and its source.
+      !c.link_code &&
+      !(c.delivery_type === "link" && !c.opponent_token),
   );
   const completedRows = all.filter((c) => c.status === "completed");
 
