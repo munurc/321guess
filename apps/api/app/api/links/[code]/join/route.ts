@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getPlayerByToken } from "@/lib/online-db";
 import { toClientChallenge } from "@/lib/challenge-db";
-import { joinLink } from "@/lib/challenge-link-db";
+import { joinLink, listMyGuesses } from "@/lib/challenge-link-db";
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const CODE_RE = /^[a-hjkmnp-z2-9]{8}$/;
@@ -32,7 +32,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ code: s
     if (!player) return NextResponse.json({ error: "unknown_player" }, { status: 401 });
     const result = await joinLink(code, token);
     if ("error" in result) return NextResponse.json({ error: result.error }, { status: STATUS_BY_ERROR[result.error] });
-    return NextResponse.json(toClientChallenge(result.challenge));
+    // The joiner's own guesses (never answers) let a reopened copy resume
+    // at the question they left, chips included.
+    const myGuesses = await listMyGuesses(result.challenge.id, token);
+    return NextResponse.json({ ...toClientChallenge(result.challenge), myGuesses });
   } catch (e) {
     return NextResponse.json({ error: "server_error", message: (e as Error).message }, { status: 500 });
   }

@@ -23,7 +23,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     let challenge = await getChallenge(id);
     if (!challenge) return NextResponse.json({ error: "no_challenge" }, { status: 404 });
 
-    if (challenge.opponentToken === null && challenge.creatorToken !== token) {
+    // Invite-link challenges are joined only through /api/links/[code]:
+    // claiming a link's source by id would hijack the rows every copy is
+    // made from.
+    if (challenge.opponentToken === null && challenge.creatorToken !== token && challenge.deliveryType !== "link") {
       const claimed = await claimChallengeAsOpponent(id, token);
       if (claimed) challenge = claimed;
       // If claiming lost the race (someone else claimed it first between

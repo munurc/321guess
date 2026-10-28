@@ -34,6 +34,7 @@ async function findActiveLink(sourceChallengeId: string): Promise<string | null>
     .select("code")
     .eq("source_challenge_id", sourceChallengeId)
     .is("revoked_at", null)
+    .gt("expires_at", new Date().toISOString())
     .order("created_at", { ascending: true })
     .limit(1)
     .maybeSingle();
@@ -121,6 +122,46 @@ export async function getLinkInvite(code: string): Promise<LinkInvite | null> {
   };
 }
 
+export async function listMyGuesses(
+  challengeId: string,
+  token: string,
+): Promise<{ questionIndex: number; playerId: string; correct: boolean }[]> {
+  const supabase = getSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("challenge_guesses")
+    .select("question_index, guessed_player_id, correct, created_at")
+    .eq("challenge_id", challengeId)
+    .eq("player_token", token)
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  return (data ?? []).map((g) => ({ questionIndex: g.question_index, playerId: g.guessed_player_id, correct: g.correct }));
+}
+
+/** A copy is complete once its questions exist: the creator's score goes in
+ * first and the questions last, in a single insert. */
+const isComplete = (c: ChallengeRow) => c.questions.length > 0;
+
+/** Waits briefly for a concurrent join of the same player to finish copying. */
+async function waitForCompleteClone(code: string, joinerToken: string): Promise<ChallengeRow | null> {
+  for (let attempt = 0; attempt < 10; attempt++) {
+    const clone = await findClone(code, joinerToken);
+    if (!clone) return null;
+    if (isComplete(clone)) return clone;
+    await new Promise((r) => setTimeout(r, 300));
+  }
+  return null;
+}
+
+async function deleteClone(id: string): Promise<void> {
+  const supabase = getSupabaseServerClient();
+  for (const table of ["challenge_guesses", "challenge_scores", "challenge_questions"]) {
+    const { error } = await supabase.from(table).delete().eq("challenge_id", id);
+    if (error) console.error(`clone cleanup: ${table} for ${id}`, error);
+  }
+  const { error } = await supabase.from("challenges").delete().eq("id", id);
+  if (error) console.error(`clone cleanup: challenge ${id}`, error);
+}
+
 async function findClone(code: string, joinerToken: string): Promise<ChallengeRow | null> {
   const supabase = getSupabaseServerClient();
   const { data, error } = await supabase
@@ -147,7 +188,14 @@ export async function joinLink(
   if (!link) return { error: "not_found" };
 
   const existing = await findClone(code, joinerToken);
-  if (existing) return { challenge: existing };
+  if (existing) {
+    if (isComplete(existing)) return { challenge: existing };
+    // Half-built: a concurrent join is still copying, or a failed copy left
+    // it behind. Wait for the first; clear the second and build afresh.
+    const ready = await waitForCompleteClone(code, joinerToken);
+    if (ready) return { challenge: ready };
+    await deleteClone(existing.id);
+  }
 
   const joinable = isLinkJoinable(
     { creatorToken: link.creator_token, expiresAt: link.expires_at, revokedAt: link.revoked_at },
@@ -181,7 +229,7 @@ export async function joinLink(
   if (insertError) {
     // A concurrent join by the same player won the unique index race.
     if (insertError.code === UNIQUE_VIOLATION) {
-      const raced = await findClone(code, joinerToken);
+      const raced = await waitForCompleteClone(code, joinerToken);
       if (raced) return { challenge: raced };
     }
     throw insertError;
@@ -200,18 +248,17 @@ export async function joinLink(
     if (qError) throw qError;
     if (sError) throw sError;
 
-    const { error: qInsertError } = await supabase
-      .from("challenge_questions")
-      .insert((questions ?? []).map((q) => ({ ...q, challenge_id: clone.id })));
-    if (qInsertError) throw qInsertError;
+    // Score first, questions last: questions present = copy complete.
     const { error: sInsertError } = await supabase
       .from("challenge_scores")
       .insert({ ...creatorScore, challenge_id: clone.id });
     if (sInsertError) throw sInsertError;
+    const { error: qInsertError } = await supabase
+      .from("challenge_questions")
+      .insert((questions ?? []).map((q) => ({ ...q, challenge_id: clone.id })));
+    if (qInsertError) throw qInsertError;
   } catch (e) {
-    await supabase.from("challenge_questions").delete().eq("challenge_id", clone.id);
-    await supabase.from("challenge_scores").delete().eq("challenge_id", clone.id);
-    await supabase.from("challenges").delete().eq("id", clone.id);
+    await deleteClone(clone.id);
     throw e;
   }
 
@@ -239,6 +286,7 @@ export async function listLinksForCreator(creatorToken: string): Promise<LinkSum
     .select("code, created_at, expires_at")
     .eq("creator_token", creatorToken)
     .is("revoked_at", null)
+    .gt("expires_at", new Date().toISOString())
     .order("created_at", { ascending: false });
   if (error) throw error;
   return Promise.all(

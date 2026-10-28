@@ -484,6 +484,13 @@ export async function listChallengesForPlayer(playerToken: string) {
     .order("created_at", { ascending: false });
   if (receivedError) throw receivedError;
 
+  const { data: linkSources, error: linkSourcesError } = await supabase
+    .from("challenge_links")
+    .select("source_challenge_id")
+    .eq("creator_token", playerToken);
+  if (linkSourcesError) throw linkSourcesError;
+  const linkSourceIds = new Set((linkSources ?? []).map((l) => l.source_challenge_id));
+
   const all = [...(created ?? []), ...(received ?? [])];
   const incoming = all.filter((c) => c.status === "pending" && c.opponent_token === playerToken);
   // Everything the player created that isn't finished: unsent ("waiting",
@@ -496,7 +503,7 @@ export async function listChallengesForPlayer(playerToken: string) {
       // Invite links are listed separately (one row per link, from
       // challenge_links): skip each link's per-friend clones and its source.
       !c.link_code &&
-      !(c.delivery_type === "link" && !c.opponent_token),
+      !linkSourceIds.has(c.id),
   );
   const completedRows = all.filter((c) => c.status === "completed");
 
