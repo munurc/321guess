@@ -196,22 +196,23 @@ export async function checkGuessRateLimit(
 ): Promise<{ allowed: true } | { allowed: false; reason: "too_fast" | "too_many" }> {
   const supabase = getSupabaseServerClient();
 
-  const { count, error: countError } = await supabase
-    .from("daily_guesses")
-    .select("*", { count: "exact", head: true })
-    .eq("round_date", roundDate)
-    .eq("player_token", token);
+  const [{ count, error: countError }, { data: last, error: lastError }] = await Promise.all([
+    supabase
+      .from("daily_guesses")
+      .select("*", { count: "exact", head: true })
+      .eq("round_date", roundDate)
+      .eq("player_token", token),
+    supabase
+      .from("daily_guesses")
+      .select("created_at")
+      .eq("round_date", roundDate)
+      .eq("player_token", token)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+  ]);
   if (countError) throw countError;
   if ((count ?? 0) >= MAX_GUESSES_PER_ROUND) return { allowed: false, reason: "too_many" };
-
-  const { data: last, error: lastError } = await supabase
-    .from("daily_guesses")
-    .select("created_at")
-    .eq("round_date", roundDate)
-    .eq("player_token", token)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
   if (lastError) throw lastError;
   if (last && Date.now() - new Date(last.created_at).getTime() < MIN_GUESS_INTERVAL_MS) {
     return { allowed: false, reason: "too_fast" };

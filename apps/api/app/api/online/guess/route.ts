@@ -45,15 +45,20 @@ export async function POST(req: Request) {
   }
 
   try {
-    const player = await getPlayerByToken(token);
+    // Independent reads run in parallel: each one is a round-trip to
+    // Supabase, and running them back to back made every guess feel slow on
+    // device. Validation order of the responses is unchanged.
+    const roundDate = todayRoundDate();
+    const [player, round, rateLimit] = await Promise.all([
+      getPlayerByToken(token),
+      getDailyRound(roundDate),
+      checkGuessRateLimit(roundDate, token),
+    ]);
     if (!player) return NextResponse.json({ error: "unknown_player" }, { status: 401 });
 
-    const roundDate = todayRoundDate();
-    const round = await getDailyRound(roundDate);
     const question = round?.questions.find((q) => q.index === questionIndex);
     if (!round || !question) return NextResponse.json({ error: "no_round" }, { status: 400 });
 
-    const rateLimit = await checkGuessRateLimit(roundDate, token);
     if (!rateLimit.allowed) {
       return NextResponse.json({ error: rateLimit.reason }, { status: 429 });
     }
