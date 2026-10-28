@@ -225,9 +225,13 @@ export function SetupScreen() {
                 </ScrollView>
               ) : (
                 <>
-                  <ScrollView className="flex-1 px-4" contentContainerClassName="gap-6 pb-10">
+                  <ScrollView
+                    className="flex-1 px-4"
+                    contentContainerClassName="gap-6 pb-10"
+                    contentContainerStyle={{ paddingTop: insets.top + 16 }}
+                  >
                     <View className="gap-6">
-                      <Pressable onPress={() => setScreen("modes")}>
+                      <Pressable onPress={() => setScreen("modes")} hitSlop={12} className="self-start py-2">
                         <Text className="text-sm tracking-wider text-arena-text-soft">← {localeUpper(t("modeGroups.offline.title"), locale)}</Text>
                       </Pressable>
                       <View className="gap-4">
