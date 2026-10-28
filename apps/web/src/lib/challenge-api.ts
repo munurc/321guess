@@ -108,7 +108,13 @@ export function finishChallenge(token: string, challengeId: string): Promise<Api
 
 export type RivalryChallenge = ChallengeRow & { rivalry: { myWins: number; opponentWins: number; ties: number }; opponentUsername: string };
 export type IncomingChallenge = ChallengeRow & { fromUsername: string };
-export type ChallengeList = { incoming: IncomingChallenge[]; outgoing: ChallengeRow[]; completed: RivalryChallenge[] };
+/** opponentUsername is null until the challenge is sent or randomly matched. */
+export type OutgoingChallenge = ChallengeRow & { opponentUsername: string | null };
+export type ChallengeList = { incoming: IncomingChallenge[]; outgoing: OutgoingChallenge[]; completed: RivalryChallenge[] };
+
+export function cancelChallenge(token: string, challengeId: string): Promise<ApiResult<{ cancelled: true }>> {
+  return post(`/api/challenges/${challengeId}/cancel`, { token });
+}
 
 export function listChallenges(token: string): Promise<ApiResult<ChallengeList>> {
   return get(`/api/challenges/list`, token);

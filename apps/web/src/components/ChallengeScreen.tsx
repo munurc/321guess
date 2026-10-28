@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { Alert, Pressable, ScrollView, Text, TextInput, View } from "react-native";
 import { useRouter } from "expo-router";
 import { useFocusEffect } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -7,6 +7,7 @@ import { useLocale, useTranslations } from "use-intl";
 import type { Dataset, Difficulty, GameMode, Player } from "@321guess/core";
 import {
   listChallenges,
+  cancelChallenge,
   createChallenge,
   sendChallenge,
   submitChallengeGuess,
@@ -16,6 +17,7 @@ import {
   type ChallengeList,
   type ChallengeRow,
   type FinishChallengeResult,
+  type OutgoingChallenge,
 } from "../lib/challenge-api";
 import { loadDataset } from "../lib/dataset";
 import { loadIdentity, type Identity } from "../lib/online-storage";
@@ -99,6 +101,29 @@ export function ChallengeScreen() {
   useEffect(() => {
     refreshList();
   }, [refreshList]);
+
+  function confirmDeleteOutgoing(challenge: OutgoingChallenge) {
+    Alert.alert(t("deleteConfirmTitle"), t("deleteConfirmMessage"), [
+      { text: t("deleteConfirmCancel"), style: "cancel" },
+      {
+        text: t("deleteChallenge"),
+        style: "destructive",
+        onPress: () => {
+          if (!identity) return;
+          // Optimistic: drop it from the list right away, then re-sync with
+          // the server either way so a failed delete reappears.
+          setList((prev) => (prev ? { ...prev, outgoing: prev.outgoing.filter((c) => c.id !== challenge.id) } : prev));
+          void cancelChallenge(identity.token, challenge.id).finally(refreshList);
+        },
+      },
+    ]);
+  }
+
+  function outgoingLabel(c: OutgoingChallenge): string {
+    if (c.opponentUsername) return t("waitingForUser", { username: c.opponentUsername });
+    if (c.deliveryType === "random") return t("waitingForRandom");
+    return t("notSent");
+  }
 
   // Refresh every time the hub regains focus (e.g. coming back from a
   // finished challenge) — matches the "in-app notification tab" role this
@@ -361,8 +386,21 @@ export function ChallengeScreen() {
               <Text className="rounded-2xl bg-arena-bg-soft p-4 text-arena-text-soft">{t("emptyOutgoing")}</Text>
             ) : (
               list.outgoing.map((c) => (
-                <View key={c.id} className="rounded-2xl bg-arena-bg-soft p-4">
-                  <Text className="text-base font-semibold text-arena-text">{t("waitingForOpponent")}</Text>
+                <View key={c.id} className="flex-row items-center gap-3 rounded-2xl bg-arena-bg-soft p-4">
+                  {c.opponentUsername ? (
+                    <InitialAvatar username={c.opponentUsername} size={36} />
+                  ) : (
+                    <Text className="w-9 text-center text-2xl">{c.deliveryType === "random" ? "🎲" : "✉️"}</Text>
+                  )}
+                  <Text className="flex-1 text-base font-semibold text-arena-text">{outgoingLabel(c)}</Text>
+                  <Pressable
+                    onPress={() => confirmDeleteOutgoing(c)}
+                    hitSlop={8}
+                    accessibilityLabel={t("deleteChallenge")}
+                    className="rounded-full border border-arena-accent-2 px-3 py-1.5"
+                  >
+                    <Text className="text-sm font-semibold text-arena-text-soft">{t("deleteChallenge")}</Text>
+                  </Pressable>
                 </View>
               ))
             )}

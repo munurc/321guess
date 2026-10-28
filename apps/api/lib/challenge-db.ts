@@ -480,7 +480,12 @@ export async function listChallengesForPlayer(playerToken: string) {
 
   const all = [...(created ?? []), ...(received ?? [])];
   const incoming = all.filter((c) => c.status === "pending" && c.opponent_token === playerToken);
-  const outgoing = all.filter((c) => c.status === "waiting" && c.creator_token === playerToken);
+  // Everything the player created that isn't finished: unsent ("waiting",
+  // no delivery yet), queued for a random match, and invites already sent to
+  // someone ("pending"). Filtering on "waiting" alone hid every sent invite.
+  const outgoing = all.filter(
+    (c) => (c.status === "waiting" || c.status === "pending") && c.creator_token === playerToken,
+  );
   const completedRows = all.filter((c) => c.status === "completed");
 
   const completed = await Promise.all(
@@ -546,11 +551,57 @@ export async function listChallengesForPlayer(playerToken: string) {
     }),
   );
 
+  // Outgoing entries name the recipient so the hub can say who it's
+  // waiting on; null while nobody has been sent/matched yet.
+  const outgoingWithRecipient = await Promise.all(
+    (await withQuestions(outgoing)).map(async (c, i) => {
+      const opponentToken = outgoing[i].opponent_token as string | null;
+      if (!opponentToken) return { ...c, opponentUsername: null };
+      const { data: opponentPlayer } = await supabase
+        .from("online_players")
+        .select("username")
+        .eq("player_token", opponentToken)
+        .maybeSingle();
+      return { ...c, opponentUsername: opponentPlayer?.username ?? null };
+    }),
+  );
+
   return {
     incoming: incomingWithSender,
-    outgoing: await withQuestions(outgoing),
+    outgoing: outgoingWithRecipient,
     completed,
   };
+}
+
+/** Lets a creator withdraw a challenge that hasn't been completed, e.g. an
+ * invite a friend never answered. Child rows go first (they reference
+ * challenges). Only the creator can cancel, and never a completed challenge:
+ * that one already counts toward the rivalry score. Returns false when the
+ * challenge doesn't exist or doesn't qualify, so the route can report it. */
+export async function cancelChallengeAsCreator(id: string, creatorToken: string): Promise<boolean> {
+  const supabase = getSupabaseServerClient();
+  const { data: row, error } = await supabase
+    .from("challenges")
+    .select("id")
+    .eq("id", id)
+    .eq("creator_token", creatorToken)
+    .neq("status", "completed")
+    .maybeSingle();
+  if (error) throw error;
+  if (!row) return false;
+
+  for (const table of ["challenge_guesses", "challenge_scores", "challenge_questions"]) {
+    const { error: childError } = await supabase.from(table).delete().eq("challenge_id", id);
+    if (childError) throw childError;
+  }
+  const { error: deleteError } = await supabase
+    .from("challenges")
+    .delete()
+    .eq("id", id)
+    .eq("creator_token", creatorToken)
+    .neq("status", "completed");
+  if (deleteError) throw deleteError;
+  return true;
 }
 
 /** Backs the "search an existing user" step of sending a targeted
