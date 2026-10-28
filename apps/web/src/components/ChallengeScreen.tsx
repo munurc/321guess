@@ -26,6 +26,7 @@ import { Countdown } from "./Countdown";
 import { GameSettingsPicker } from "./GameSettingsPicker";
 import { InitialAvatar } from "./InitialAvatar";
 import { RoundPlayView } from "./RoundPlayView";
+import { useScrollToEndOnKeyboard } from "../lib/use-scroll-to-end-on-keyboard";
 
 type Screen =
   | { kind: "hub" }
@@ -67,11 +68,15 @@ export function ChallengeScreen() {
   const [celebrationTick, setCelebrationTick] = useState(0);
   const [guessFeedback, setGuessFeedback] = useState<{ id: number; status: "correct" | "wrong"; label: string } | null>(null);
   const feedbackIdRef = useRef(0);
+  const playScrollRef = useRef<ScrollView>(null);
+  useScrollToEndOnKeyboard(playScrollRef, screen.kind === "new-playing" || screen.kind === "opponent-playing");
 
   // --- Send phase state ---
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<string[]>([]);
-  const [sendStatus, setSendStatus] = useState<"idle" | "sent">("idle");
+  // Keyed by challenge id: a plain "sent" flag outlived the challenge it was
+  // for, so every later friend challenge skipped straight to "sent".
+  const [sentTo, setSentTo] = useState<{ challengeId: string; username: string } | null>(null);
 
   useEffect(() => {
     loadIdentity().then(setIdentity);
@@ -279,7 +284,7 @@ export function ChallengeScreen() {
   async function sendToUsername(challenge: ChallengeRow, username: string) {
     if (!identity) return;
     const res = await sendChallenge(identity.token, challenge.id, username);
-    if (res.status === "ok") setSendStatus("sent");
+    if (res.status === "ok") setSentTo({ challengeId: challenge.id, username });
   }
 
   if (!identity) {
@@ -452,7 +457,14 @@ export function ChallengeScreen() {
 
     return (
       <ArenaBackground className="flex-1">
-        <ScrollView className="flex-1 px-4" contentContainerClassName="gap-4 pb-10" style={{ paddingTop: insets.top + 16 }}>
+        <ScrollView
+          ref={playScrollRef}
+          className="flex-1 px-4"
+          contentContainerClassName="gap-4 pb-10"
+          style={{ paddingTop: insets.top + 16 }}
+          keyboardShouldPersistTaps="handled"
+          automaticallyAdjustKeyboardInsets
+        >
           <Text className="text-sm text-arena-text-soft">
             {questionIndex + 1} / {challenge.questions.length}
           </Text>
@@ -500,8 +512,8 @@ export function ChallengeScreen() {
         {/* Username search + send is the only delivery option: the former
             "generate a link" flow produced https://www.321guess.com/challenge/<id>,
             a URL with no matching route and no deep-link handling. */}
-        {sendStatus === "sent" ? (
-          <Text className="mt-8 text-lg text-arena-accent-2">{t("sentSuccess")}</Text>
+        {sentTo?.challengeId === challenge.id ? (
+          <Text className="mt-8 text-lg text-arena-accent-2">{t("sentSuccess", { username: sentTo.username })}</Text>
         ) : (
           <View className="mt-8 flex-1 gap-3">
             <TextInput
@@ -537,7 +549,14 @@ export function ChallengeScreen() {
 
     return (
       <ArenaBackground className="flex-1">
-        <ScrollView className="flex-1 px-4" contentContainerClassName="gap-4 pb-10" style={{ paddingTop: insets.top + 16 }}>
+        <ScrollView
+          ref={playScrollRef}
+          className="flex-1 px-4"
+          contentContainerClassName="gap-4 pb-10"
+          style={{ paddingTop: insets.top + 16 }}
+          keyboardShouldPersistTaps="handled"
+          automaticallyAdjustKeyboardInsets
+        >
           <Text className="text-sm text-arena-text-soft">
             {questionIndex + 1} / {challenge.questions.length}
           </Text>

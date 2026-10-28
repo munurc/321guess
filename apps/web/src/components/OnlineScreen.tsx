@@ -38,6 +38,7 @@ import { Countdown } from "./Countdown";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { LogoTile } from "./LogoTile";
 import { GuessInput, RoundPlayView } from "./RoundPlayView";
+import { useScrollToEndOnKeyboard } from "../lib/use-scroll-to-end-on-keyboard";
 import { ScrollFadeBottom } from "./ScrollFadeBottom";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -313,6 +314,8 @@ export function OnlineScreen() {
     () => new Set([...foundPlayers, ...wrongPlayers].map((p) => p.id)),
     [foundPlayers, wrongPlayers],
   );
+  const playScrollRef = useRef<ScrollView>(null);
+  useScrollToEndOnKeyboard(playScrollRef, Platform.OS !== "web" && phase === "playing");
   const currentQuestion = round?.questions[questionIndex] ?? null;
 
   function shareText(): string {
@@ -342,9 +345,12 @@ export function OnlineScreen() {
       <ArenaBackground className="flex-1">
         <View className="relative flex-1">
           <ScrollView
+            ref={playScrollRef}
             className="flex-1 px-4 pb-8"
             contentContainerClassName="pb-10"
             contentContainerStyle={{ paddingTop: insets.top + 32 }}
+            keyboardShouldPersistTaps="handled"
+            automaticallyAdjustKeyboardInsets
           >
             <View className="mb-8 flex-row items-center justify-between">
               <Pressable onPress={() => router.push("/")}>

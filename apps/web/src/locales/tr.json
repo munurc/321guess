@@ -256,7 +256,7 @@
     "orGenerateLink": "ya da",
     "generateLink": "Link Oluştur ve Paylaş",
     "linkCopied": "Link kopyalandı!",
-    "sentSuccess": "Meydan okuma gönderildi!",
+    "sentSuccess": "Meydan okuma {username} kullanıcısına gönderildi!",
     "resultHeading": "Sonuç",
     "youScored": "Sen: {correct}/{total}",
     "opponentScored": "{username}: {correct}/{total}",

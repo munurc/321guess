@@ -256,7 +256,7 @@
     "orGenerateLink": "or",
     "generateLink": "Generate a Link to Share",
     "linkCopied": "Link copied!",
-    "sentSuccess": "Challenge sent!",
+    "sentSuccess": "Challenge sent to {username}!",
     "resultHeading": "Result",
     "youScored": "You: {correct}/{total}",
     "opponentScored": "{username}: {correct}/{total}",

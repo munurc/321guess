@@ -76,8 +76,11 @@ export function GuessInput({
           placeholderTextColor="#8FE8C4"
           className="rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-5 py-5 text-xl text-arena-text"
         />
+        {/* Opens upward: below the input is where the keyboard (and the
+            Pas/Bitir buttons) are, so a downward list was either hidden or
+            covered those buttons. */}
         {open && query.trim().length >= 2 && (
-          <View className="absolute top-full z-20 mt-2 max-h-72 w-full rounded-2xl border border-arena-accent-2 bg-arena-bg">
+          <View className="absolute bottom-full z-20 mb-2 max-h-72 w-full rounded-2xl border border-arena-accent-2 bg-arena-bg">
             {filtered.length === 0 ? (
               <Text className="px-4 py-3 text-base text-arena-text-soft">{emptyText}</Text>
             ) : (
