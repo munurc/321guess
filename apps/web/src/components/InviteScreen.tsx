@@ -10,7 +10,6 @@ import {
   finishChallenge,
   joinLink,
   submitChallengeGuess,
-  type ChallengeQuestion,
   type ChallengeRow,
   type FinishChallengeResult,
   type LinkInvite,
@@ -25,7 +24,9 @@ import { ArenaBackground } from "./ArenaBackground";
 import { ArenaPressable } from "./ArenaPressable";
 import { Countdown } from "./Countdown";
 import { LogoTile } from "./LogoTile";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 import { GuessInput, RoundPlayView } from "./RoundPlayView";
+import { ThemeToggle } from "./ThemeToggle";
 
 type UsernameError = "format" | "blocked" | "taken" | "server" | "expired";
 
@@ -42,40 +43,25 @@ type Phase =
 
 const isWeb = Platform.OS === "web";
 
-// The website keeps its light "paper" look; the app keeps the arena theme.
-// Same flow, two skins.
-const ui = isWeb
-  ? {
-      title: "text-2xl font-black text-ink",
-      body: "text-base text-ink-soft",
-      soft: "text-sm text-ink-mute",
-      accent: "text-base font-semibold text-accent",
-      brand: "text-2xl font-black text-accent",
-      error: "text-sm text-red-600",
-      input: "rounded-xl border border-rule bg-paper-2 px-4 py-3 text-base text-ink",
-      button: "items-center rounded-xl bg-accent py-4",
-      buttonText: "text-lg font-bold text-paper",
-      won: "text-accent",
-      lost: "text-red-600",
-      tied: "text-ink-mute",
-    }
-  : {
-      title: "text-2xl font-bold text-arena-text",
-      body: "text-xl text-arena-text",
-      soft: "text-sm text-arena-text-soft",
-      accent: "text-lg text-arena-accent-2",
-      brand: "font-display text-3xl text-arena-accent",
-      error: "text-sm text-red-400",
-      input: "rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-4 py-4 text-lg text-arena-text",
-      button: "items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-6",
-      buttonText: "text-2xl font-bold text-[#2A1E00]",
-      won: "text-arena-accent-2",
-      lost: "text-red-300",
-      tied: "text-arena-text-soft",
-    };
+// The app's arena skin. The website renders its own tree (WebInvite below)
+// with the site's shared header and paper/ink tokens.
+const ui = {
+  title: "text-2xl font-bold text-arena-text",
+  body: "text-xl text-arena-text",
+  soft: "text-sm text-arena-text-soft",
+  accent: "text-lg text-arena-accent-2",
+  brand: "font-display text-3xl text-arena-accent",
+  error: "text-sm text-red-400",
+  input: "rounded-2xl border border-arena-accent-2 bg-arena-bg-soft px-4 py-4 text-lg text-arena-text",
+  button: "items-center rounded-2xl border-b-[6px] border-arena-accent-strong bg-arena-accent py-6",
+  buttonText: "text-2xl font-bold text-[#2A1E00]",
+  won: "text-arena-accent-2",
+  lost: "text-red-300",
+  tied: "text-arena-text-soft",
+};
 
 function Surface({ children }: { children: ReactNode }) {
-  return isWeb ? <View className="flex-1 bg-paper">{children}</View> : <ArenaBackground className="flex-1">{children}</ArenaBackground>;
+  return <ArenaBackground className="flex-1">{children}</ArenaBackground>;
 }
 
 function Button({ label, onPress, disabled }: { label: string; onPress: () => void; disabled?: boolean }) {
@@ -93,6 +79,7 @@ export function InviteScreen({ code }: { code: string }) {
   const t = useTranslations("invite");
   const tc = useTranslations("challenge");
   const tu = useTranslations("online.username");
+  const to = useTranslations("online");
   const locale = useLocale();
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -208,9 +195,178 @@ export function InviteScreen({ code }: { code: string }) {
   }
 
   const goHome = () => router.replace(localizedPath(isWeb ? "/" : "/challenge", locale) as never);
-  const container = { paddingTop: insets.top + (isWeb ? 32 : 24), paddingBottom: insets.bottom + 32 };
-  const scrollClass = `flex-1 ${isWeb ? "px-4" : "px-6"}`;
-  const contentClass = `gap-6 ${isWeb ? "mx-auto w-full max-w-md" : ""}`;
+
+  if (isWeb) {
+    const heading =
+      invite && (phase.kind === "invite" || phase.kind === "username") ? (
+        <>
+          <Text className="text-2xl font-black text-accent">{t("title", { username: invite.creatorUsername })}</Text>
+          <Text className="mb-6 mt-1 text-sm text-ink-mute">
+            {t("score", { correct: invite.creatorScore.correctCount, total: invite.creatorScore.totalPossible })}
+          </Text>
+        </>
+      ) : null;
+    const challenge = phase.kind === "playing" ? phase.challenge : null;
+    const question = challenge?.questions[questionIndex];
+
+    return (
+      <ScrollView className="flex-1 bg-paper px-4 py-8" contentContainerClassName="pb-8" keyboardShouldPersistTaps="handled">
+        <View className="mb-8 flex-row items-center justify-between">
+          <Pressable onPress={goHome}>
+            <Text className="text-3xl font-black text-ink">
+              <Text className="text-accent">3·2·1</Text>guess
+            </Text>
+          </Pressable>
+          <View className="flex-row items-center gap-2">
+            <ThemeToggle />
+            <LanguageSwitcher />
+          </View>
+        </View>
+
+        {heading}
+
+        {phase.kind === "loading" && <WebLoadingBox text={tc("loading")} />}
+
+        {phase.kind === "error" && (
+          <View className="gap-4">
+            <WebLoadingBox text={tu("error.server")} />
+            <WebButton label={t("retry")} onPress={() => (identity ? void join(identity) : setPhase({ kind: "invite" }))} />
+          </View>
+        )}
+
+        {phase.kind === "inactive" && (
+          <View className="gap-4">
+            <WebLoadingBox text={t("inactive")} />
+            <WebButton label={t("goHome")} onPress={goHome} />
+          </View>
+        )}
+
+        {phase.kind === "own" && invite && (
+          <View className="gap-4">
+            <View className="items-center rounded-lg border border-rule bg-ink/5 p-8">
+              <Text className="text-ink">{t("own")}</Text>
+              <Text className="mt-2 text-sm font-semibold text-accent">{tc("linkRow", { count: invite.playedCount })}</Text>
+            </View>
+            <WebButton label={t("goHome")} onPress={goHome} />
+          </View>
+        )}
+
+        {phase.kind === "invite" && invite && (
+          <View className="gap-3">
+            <WebButton label={t("start")} onPress={start} disabled={joining} />
+            <Pressable onPress={() => void Linking.openURL(`guess321://m/${code}`)} className="items-center py-2">
+              <Text className="text-xs text-ink-mute underline">{t("openInApp")}</Text>
+            </Pressable>
+          </View>
+        )}
+
+        {phase.kind === "username" && (
+          <View className="gap-3">
+            <Text className="text-sm font-semibold text-ink-soft">{tu("label")}</Text>
+            <TextInput
+              value={usernameInput}
+              onChangeText={(v) => {
+                setUsernameInput(v);
+                setUsernameError(null);
+              }}
+              placeholder={tu("placeholder")}
+              maxLength={20}
+              autoCapitalize="none"
+              autoFocus
+              onSubmitEditing={() => void handleRegister()}
+              className="rounded-xl border border-rule bg-paper-2 px-4 py-3 text-base text-ink"
+            />
+            {usernameError && <Text className="text-xs text-red-500">{tu(`error.${usernameError}`)}</Text>}
+            <Text className="text-xs text-ink-mute">{tu("hint")}</Text>
+            <WebButton
+              label={registering ? tu("submitting") : tu("submit")}
+              onPress={() => void handleRegister()}
+              disabled={registering || joining || usernameInput.trim().length === 0}
+            />
+          </View>
+        )}
+
+        {phase.kind === "countdown" && (
+          <Countdown onDone={() => setPhase({ kind: "playing", challenge: phase.challenge })} />
+        )}
+
+        {challenge &&
+          (!dataset || !question ? (
+            <WebLoadingBox text={tc("loading")} />
+          ) : (
+            <View className="gap-4">
+              <Text className="text-xs text-ink-mute">
+                {to("questionProgress", { current: questionIndex + 1, total: challenge.questions.length })}
+              </Text>
+
+              <View className="rounded-2xl border-2 border-rule bg-ink/5 px-4 pb-4 pt-4">
+                <View className="flex-row items-center justify-center gap-4">
+                  <LogoTile size="sm" src={question.clubA.logoUrl} alt={question.clubA.name} caption={question.clubA.name} />
+                  <Text className="text-xs font-black text-ink-mute">{to("vs")}</Text>
+                  <LogoTile size="sm" src={question.clubB.logoUrl} alt={question.clubB.name} caption={question.clubB.name} />
+                </View>
+                <View className="mt-3 items-center gap-1.5">
+                  <Text className="text-[11px] text-ink-mute">{to("possibleCount", { count: question.totalPossible })}</Text>
+                  <View className="flex-row flex-wrap justify-center gap-1.5">
+                    {Array.from({ length: question.totalPossible }).map((_, i) => (
+                      <View
+                        key={i}
+                        className={`h-2.5 w-2.5 rounded-full border border-accent ${i < foundPlayers.length ? "bg-accent" : ""}`}
+                      />
+                    ))}
+                  </View>
+                </View>
+              </View>
+
+              <GuessInput
+                players={dataset.players}
+                excludedIds={guessedIds}
+                onGuess={(p) => void submitGuess(challenge, p)}
+                placeholder={tc("guessPlaceholder")}
+                emptyText={tc("guessEmpty")}
+              />
+
+              {guessFeedback && (
+                <View
+                  className={`flex-row items-center gap-2 rounded-lg px-3 py-2 ${
+                    guessFeedback.status === "correct" ? "bg-accent/15" : "bg-red-500/10"
+                  }`}
+                >
+                  <Text className={guessFeedback.status === "correct" ? "text-accent" : "text-red-600"}>
+                    {guessFeedback.status === "correct" ? "✓" : "✗"} {guessFeedback.label}
+                  </Text>
+                </View>
+              )}
+
+              {(foundPlayers.length > 0 || wrongPlayers.length > 0) && (
+                <View className="flex-row flex-wrap gap-2">
+                  {foundPlayers.map((p) => (
+                    <View key={p.id} className="rounded-full border border-accent/30 bg-accent/10 px-3 py-1">
+                      <Text className="text-xs font-medium text-ink">{p.name}</Text>
+                    </View>
+                  ))}
+                  {wrongPlayers.map((p) => (
+                    <View key={p.id} className="rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1">
+                      <Text className="text-xs font-medium text-red-600">✕ {p.name}</Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+
+              <Pressable onPress={() => void nextQuestion(challenge)} className="items-center rounded-xl bg-accent py-3">
+                <Text className="text-sm font-bold text-paper">{foundPlayers.length > 0 ? to("nextQuestion") : to("pass")}</Text>
+              </Pressable>
+            </View>
+          ))}
+
+        {phase.kind === "result" && <WebInviteResult result={phase.result} username={identity?.username ?? ""} onHome={goHome} />}
+      </ScrollView>
+    );
+  }
+
+  const container = { paddingTop: insets.top + 24, paddingBottom: insets.bottom + 32 };
+  const scrollClass = "flex-1 px-6";
+  const contentClass = "gap-6";
 
   if (phase.kind === "countdown") {
     return (
@@ -240,20 +396,7 @@ export function InviteScreen({ code }: { code: string }) {
               <Text className={ui.soft}>
                 {questionIndex + 1} / {challenge.questions.length}
               </Text>
-              {isWeb ? (
-                <>
-                  <WebQuestion question={question} foundCount={foundPlayers.length} />
-                  <GuessInput
-                    players={dataset.players}
-                    excludedIds={guessedIds}
-                    onGuess={(p) => void submitGuess(challenge, p)}
-                    placeholder={tc("guessPlaceholder")}
-                    emptyText={tc("guessEmpty")}
-                  />
-                  <WebGuessChips found={foundPlayers} wrong={wrongPlayers} feedback={guessFeedback} />
-                </>
-              ) : (
-                <RoundPlayView
+              <RoundPlayView
                   question={{ clubA: question.clubA, clubB: question.clubB, totalPossible: question.totalPossible }}
                   foundPlayers={foundPlayers}
                   wrongPlayers={wrongPlayers}
@@ -266,7 +409,6 @@ export function InviteScreen({ code }: { code: string }) {
                   guessPlaceholder={tc("guessPlaceholder")}
                   guessEmptyText={tc("guessEmpty")}
                 />
-              )}
               <Button label="→" onPress={() => void nextQuestion(challenge)} />
             </>
           )}
@@ -311,11 +453,6 @@ export function InviteScreen({ code }: { code: string }) {
               {t("score", { correct: invite.creatorScore.correctCount, total: invite.creatorScore.totalPossible })}
             </Text>
             <Button label={t("start")} onPress={start} disabled={joining} />
-            {isWeb && (
-              <Pressable onPress={() => void Linking.openURL(`guess321://m/${code}`)} className="items-center py-2">
-                <Text className={`${ui.soft} underline`}>{t("openInApp")}</Text>
-              </Pressable>
-            )}
           </>
         )}
 
@@ -329,7 +466,7 @@ export function InviteScreen({ code }: { code: string }) {
                 setUsernameError(null);
               }}
               placeholder={tu("placeholder")}
-              placeholderTextColor={isWeb ? undefined : "#8FE8C4"}
+              placeholderTextColor="#8FE8C4"
               maxLength={20}
               autoCapitalize="none"
               autoFocus
@@ -352,62 +489,70 @@ export function InviteScreen({ code }: { code: string }) {
   );
 }
 
-/** Web question card, matching the website's Daily Challenge look. */
-function WebQuestion({ question, foundCount }: { question: ChallengeQuestion; foundCount: number }) {
+function WebButton({ label, onPress, disabled }: { label: string; onPress: () => void; disabled?: boolean }) {
   return (
-    <View className="rounded-2xl border-2 border-rule bg-ink/5 px-4 pb-4 pt-4">
-      <View className="flex-row items-center justify-center gap-4">
-        <LogoTile size="sm" src={question.clubA.logoUrl} alt={question.clubA.name} caption={question.clubA.name} />
-        <Text className="text-xs font-black text-ink-mute">×</Text>
-        <LogoTile size="sm" src={question.clubB.logoUrl} alt={question.clubB.name} caption={question.clubB.name} />
-      </View>
-      <View className="mt-3 flex-row flex-wrap justify-center gap-1.5">
-        {Array.from({ length: question.totalPossible }).map((_, i) => (
-          <View key={i} className={`h-2.5 w-2.5 rounded-full border border-accent ${i < foundCount ? "bg-accent" : ""}`} />
-        ))}
-      </View>
+    <Pressable onPress={onPress} disabled={disabled} className={`items-center rounded-xl py-4 ${disabled ? "bg-ink/10" : "bg-accent"}`}>
+      <Text className={`text-lg font-bold ${disabled ? "text-ink-mute" : "text-paper"}`}>{label}</Text>
+    </Pressable>
+  );
+}
+
+function WebLoadingBox({ text }: { text: string }) {
+  return (
+    <View className="items-center rounded-lg border border-rule bg-ink/5 p-8">
+      <Text className="text-center text-ink-mute">{text}</Text>
     </View>
   );
 }
 
-function WebGuessChips({
-  found,
-  wrong,
-  feedback,
-}: {
-  found: Player[];
-  wrong: Player[];
-  feedback: { status: "correct" | "wrong"; label: string } | null;
-}) {
+/** The website's result card, matching the Daily Challenge result: outcome on
+ * top, then both scores as leaderboard-style rows with the viewer
+ * highlighted. */
+function WebInviteResult({ result, username, onHome }: { result: FinishChallengeResult; username: string; onHome: () => void }) {
+  const t = useTranslations("invite");
+  const tc = useTranslations("challenge");
+  const opponent = result.opponentResult;
+  const opponentCorrect = opponent?.correctCount ?? 0;
+  const outcome =
+    result.correctCount === opponentCorrect ? "tied" : result.correctCount > opponentCorrect ? "won" : "lost";
+  const rows = [
+    { name: username, correct: result.correctCount, total: result.totalPossible, me: true },
+    ...(opponent ? [{ name: opponent.username, correct: opponent.correctCount, total: opponent.totalPossible, me: false }] : []),
+  ];
   return (
-    <>
-      {feedback && (
-        <View className={`rounded-lg px-3 py-2 ${feedback.status === "correct" ? "bg-accent/15" : "bg-red-500/10"}`}>
-          <Text className={feedback.status === "correct" ? "text-accent" : "text-red-600"}>
-            {feedback.status === "correct" ? "✓" : "✗"} {feedback.label}
-          </Text>
-        </View>
-      )}
-      {(found.length > 0 || wrong.length > 0) && (
-        <View className="flex-row flex-wrap gap-2">
-          {found.map((p) => (
-            <View key={p.id} className="rounded-full border border-accent/30 bg-accent/10 px-3 py-1">
-              <Text className="text-xs font-medium text-ink">{p.name}</Text>
-            </View>
-          ))}
-          {wrong.map((p) => (
-            <View key={p.id} className="rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1">
-              <Text className="text-xs font-medium text-red-600">✕ {p.name}</Text>
-            </View>
-          ))}
-        </View>
-      )}
-    </>
+    <View className="gap-6">
+      <View className="items-center rounded-xl border-2 border-accent bg-accent/10 p-6">
+        <Text className="text-3xl font-black text-ink">
+          {outcome === "won" ? tc("youWon") : outcome === "lost" ? tc("youLost") : tc("tied")}
+        </Text>
+        <Text className="mt-1 text-sm text-ink-mute">{tc("resultHeading")}</Text>
+      </View>
+
+      <View className="gap-1">
+        {rows.map((row) => (
+          <View
+            key={row.name}
+            className={`flex-row items-center justify-between rounded-lg px-3 py-2 ${
+              row.me ? "border border-accent/40 bg-accent/10" : "bg-ink/5"
+            }`}
+          >
+            <Text className={row.me ? "font-semibold text-ink" : "text-ink"}>{row.name}</Text>
+            <Text className="text-ink-soft">
+              {row.correct} / {row.total}
+            </Text>
+          </View>
+        ))}
+      </View>
+
+      <Text className="text-center text-sm font-semibold text-accent">{t("appSoon")}</Text>
+      <Pressable onPress={onHome} className="items-center rounded-xl border border-rule py-3">
+        <Text className="text-sm font-semibold text-ink-soft">{t("goHome")}</Text>
+      </Pressable>
+    </View>
   );
 }
 
 function InviteResult({ result }: { result: FinishChallengeResult }) {
-  const t = useTranslations("invite");
   const tc = useTranslations("challenge");
   const opponent = result.opponentResult;
   const opponentCorrect = opponent?.correctCount ?? 0;
@@ -425,7 +570,6 @@ function InviteResult({ result }: { result: FinishChallengeResult }) {
           {tc("opponentScored", { username: opponent.username, correct: opponent.correctCount, total: opponent.totalPossible })}
         </Text>
       )}
-      {isWeb && <Text className={`mt-4 text-center ${ui.accent}`}>{t("appSoon")}</Text>}
     </View>
   );
 }
